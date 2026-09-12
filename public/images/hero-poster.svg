@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="ocean" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0B1D3A"/>
+      <stop offset="50%" style="stop-color:#1A5276"/>
+      <stop offset="100%" style="stop-color:#0B1D3A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#ocean)"/>
+  <path d="M0,800 Q480,750 960,800 T1920,800 L1920,1080 L0,1080 Z" fill="#2EAFB8" opacity="0.15"/>
+  <path d="M0,850 Q480,820 960,850 T1920,850 L1920,1080 L0,1080 Z" fill="#7FDBDA" opacity="0.1"/>
+  <ellipse cx="960" cy="540" rx="200" ry="80" fill="#2EAFB8" opacity="0.05"/>
+</svg>

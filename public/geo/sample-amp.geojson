@@ -1,0 +1,18 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Portofino",
+        "slug": "portofino",
+        "region": "Liguria",
+        "fishing_status": "prohibited"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.215, 44.303]
+      }
+    }
+  ]
+}
