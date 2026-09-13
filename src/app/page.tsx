@@ -1,8 +1,5 @@
-import { HeroSection } from "@/components/home/HeroSection";
-import { StatsSection } from "@/components/home/StatsSection";
-import { FeaturesSection } from "@/components/home/FeaturesSection";
-import { ScrollDiveSection } from "@/components/home/ScrollDiveSection";
-import { MarineMap } from "@/components/map/MarineMap";
+import { OceanStory } from "@/components/home/OceanStory";
+import { MapExplorer } from "@/components/map/MapExplorer";
 import {
   getMarineAreas,
   getGhostNets,
@@ -21,20 +18,18 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection />
-      <StatsSection />
-      <ScrollDiveSection />
-      <FeaturesSection />
+      <OceanStory />
 
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="mappa" className="home-map-section scroll-mt-24">
+        <div className="mx-auto w-full px-2 sm:px-4 lg:px-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">
-                Aree Marine Protette
+              <p className="story-eyebrow mb-4">IL MEDITERRANEO, DA VICINO</p>
+              <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-white mb-4">
+                Un mare di cui prendersi cura.
               </h2>
               <p className="text-white/50">
-                Esplora le AMP italiane con dati da fonti ISPRA/MASE
+                Esplora i perimetri delle AMP e le zonazioni disponibili. Consulta le fonti e il regolamento dell’ente gestore nelle schede delle aree.
               </p>
             </div>
             <Link href="/mappa">
@@ -44,27 +39,10 @@ export default async function HomePage() {
               </Button>
             </Link>
           </div>
-          <MarineMap areas={areas} ghostNets={ghostNets} aisVessels={aisVessels} />
+          <MapExplorer areas={areas} ghostNets={ghostNets} aisVessels={aisVessels} />
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-transparent to-[var(--color-ocean)]/20">
-        <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Verifica un certificato
-          </h2>
-          <p className="text-white/50 mb-8">
-            Inserisci il codice QR o il numero seriale per verificare l&apos;autenticità
-            di un certificato o autorizzazione FIPSAS.
-          </p>
-          <Link href="/verifica">
-            <Button variant="primary" size="lg">
-              Vai alla verifica
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

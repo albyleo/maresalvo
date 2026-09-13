@@ -1,0 +1,1268 @@
+[
+  {
+    "id": "EUAP0554",
+    "name": "Capo Caccia Isola Piana",
+    "slug": "capo-caccia-isola-piana",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 26.31,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        8.1867805,
+        40.5916615
+      ]
+    },
+    "bounds": [
+      8.129069,
+      40.557086,
+      8.244492,
+      40.626237
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "sardinia-areemarineprotette.6",
+        "zone": "C",
+        "name": "AREA MARINA PROTETTA \"CAPO CACCIA - ISOLA PIANA\" - FASCIA ESTERNA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.7",
+        "zone": "B",
+        "name": "ZONA ORIENTALE DI PORTO CONTE COMPRESA TRA LA PUNTA DEL CERCHIO E CAPO GALERA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.8",
+        "zone": "A",
+        "name": "TRATTO DI MARE AD EST DEL PROMONTORIO DI PUNTA GIGLIO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.9",
+        "zone": "B",
+        "name": "ZONA OCCIDENTALE DI PORTO CONTE DA PUNTA DELLE GESSIERE A PUNTA DEL BOLLO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.10",
+        "zone": "A",
+        "name": "TRATTO DI MARE DI ISOLA PIANA A OVEST",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0953",
+    "name": "Capo Carbonara",
+    "slug": "capo-carbonara",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 143.61,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        9.531241999999999,
+        39.106691
+      ]
+    },
+    "bounds": [
+      9.441727,
+      39.05558,
+      9.620757,
+      39.157802
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "sardinia-areemarineprotette.18",
+        "zone": "C",
+        "name": "RESIDUO TRATTO DI MARE CIRCOSTANTE ALLE ZONE A E B",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.19",
+        "zone": "D",
+        "name": "RESIDUO TRATTO DI MARE ALL'INTERNO DEL PERIMETRO DELL'AREA MARINA PROTETTA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.20",
+        "zone": "B",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA ZONA A DELLA SECCA DE IS PISCADEDDUS",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.21",
+        "zone": "B",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA ZONA A DELLA SECCA DI S. CATERINA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.22",
+        "zone": "B",
+        "name": "TRATTO DI MARE ANTISTANTE IL CAPO CARBONARA E CIRCOSTANTE ISOLA DEI CAVOLI",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.23",
+        "zone": "B",
+        "name": "TRATTO DI MARE ANTISTANTE LA COSTA SUD-OCCIDENTALE E ORIENTALE DI ISOLA DI SERPENTARA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.24",
+        "zone": "B",
+        "name": "TRATTO DI MARE ANTISTANTE LA COSTA DI PUNTA MOLENTIS E DI PUNTA PORCEDDUS",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.25",
+        "zone": "B",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA SECCA DI BERNI",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.26",
+        "zone": "B",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA SECCA DI LIBECCIO E LA SECCA DI MEZZO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.27",
+        "zone": "A",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA SECCA DE IS PISCADEDDUS",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.28",
+        "zone": "A",
+        "name": "TRATTO DI MARE CIRCOSTANTE LA SECCA DI S. CATERINA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.29",
+        "zone": "A",
+        "name": "TRATTO DI MARE CIRCOSTANTE I VARIGLIONI DI ISOLA DEI CAVOLI",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.30",
+        "zone": "A",
+        "name": "TRATTO DI MARE ANTISTANTE LA COSTA NORD-OCCIDENTALE DE I VARIGLIONI DI ISOLA DI ISOLA DI SERPENTARA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0555",
+    "name": "Capo Gallo - Isola delle Femmine",
+    "slug": "capo-gallo-isola-delle-femmine",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 21.73,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        13.270938000000001,
+        38.213671
+      ]
+    },
+    "bounds": [
+      13.211672,
+      38.189527,
+      13.330204,
+      38.237815
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1233",
+    "name": "Capo Milazzo",
+    "slug": "capo-milazzo",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 7.49,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        15.234583355,
+        38.26843704
+      ]
+    },
+    "bounds": [
+      15.21592878,
+      38.25415823,
+      15.25323793,
+      38.28271585
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "milazzo-1",
+        "zone": "B",
+        "name": "Capo Milazzo · zona B",
+        "source_label": "Regione Siciliana · SITR",
+        "source_url": "https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/",
+        "notes": "Cartografia regionale informativa; fa fede il decreto di approvazione."
+      },
+      {
+        "id": "milazzo-2",
+        "zone": "C",
+        "name": "Capo Milazzo · zona C",
+        "source_label": "Regione Siciliana · SITR",
+        "source_url": "https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/",
+        "notes": "Cartografia regionale informativa; fa fede il decreto di approvazione."
+      },
+      {
+        "id": "milazzo-3",
+        "zone": "A",
+        "name": "Capo Milazzo · zona A",
+        "source_label": "Regione Siciliana · SITR",
+        "source_url": "https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/",
+        "notes": "Cartografia regionale informativa; fa fede il decreto di approvazione."
+      },
+      {
+        "id": "milazzo-4",
+        "zone": "B",
+        "name": "Capo Milazzo · zona B",
+        "source_label": "Regione Siciliana · SITR",
+        "source_url": "https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/",
+        "notes": "Cartografia regionale informativa; fa fede il decreto di approvazione."
+      },
+      {
+        "id": "milazzo-5",
+        "zone": "Bs",
+        "name": "Capo Milazzo · zona Bs",
+        "source_label": "Regione Siciliana · SITR",
+        "source_url": "https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/",
+        "notes": "Cartografia regionale informativa; fa fede il decreto di approvazione."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0166",
+    "name": "Capo Rizzuto",
+    "slug": "capo-rizzuto",
+    "area_type": "amp",
+    "region_name": "Calabria",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 147.21,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        17.097973975000002,
+        38.962818485
+      ]
+    },
+    "bounds": [
+      16.96464298,
+      38.85756799,
+      17.23130497,
+      39.06806898
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1230",
+    "name": "Capotesta - Punta Falcone",
+    "slug": "capotesta-punta-falcone",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 51.42,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        9.18873254,
+        41.236809915
+      ]
+    },
+    "bounds": [
+      9.09943461,
+      41.19786133,
+      9.27803047,
+      41.2757585
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0948",
+    "name": "Cinque Terre",
+    "slug": "cinque-terre",
+    "area_type": "amp",
+    "region_name": "Liguria",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 45.91,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        9.682882,
+        44.1049125
+      ]
+    },
+    "bounds": [
+      9.605366,
+      44.059288,
+      9.760398,
+      44.150537
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1228",
+    "name": "Costa degli Infreschi e della Masseta",
+    "slug": "costa-degli-infreschi-e-della-masseta",
+    "area_type": "amp",
+    "region_name": "Campania",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 23.32,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        15.4427695,
+        40.0070775
+      ]
+    },
+    "bounds": [
+      15.387754,
+      39.973779,
+      15.497785,
+      40.040376
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0167",
+    "name": "di Miramare nel Golfo di Trieste",
+    "slug": "di-miramare-nel-golfo-di-trieste",
+    "area_type": "amp",
+    "region_name": "Friuli-Venezia Giulia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 0.3,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        13.7139925,
+        45.7026965
+      ]
+    },
+    "bounds": [
+      13.707641,
+      45.698792,
+      13.720344,
+      45.706601
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0552",
+    "name": "Isola dell'Asinara",
+    "slug": "isola-dell-asinara",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 107.32,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        8.283144499999999,
+        41.053873
+      ]
+    },
+    "bounds": [
+      8.201274,
+      40.969036,
+      8.365015,
+      41.13871
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "sardinia-areemarineprotette.1",
+        "zone": "C",
+        "name": "FASCIA ESTERNA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.2",
+        "zone": "B",
+        "name": "TRATTO DI MARE OCCIDENTALE E ORIENTALE DELL'ISOLA DELL'ASINARA COMPRESO TRA PUNTA SALIPPI E PUNTA BARBAROSSA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.3",
+        "zone": "A",
+        "name": "TRATTO DI MARE COMPRESO TRA PUNTA DELLO SCORNO E PUNTA DEL PORCO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.4",
+        "zone": "A",
+        "name": "TRATTO DI MARE COMPRESO TRA PUNTA PEDRA BIANCA E PUNTA AGNADDA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.5",
+        "zone": "A",
+        "name": "TRATTO DI MARE COMPRESO TRA PUNTA L'ARROCCU E PUNTA GALETTA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0911",
+    "name": "Isola di Bergeggi",
+    "slug": "isola-di-bergeggi",
+    "area_type": "amp",
+    "region_name": "Liguria",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 2.03,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        8.4468365,
+        44.2365445
+      ]
+    },
+    "bounds": [
+      8.438541,
+      44.228139,
+      8.455132,
+      44.24495
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0170",
+    "name": "Isola di Ustica",
+    "slug": "isola-di-ustica",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 159.51,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        13.175712,
+        38.704763
+      ]
+    },
+    "bounds": [
+      13.088006,
+      38.639431,
+      13.263418,
+      38.770095
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0171",
+    "name": "Isole Ciclopi",
+    "slug": "isole-ciclopi",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 6.23,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        15.162504,
+        37.5575085
+      ]
+    },
+    "bounds": [
+      15.142576,
+      37.539294,
+      15.182432,
+      37.575723
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0947",
+    "name": "Isole di Ventotene e Santo Stefano",
+    "slug": "isole-di-ventotene-e-santo-stefano",
+    "area_type": "amp",
+    "region_name": "Lazio",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 27.99,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        13.42987,
+        40.7967475
+      ]
+    },
+    "bounds": [
+      13.380579,
+      40.770127,
+      13.479161,
+      40.823368
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0172",
+    "name": "Isole Egadi",
+    "slug": "isole-egadi",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 539.92,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        12.223258999999999,
+        37.9530685
+      ]
+    },
+    "bounds": [
+      11.99972,
+      37.868871,
+      12.446798,
+      38.037266
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0553",
+    "name": "Isole Pelagie",
+    "slug": "isole-pelagie",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 41.36,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        12.695129,
+        35.684632500000006
+      ]
+    },
+    "bounds": [
+      12.501149,
+      35.485235,
+      12.889109,
+      35.88403
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0168",
+    "name": "Isole Tremiti",
+    "slug": "isole-tremiti",
+    "area_type": "amp",
+    "region_name": "Puglia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 14.66,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        15.611143,
+        42.160671495
+      ]
+    },
+    "bounds": [
+      15.467687,
+      42.092642,
+      15.754599,
+      42.22870099
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0951",
+    "name": "Penisola del Sinis  - Isola Mal di Ventre",
+    "slug": "penisola-del-sinis-isola-mal-di-ventre",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 267.03,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        8.36141,
+        39.9211915
+      ]
+    },
+    "bounds": [
+      8.239902,
+      39.833676,
+      8.482918,
+      40.008707
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "sardinia-areemarineprotette.35",
+        "zone": "A",
+        "name": "TRATTO DI MARE TUTTO INTORNO LO SCOGLIO DEL CATALANO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.31",
+        "zone": "C",
+        "name": "AREA MARINA PROTETTA PENISOLA DEL SINIS - ISOLA DI MAL DI VENTRE",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.32",
+        "zone": "B",
+        "name": "TRATTO DI MARE ANTISTANTE TORRE DEL SEVO, COMPRENDENDO LE ISOLE DI IS CAOGHEDDAS E PUNTA MAIMONI, PER UNA DISTANZA DI CIRCA 1.000 METRI DALLA COSTA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.33",
+        "zone": "B",
+        "name": "TRATTO DI MARE NORD E SUD-OCCIDENTALE DELL'ISOLA DI MAL DI VENTRE, TUTT'INTORNO LA ZONA A, RICOMPRESO TRA LA CONGIUNGENTE L'ESTREMA PUNTA NORD DELL'ISOLA E LO SCOGLIO DEL FARO VECCHIO E IL MERIDIANO PASSANTE PER L'ESTREMA PUNTA A SUD DI CALA DEI PASTORI",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.34",
+        "zone": "A",
+        "name": "TRATTO DI MARE NORD-OCCIDENTALE DELL'ISOLA DI MAL DI VENTRE, A PARTIRE DALLA PUNTA A OVEST DI CALA MAESTRA",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0512",
+    "name": "Plemmirio",
+    "slug": "plemmirio",
+    "area_type": "amp",
+    "region_name": "Sicilia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 24.29,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        15.3155205,
+        37.013450500000005
+      ]
+    },
+    "bounds": [
+      15.274317,
+      36.984201,
+      15.356724,
+      37.0427
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0950",
+    "name": "Porto Cesareo",
+    "slug": "porto-cesareo",
+    "area_type": "amp",
+    "region_name": "Puglia",
+    "managing_body": "Consorzio di gestione AMP Porto Cesareo",
+    "description": "AMP lungo circa 32 km di costa tra Punta Prosciutto e Torre Inserraglio. Comprende due settori A, due settori B e la restante zona C. Superficie dichiarata: 166,54 km².",
+    "regulation_url": "https://www.gazzettaufficiale.it/eli/gu/2010/01/02/1/sg/pdf",
+    "fishing_status": "restricted",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 166.54,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        17.824838435,
+        40.23119397
+      ]
+    },
+    "bounds": [
+      17.72301694,
+      40.16731797,
+      17.92665993,
+      40.29506997
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "porto-0",
+        "zone": "A",
+        "name": "Torre Sant’Isidoro – Casa Giorgella",
+        "source_label": "Ricostruzione da DM 12/12/1997",
+        "source_url": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaDettaglioAtto/originario?atto.codiceRedazionale=098A1390&atto.dataPubblicazioneGazzetta=1998-02-24&elenco30giorni=false",
+        "notes": "Elaborazione delle coordinate del decreto con costa CDDA: rappresentazione indicativa, non rilievo nautico."
+      },
+      {
+        "id": "porto-1",
+        "zone": "A",
+        "name": "Penisola della Strea",
+        "source_label": "Ricostruzione da DM 12/12/1997",
+        "source_url": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaDettaglioAtto/originario?atto.codiceRedazionale=098A1390&atto.dataPubblicazioneGazzetta=1998-02-24&elenco30giorni=false",
+        "notes": "Elaborazione delle coordinate del decreto con costa CDDA: rappresentazione indicativa, non rilievo nautico."
+      },
+      {
+        "id": "porto-2",
+        "zone": "B",
+        "name": "Settore Punta Prosciutto",
+        "source_label": "Ricostruzione da DM 12/12/1997",
+        "source_url": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaDettaglioAtto/originario?atto.codiceRedazionale=098A1390&atto.dataPubblicazioneGazzetta=1998-02-24&elenco30giorni=false",
+        "notes": "Elaborazione delle coordinate del decreto con costa CDDA: rappresentazione indicativa, non rilievo nautico."
+      },
+      {
+        "id": "porto-3",
+        "zone": "B",
+        "name": "Settore Torre Sant’Isidoro",
+        "source_label": "Ricostruzione da DM 12/12/1997",
+        "source_url": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaDettaglioAtto/originario?atto.codiceRedazionale=098A1390&atto.dataPubblicazioneGazzetta=1998-02-24&elenco30giorni=false",
+        "notes": "Elaborazione delle coordinate del decreto con costa CDDA: rappresentazione indicativa, non rilievo nautico."
+      },
+      {
+        "id": "porto-c",
+        "zone": "C",
+        "name": "Restante area della riserva",
+        "source_label": "Ricostruzione da DM 12/12/1997",
+        "source_url": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaDettaglioAtto/originario?atto.codiceRedazionale=098A1390&atto.dataPubblicazioneGazzetta=1998-02-24&elenco30giorni=false",
+        "notes": "Area residua dopo l’esclusione delle zone A e B. Verificare regolamento e ordinanze vigenti."
+      }
+    ]
+  },
+  {
+    "id": "EUAP0949",
+    "name": "Portofino",
+    "slug": "portofino",
+    "area_type": "amp",
+    "region_name": "Liguria",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 3.46,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        9.181974,
+        44.321579
+      ]
+    },
+    "bounds": [
+      9.140764,
+      44.296127,
+      9.223184,
+      44.347031
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0946",
+    "name": "Punta Campanella",
+    "slug": "punta-campanella",
+    "area_type": "amp",
+    "region_name": "Campania",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 15.39,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        14.389069500000002,
+        40.602791499999995
+      ]
+    },
+    "bounds": [
+      14.314711,
+      40.565867,
+      14.463428,
+      40.639716
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0917",
+    "name": "Regno di Nettuno",
+    "slug": "regno-di-nettuno",
+    "area_type": "amp",
+    "region_name": "Campania",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 112.56,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        13.929035500000001,
+        40.7828325
+      ]
+    },
+    "bounds": [
+      13.81747,
+      40.686058,
+      14.040601,
+      40.879607
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1225",
+    "name": "Santa Maria di Castellabate",
+    "slug": "santa-maria-di-castellabate",
+    "area_type": "amp",
+    "region_name": "Campania",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 70.95,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        14.8779775,
+        40.2768435
+      ]
+    },
+    "bounds": [
+      14.802516,
+      40.20619,
+      14.953439,
+      40.347497
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1227",
+    "name": "Secche della Meloria",
+    "slug": "secche-della-meloria",
+    "area_type": "amp",
+    "region_name": "Toscana",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 93.72,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        10.1771365,
+        43.562914
+      ]
+    },
+    "bounds": [
+      10.114752,
+      43.513356,
+      10.239521,
+      43.612472
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP1172",
+    "name": "Secche di Tor Paterno",
+    "slug": "secche-di-tor-paterno",
+    "area_type": "amp",
+    "region_name": "Lazio",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 13.87,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        12.3315375,
+        41.5973355
+      ]
+    },
+    "bounds": [
+      12.298993,
+      41.573943,
+      12.364082,
+      41.620728
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0952",
+    "name": "Tavolara - Punta Coda Cavallo",
+    "slug": "tavolara-punta-coda-cavallo",
+    "area_type": "amp",
+    "region_name": "Sardegna",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 153.57,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        9.7116245,
+        40.8536345
+      ]
+    },
+    "bounds": [
+      9.614914,
+      40.765813,
+      9.808335,
+      40.941456
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": [
+      {
+        "id": "sardinia-areemarineprotette.11",
+        "zone": "C",
+        "name": "AREA MARINA PROTETTA TAVOLARA - PUNTA CODA CAVALLO - IL TRATTO DI MARE ALL'INTERNO DEL CONFINE DELL'AREA PROTETTA MARINA, ESCLUDENDO LE ZONE A E LE ZONE B",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.12",
+        "zone": "B",
+        "name": "IL TRATTO DI MARE COMPRESO TRA CAPO CERASO E IL LIMITE SUD DELLA CALETTA SA ENAS APPARA, PER UN'AMPIEZZA DI CIRCA 700 METRI",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.13",
+        "zone": "B",
+        "name": "IL TRATTO DI MARE COMPRESO TRA CODA DELLU FURRU E PUNTA DI TAMERIGIO (CAPO CODA CAVALLO)",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.14",
+        "zone": "B",
+        "name": "NELL'ISOLA DI TAVOLARA L'AREA DI MARE COSTIERA DEL LATO NORD-OCCIDENTALE, PER UN'AMPIEZZA DI CIRCA 500 METRI DALLA COSTA E, DEI LATI NORD-ORIENTALE E SUD-ORIENTALE, PER UN'AMPIEZZA DI CIRCA 300 METRI DALLA ZONA A",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.15",
+        "zone": "B",
+        "name": "IL TRATTO DI MARE CIRCOSTANTE L'ISOLA DI MOLARA E LA ZONA A DI MOLAROTTO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.16",
+        "zone": "A",
+        "name": "NELL'ISOLA DI TAVOLARA LA PUNTA A SUD DI CALA DI LEVANTE, PUNTA DEL PAPA E IL PUNTO IN COSTA A SUD-EST DELLA PUNTA DEL PASSO MALOIE  RELATIVI TERRITORI COSTIERI APPARTENENTI AL DEMANIO MARITTIMO",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      },
+      {
+        "id": "sardinia-areemarineprotette.17",
+        "zone": "A",
+        "name": "NELL'ISOLA MOLAROTTO, L'AREA PENTAGONALE CIRCOSTANTE MOLAROTTO, PER UN'AMPIEZZA DI CIRCA 750 METRI AD EST E AD OVEST (LATI); CIRCA 1.000 METRI A NORD (VERTICE); CIRCA 1.500 METRI A SUD (LATO).",
+        "source_label": "Regione Sardegna · dati indicativi",
+        "source_url": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities",
+        "notes": "Zonazione pubblicata dal servizio regionale come dato indicativo; verificare il decreto e gli aggiornamenti dell’ente gestore."
+      }
+    ]
+  },
+  {
+    "id": "EUAP1226",
+    "name": "Torre del Cerrano",
+    "slug": "torre-del-cerrano",
+    "area_type": "amp",
+    "region_name": "Abruzzo",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 34.31,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        14.1157135,
+        42.5925005
+      ]
+    },
+    "bounds": [
+      14.066743,
+      42.559323,
+      14.164684,
+      42.625678
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  },
+  {
+    "id": "EUAP0169",
+    "name": "Torre Guaceto",
+    "slug": "torre-guaceto",
+    "area_type": "amp",
+    "region_name": "Puglia",
+    "managing_body": null,
+    "description": "Area marina protetta. Il perimetro deriva dal catalogo nazionale CDDA pubblicato da EMODnet; i regimi di tutela dipendono dalle zone e dal regolamento locale.",
+    "regulation_url": null,
+    "fishing_status": "unknown",
+    "fishing_notes": "Le condizioni di pesca dipendono dalla zona, dalle autorizzazioni e dalle ordinanze dell’ente gestore.",
+    "seasonality": null,
+    "area_km2": 22.27,
+    "centroid": {
+      "type": "Point",
+      "coordinates": [
+        17.80710243,
+        40.72687047
+      ]
+    },
+    "bounds": [
+      17.76589993,
+      40.69627397,
+      17.84830493,
+      40.75746697
+    ],
+    "source_url": "https://emodnet.ec.europa.eu/en/human-activities",
+    "source_label": "EMODnet / EEA CDDA",
+    "source_date": "2021",
+    "zones": []
+  }
+]

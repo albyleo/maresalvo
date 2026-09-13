@@ -1,0 +1,11 @@
+{
+  "retrieved_at": "2026-09-13T07:39:16.301Z",
+  "sources": {
+    "italy": "https://ows.emodnet-humanactivities.eu/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=emodnet:cddaareas&outputFormat=application/json&srsName=EPSG:4326&count=1000&CQL_FILTER=cddacountr%3D%27IT%27",
+    "sardinia": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=dbu:areemarineprotette&outputFormat=application/json&srsName=EPSG:4326&count=1000",
+    "milazzo": "https://map.sitr.regione.sicilia.it/orbs/rest/services/aree_protette/aree_marine_protette/MapServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
+  },
+  "area_count": 29,
+  "zone_count": 45,
+  "coverage": "Italian IT90 marine protected areas in the CDDA source; partial internal zoning. WMS supplies additional international boundaries."
+}

@@ -24,8 +24,11 @@ Official issuance is deliberately disabled in the database review function.
    - `supabase/migrations/001_initial_schema.sql`
    - `supabase/migrations/002_marine_monitoring.sql`
    - `supabase/migrations/003_certification_pilot.sql`
+   - `supabase/migrations/004_training_questionnaires.sql`
+   - `supabase/migrations/005_training_questionnaires_v2.sql`
+   - `supabase/migrations/006_ghost_net_observations.sql`
 
-   Run all three before accepting signups. They are one-time migrations, not
+   Apply all six in order, skipping any already completed. They are one-time migrations, not
    scripts to rerun against a populated database. The third migration seeds the
    test questionnaire. The old `supabase/seed.sql` is optional and contains
    illustrative qualification and map records; it is not required for this pilot.
@@ -52,9 +55,9 @@ Official issuance is deliberately disabled in the database review function.
 
 ## Pilot acceptance walkthrough
 
-1. Applicant: open `/dashboard/qualifiche`. The sample answers are 1, 2, 2
-   (option positions as shown). All three must be correct. Wrong answers create
-   a failed attempt; up to five submissions per questionnaire are allowed in 24 hours.
+1. Applicant: open `/dashboard/qualifiche` and select one of the three version-2
+   training paths. At least 12 of its 15 answers must be correct. Lower scores
+   create a failed attempt; up to five submissions per questionnaire are allowed in 24 hours.
 2. A passing submission appears as `In revisione`, with no certificate issued yet.
 3. Reviewer: open `/admin/pratiche`, examine the applicant and score, select a
    decision, acknowledge the demo status, then confirm. Rejection requires notes.
@@ -81,7 +84,9 @@ Official issuance is deliberately disabled in the database review function.
   the former enumerable verification view is inaccessible to API roles.
 - Net-report contacts are excluded from public API projections, unmoderated reports
   are not anonymously readable, and submissions fail explicitly when unconfigured.
-  The staff net-recovery workflow remains a later milestone.
+  Migration 006 restricts submissions to approved reporters, adds independent
+  observations and provides super-admin review/permission controls at `/admin/reti-perse`.
+  Apply 006 before enabling the updated reporting page; see `DEPLOY.md` for the walkthrough.
 - Approved questionnaire authoring, official eligibility/medical requirements,
   official certificates/permits, renewal/revocation UI, production abuse controls,
   and authoritative marine/SAR data are not part of this test milestone.

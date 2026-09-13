@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import { Card } from '@/components/ui/Card';
-import { QuestionnaireForm } from '@/features/certification/QuestionnaireForm';
+import { QuestionnairePicker } from '@/features/certification/QuestionnairePicker';
 import { APPLICATION_STATUS, type Application, type Question, type Questionnaire } from '@/features/certification/types';
 import { formatDate } from '@/lib/utils';
 
@@ -33,7 +33,6 @@ export default async function DashboardQualifichePage() {
       </Card>)}
     </section>}
     {questionnaires.length === 0 && <Card>Nessun questionario disponibile al momento.</Card>}
-    {questionnaires.filter(q => !applications.some(a => a.questionnaire_id === q.id && ['pending', 'approved'].includes(a.status))).map(q =>
-      <Card key={q.id} glass><QuestionnaireForm questionnaire={q} questions={(questions ?? []).filter(item => item.questionnaire_id === q.id) as Question[]} /></Card>)}
+    <QuestionnairePicker items={questionnaires.filter(q => !applications.some(a => a.questionnaire_id === q.id && ['pending', 'approved'].includes(a.status))).map(q => ({ ...q, questions: (questions ?? []).filter(item => item.questionnaire_id === q.id) as Question[] }))} />
   </div>;
 }

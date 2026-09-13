@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Waves, Mail, Lock, AlertCircle } from "lucide-react";
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 
-export function LoginForm() {
+export function LoginForm({ destination = '/dashboard' }: { destination?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(destination);
     router.refresh();
     } catch { setError('Connessione non disponibile. Riprova.'); }
     finally { setLoading(false); }

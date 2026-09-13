@@ -139,5 +139,87 @@ test('certification workflow and database permissions', async t => {
       await assert.rejects(db.query('SELECT contact_info FROM public.ghost_net_reports'), /permission denied/);
       await assert.rejects(db.query("INSERT INTO public.ghost_net_reports(lat,lng,status) VALUES (40,15,'verified')"), /row-level security/);
     });
+    await t.test('migration 004 adds three 10-question training paths without exposing answer keys', async () => {
+      await root();
+      await db.exec(await readFile(new URL('../supabase/migrations/004_training_questionnaires.sql', import.meta.url), 'utf8'));
+      const { rows: catalog } = await db.query('SELECT id FROM public.questionnaires WHERE is_active ORDER BY id');
+      for (const item of catalog) item.questions = (await db.query('SELECT id, prompt, options FROM public.questionnaire_questions WHERE questionnaire_id = $1 ORDER BY position', [item.id])).rows;
+      assert.equal(catalog.length, 3);
+      const active = await db.query('SELECT id FROM public.questionnaires WHERE is_active');
+      assert.equal(active.rows.length, 3);
+      for (const item of catalog) {
+        assert.equal(item.questions.length, 10);
+        assert.ok(item.questions.every(question => !('correct_option' in question)));
+        const keys = await db.query('SELECT k.question_id, k.correct_option FROM public.questionnaire_answer_keys k JOIN public.questionnaire_questions q ON q.id = k.question_id WHERE q.questionnaire_id = $1 ORDER BY q.position', [item.id]);
+        const submission = Object.fromEntries(keys.rows.map(k => [k.question_id, k.correct_option]));
+        // Eight correct answers meet the configured 80% threshold.
+        for (const question of item.questions.slice(-2)) submission[question.id] = (submission[question.id] + 1) % question.options.length;
+        await as(alice);
+        const result = await db.query('SELECT public.submit_questionnaire($1, $2) AS id', [item.id, JSON.stringify(submission)]);
+        const scored = await db.query('SELECT score_percent, status FROM public.certification_applications WHERE id = $1', [result.rows[0].id]);
+        assert.deepEqual(scored.rows[0], { score_percent: 80, status: 'pending' });
+        await assert.rejects(db.query('SELECT * FROM public.questionnaire_answer_keys'), /permission denied/);
+        await root();
+      }
+      const swordfish = catalog[0].questions[8];
+      assert.match(swordfish.options[0], /gennaio.*marzo/);
+    });
+    await t.test('migration 005 versions the catalog and preserves previous questions and results', async () => {
+      await root();
+      const oldQuestions = (await db.query('SELECT * FROM public.questionnaire_questions ORDER BY id')).rows;
+      const oldKeys = (await db.query('SELECT * FROM public.questionnaire_answer_keys ORDER BY question_id')).rows;
+      const oldApplications = (await db.query('SELECT * FROM public.certification_applications ORDER BY id')).rows;
+      const oldCertificates = (await db.query('SELECT * FROM public.certificates ORDER BY id')).rows;
+      await db.exec(await readFile(new URL('../supabase/migrations/005_training_questionnaires_v2.sql', import.meta.url), 'utf8'));
+      assert.deepEqual((await db.query('SELECT * FROM public.questionnaire_questions WHERE id = ANY($1::uuid[]) ORDER BY id', [oldQuestions.map(q => q.id)])).rows, oldQuestions);
+      assert.deepEqual((await db.query('SELECT * FROM public.questionnaire_answer_keys WHERE question_id = ANY($1::uuid[]) ORDER BY question_id', [oldKeys.map(k => k.question_id)])).rows, oldKeys);
+      assert.deepEqual((await db.query('SELECT * FROM public.certification_applications ORDER BY id')).rows, oldApplications);
+      assert.deepEqual((await db.query('SELECT * FROM public.certificates ORDER BY id')).rows, oldCertificates);
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8'));
+      assert.equal(catalog.length, 3);
+      assert.deepEqual((await db.query('SELECT id, version, is_demo, pass_percent FROM public.questionnaires WHERE is_active ORDER BY id')).rows,
+        catalog.map(({ id }) => ({ id, version: 2, is_demo: true, pass_percent: 80 })));
+      const expectedKeys = [
+        [1,0,0,1,1,1,1,0,0,0,1,0,1,1,1],
+        [2,1,0,1,1,1,1,1,2,1,1,1,1,0,1],
+        [2,1,1,0,1,0,1,1,0,1,1,1,1,2,1],
+      ];
+      for (const [index, item] of catalog.entries()) {
+        assert.equal(item.questions.length, 15);
+        assert.deepEqual(Object.keys(item).sort(), ['title', 'description', 'id', 'version', 'pass_percent', 'is_demo', 'questions'].sort());
+        for (const question of item.questions) assert.deepEqual(Object.keys(question).sort(), ['id', 'position', 'prompt', 'options'].sort());
+        const { rows } = await db.query('SELECT id, position, prompt, options FROM public.questionnaire_questions WHERE questionnaire_id = $1 ORDER BY position', [item.id]);
+        assert.deepEqual(rows, item.questions);
+        const keys = (await db.query('SELECT k.correct_option FROM public.questionnaire_answer_keys k JOIN public.questionnaire_questions q ON q.id = k.question_id WHERE q.questionnaire_id = $1 ORDER BY q.position', [item.id])).rows;
+        assert.deepEqual(keys.map(k => k.correct_option), expectedKeys[index]);
+      }
+      await as(alice);
+      await assert.rejects(db.query('SELECT public.submit_questionnaire($1, $2)', ['40000000-0000-4000-8000-000000000001', '{}']), /non disponibile/);
+      // A pending version-1 result can still be reviewed after its catalog retires.
+      const pending = oldApplications.find(a => a.profile_id === alice && a.questionnaire_version === 1 && a.status === 'pending');
+      assert.ok(pending);
+      await as(admin);
+      const issued = (await review(pending.id)).rows[0].id;
+      assert.equal((await db.query('SELECT metadata FROM public.certificates WHERE id = $1', [issued])).rows[0].metadata.questionnaire_version, 1);
+    });
+    await t.test('version 2 rejects incomplete answers, fails at 11/15 and passes at 12/15', async () => {
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8'));
+      for (const item of catalog) {
+        await root();
+        const keys = (await db.query('SELECT k.question_id, k.correct_option FROM public.questionnaire_answer_keys k JOIN public.questionnaire_questions q ON q.id = k.question_id WHERE q.questionnaire_id = $1', [item.id])).rows;
+        const correct = Object.fromEntries(keys.map(k => [k.question_id, k.correct_option]));
+        await as(alice);
+        const incomplete = { ...correct }; delete incomplete[item.questions[14].id];
+        await assert.rejects(db.query('SELECT public.submit_questionnaire($1, $2)', [item.id, JSON.stringify(incomplete)]), /tutte le domande/);
+        for (const [wrongCount, score, status] of [[4, 73, 'failed'], [3, 80, 'pending']]) {
+          const submission = { ...correct };
+          for (const question of item.questions.slice(-wrongCount)) submission[question.id] = (submission[question.id] + 1) % question.options.length;
+          const result = await db.query('SELECT public.submit_questionnaire($1, $2) AS id', [item.id, JSON.stringify(submission)]);
+          const scored = await db.query('SELECT score_percent, status, total_questions, questionnaire_version FROM public.certification_applications WHERE id = $1', [result.rows[0].id]);
+          assert.deepEqual(scored.rows[0], { score_percent: score, status, total_questions: 15, questionnaire_version: 2 });
+        }
+        await assert.rejects(db.query('SELECT * FROM public.questionnaire_answer_keys'), /permission denied/);
+      }
+    });
   } finally { await db.close(); }
 });

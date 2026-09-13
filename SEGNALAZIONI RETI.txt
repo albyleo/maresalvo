@@ -1,0 +1,8 @@
+SEGNALAZIONI RETI
+
+
+Abilitazione assegnata dallo staff: ogni account potrà contribuire una sola volta alla stessa segnalazione. Le conferme aiuteranno a dare priorità alle verifiche, ma la rete diventerà “verificata” solo dopo il controllo dello staff.
+
+Ricerca di segnalazioni entro 250 metri dal punto scelto: l’utente potrà riconoscere una rete già presente e aggiungere la propria osservazione. Metodo di ritrovamento, data e descrizione saranno obbligatori; l’eventuale prova fotografica resterà visibile allo staff.
+
+Il flusso ora comprende anche il pannello amministratore per abilitare gli utenti, leggere le prove e approvare o respingere le segnalazioni. I primi test del database passano: bloccano invii anonimi, account non autorizzati e conferme ripetute. Sto verificando l’interfaccia e la build prima di lasciarti i passaggi per pubblicare.

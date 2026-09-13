@@ -1,70 +1,60 @@
-# Mappa marina 3D — architettura e dati
+# Marine map sources and coverage
 
-La mappa usa **MapLibre GL JS** (vettoriale/raster, WebGL) con vista 3D inclinata.
-Tutta la configurazione dei layer è in `src/features/marine-map/config.ts`.
+The map opens with Esri satellite imagery, EMODnet bathymetry, OpenSeaMap seamarks
+and the EMODnet WDPA WMS enabled. The map occupies 90% of the viewport height,
+uses the available page width and offers a fullscreen control.
 
-## Due modalità (selettore)
+Both map modes start behind an explicit “Esplora la mappa” entry control. Inactive
+canvas controls are inert and receive no pointer events, so wheel and vertical
+touch gestures scroll the page. Once activated, the sticky exit button, Escape,
+a click outside, or leaving the viewport returns to page navigation. Switching
+map modes remounts the gate in its inactive state. Fullscreen includes the gate.
 
-`components/map/MapExplorer.tsx` offre uno switch tra:
+The previous `emodnet:mpa` layer did not exist in the service capabilities.
+It is replaced by `cddaareas,wdpaareas` (European and worldwide inventories).
+This international WMS shows protected boundaries;
+it does not establish uniform A/B/C zoning or unrestricted fishing rights.
 
-- **Mappa marina** — MapLibre GL (AMP, batimetria, satellite Esri, nautica, reti perse, AIS).
-- **Earth 3D** — `components/map/EarthGlobe.tsx`, globo Cesium con Google Photorealistic
-  3D Tiles (fallback satellite Esri). Caricato solo client-side (`dynamic`, `ssr:false`).
+## Local interactive catalog
 
-### Earth 3D (Cesium)
+`npm run marine:sync` imports published geographic data and generates
+`public/data/marine-areas.geojson`, the metadata catalog and a source manifest.
+The import is explicit, not part of a deployment build. Source failures or
+truncated responses stop the import instead of replacing the catalog silently.
 
-- Asset statici serviti da `/cesium` (copiati da `scripts/copy-cesium.mjs` in `postinstall`).
-- `NEXT_PUBLIC_GOOGLE_MAPS_KEY` → Google Photorealistic 3D Tiles (Map Tiles API + billing).
-- `NEXT_PUBLIC_CESIUM_ION_TOKEN` → terreno mondiale e geocoder (opzionale).
-- Senza chiavi: fallback a Esri World Imagery sul globo Cesium.
-- Il 3D fotorealistico mostra la superficie, non il fondale (per il fondale: batimetria).
+- 29 Italian IT90 marine protected areas from EMODnet / EEA CDDA. The source
+  contains version-2021 Italian records with 2025 metadata. It must not be
+  described as a complete inventory of every current Mediterranean protected site.
+- 35 zoned geometries for five Sardinian AMP from the Regione Sardegna WFS
+  `dbu:areemarineprotette`. The provider labels this dataset *dati indicativi*.
+- Five zoned geometries for Capo Milazzo, including the special Bs subzone,
+  from the Regione Siciliana SITR. Its download policy is CC BY 4.0, with
+  explicit direction to consult the decrees for authoritative boundaries.
+- Five geometries for Porto Cesareo reconstructed from the decimal-minute
+  coordinates in Article 4 of DM 12 December 1997. A and B are clipped against
+  the CDDA coastal boundary; C is its geometric remainder. This combination of
+  sources is an indicative reconstruction, not a survey or certified navigation
+  boundary. The metadata and UI disclose that distinction.
 
-## Componenti
+Sources:
+- https://emodnet.ec.europa.eu/en/human-activities
+- https://ows.emodnet-humanactivities.eu/wms?service=WMS&request=GetCapabilities
+- https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities
+- https://www.sitr.regione.sicilia.it/download/tematismi/parchi-riserve-e-aree-marine-protette/
+- https://faolex.fao.org/docs/pdf/ita34349.pdf
+- https://www.comune.portocesareo.le.it/Amministrazione/Enti-e-fondazioni/Area-Marina-Protetta
 
-- `components/map/MarineMap.tsx` — wrapper: sidebar ricerca/filtri AMP, pannello toggle layer, animazioni GSAP. Riceve `areas`, `ghostNets`, `aisVessels`.
-- `components/map/MarineMapCanvas.tsx` — istanza MapLibre (caricata client-side via `next/dynamic`, `ssr:false`). Costruisce lo stile, gestisce sorgenti GeoJSON dinamiche, popup, `flyTo` e visibilità layer.
-- `features/marine-map/config.ts` — endpoint WMS/WMTS/XYZ e default toggle.
-- `features/marine-map/data.ts` — fetch AMP, reti perse e AIS (da Supabase o dati di esempio).
+Porto Cesareo is 166.54 km², with about 32 km of coastline. Local zone descriptions
+summarize protection categories and link sources; they do not replace the 2009
+regulation or more recent ordinances/authorizations. Other zones without verified
+specific rules show the category and refer to the local regulation.
 
-## Layer
+Missing internal zoning is explicitly marked as unavailable. The blue outline
+means an AMP boundary, never zone C. WMS boundaries outside the local catalog
+can be clicked to query the published CDDA/WDPA name, designation and IUCN category
+through a fixed-endpoint GetFeatureInfo proxy. These categories are not A/B/C.
+CRM development seed rows no longer override the
+published geographic catalog. Net/AIS sample data retain their separate status.
 
-| Layer | Tipo MapLibre | Fonte | Default |
-|-------|---------------|-------|---------|
-| Base oceanica | raster | Esri Ocean | on |
-| Batimetria | raster (WMS) | EMODnet Bathymetry | on |
-| Simbologia nautica | raster (XYZ) | OpenSeaMap | off |
-| AMP ufficiali | raster (WMS) | EMODnet HA / MASE | off |
-| AMP (punti+label) | geojson circle/symbol | dati app | on |
-| Reti perse | geojson circle | dati app | on |
-| AIS | geojson circle | `/api/ais` | off |
-
-## Profondità (batimetria)
-
-`EMODNET_BATHYMETRY_WMS` punta al WMS EMODnet (`emodnet:mean_multicolour`),
-reso come layer raster semitrasparente sopra la base. In alternativa GEBCO per copertura globale.
-
-## Terreno 3D del fondale
-
-Opzionale: se `NEXT_PUBLIC_MAPTILER_KEY` è presente, viene aggiunta una sorgente
-`raster-dem` (terrain-RGB) e attivato `map.setTerrain(...)`. Senza chiave la mappa
-resta in 3D prospettico (pitch/bearing) ma senza rilievo reale.
-
-## AIS / monitoraggio pesca
-
-`/api/ais` è un proxy: senza `GFW_API_TOKEN` restituisce dati di esempio; con token
-va collegato a Global Fishing Watch e al geofencing dei punti contro i poligoni AMP
-(marcando `in_protected_area`). I punti che pescano dentro un'AMP vengono evidenziati
-in rosso ed elencati in `/admin/monitoraggio`.
-
-## Reti perse (ghost nets)
-
-`/segnala-rete` cattura la posizione via `navigator.geolocation`, invia a
-`POST /api/ghost-nets` (validazione zod). Le segnalazioni compaiono sul layer pubblico
-e in `/admin/reti-perse` con workflow report → verifica → recupero.
-
-## Sostituire i poligoni AMP reali
-
-Per i perimetri reali (non solo i centroidi di esempio):
-1. scaricare il GeoJSON/WFS ufficiale ISPRA/MASE;
-2. importarlo in `marine_protected_areas.geometry` (colonna PostGIS);
-3. aggiungere una sorgente `geojson`/vector-tiles e un layer `fill`/`line` nello stile.
+`npm run test:marine` checks geometry integrity, catalog joins and the nonoverlap
+and complete partition of the Porto Cesareo reconstruction.

@@ -15,7 +15,7 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-[var(--color-deep-blue)]/80 px-6 py-3 backdrop-blur-xl">
+        <nav className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-[#061719]/75 px-5 py-3 backdrop-blur-xl">
           <Link href="/" className="flex items-center gap-2 group">
             <Waves className="h-7 w-7 text-[var(--color-aqua)] transition-transform group-hover:scale-110" />
             <span className="text-lg font-bold text-white tracking-tight">
@@ -26,7 +26,7 @@ export function Header() {
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden xl:flex items-center gap-1">
             {PUBLIC_NAV.map((item) => (
               <Link
                 key={item.href}
@@ -43,7 +43,7 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" size="sm">
                 Accedi
@@ -57,16 +57,18 @@ export function Header() {
           </div>
 
           <button
-            className="md:hidden text-white p-2"
+            className="xl:hidden text-white p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </nav>
 
         {mobileOpen && (
-          <div className="md:hidden mt-2 rounded-2xl border border-white/10 bg-[var(--color-deep-blue)]/95 backdrop-blur-xl p-4 space-y-2">
+          <div id="mobile-navigation" className="xl:hidden mt-2 rounded-2xl border border-white/10 bg-[var(--color-deep-blue)]/95 backdrop-blur-xl p-4 space-y-2">
             {PUBLIC_NAV.map((item) => (
               <Link
                 key={item.href}

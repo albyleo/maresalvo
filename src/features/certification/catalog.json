@@ -1,0 +1,466 @@
+[
+  {
+    "title": "Pesca sportiva con canna",
+    "description": "Bolentino, traina, attrezzature e tutela delle risorse marine.",
+    "id": "40000000-0000-4000-8000-000000000101",
+    "version": 2,
+    "pass_percent": 80,
+    "is_demo": true,
+    "questions": [
+      {
+        "id": "50000000-0000-4000-8000-000000001101",
+        "position": 1,
+        "prompt": "Qual è la misura minima consentita per trattenere una Cernia (Epinephelus spp.)?",
+        "options": [
+          "30 cm",
+          "45 cm",
+          "60 cm",
+          "Nessun limite"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001102",
+        "position": 2,
+        "prompt": "Quali sono i requisiti minimi di taglia per trattenere un Tonno Rosso?",
+        "options": [
+          "115 cm o 30 kg",
+          "100 cm o 20 kg",
+          "150 cm o 50 kg"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001103",
+        "position": 3,
+        "prompt": "La comunicazione di cattura di un Tonno Rosso (con regolare nulla osta) è obbligatoria?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001104",
+        "position": 4,
+        "prompt": "Qual è il limite massimo di peso giornaliero del pescato per un pescatore sportivo?",
+        "options": [
+          "3 kg",
+          "5 kg",
+          "10 kg"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001105",
+        "position": 5,
+        "prompt": "Quanti ami sono consentiti al massimo su un palamito (coffa) per uso ricreativo?",
+        "options": [
+          "100",
+          "200",
+          "500"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001106",
+        "position": 6,
+        "prompt": "Quante canne o lenze a mano sono consentite al massimo per ogni imbarcazione da diporto?",
+        "options": [
+          "3",
+          "5",
+          "Nessun limite"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001107",
+        "position": 7,
+        "prompt": "È consentito vendere a ristoranti locali il pesce catturato durante una battuta di pesca sportiva?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001108",
+        "position": 8,
+        "prompt": "È necessaria una comunicazione/censimento al Ministero per praticare la pesca sportiva in mare in Italia?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001109",
+        "position": 9,
+        "prompt": "Qual è il periodo di chiusura per la pesca del pesce spada nel Mediterraneo previsto dall’articolo 10 del Regolamento (UE) 2019/1154?",
+        "options": [
+          "Dal 1° gennaio al 31 marzo",
+          "Dal 1° giugno al 31 agosto",
+          "Nessun periodo di chiusura"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001110",
+        "position": 10,
+        "prompt": "L'uso di mulinelli elettrici (salpabolentini) per la pesca di profondità è consentito ai ricreativi?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001111",
+        "position": 11,
+        "prompt": "Qual è la distanza minima da mantenere rispetto agli attrezzi da pesca professionali segnalati (es. reti fisse)?",
+        "options": [
+          "50 metri",
+          "100 metri",
+          "Nessuna distanza"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001112",
+        "position": 12,
+        "prompt": "I pescatori sportivi hanno l'obbligo di tagliare il lobo inferiore della pinna caudale per alcune specie di pregio catturate (es. Spigola, Orata, Dentice)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001113",
+        "position": 13,
+        "prompt": "In linea generale, è consentito pescare con la canna all'interno dei porti commerciali?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001114",
+        "position": 14,
+        "prompt": "Nella pesca sportiva è consentito l'uso di fonti luminose attrattive di grande potenza (es. lampare)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001115",
+        "position": 15,
+        "prompt": "Qual è la misura minima di conservazione (taglia minima) per trattenere un Pesce Spada?",
+        "options": [
+          "80 cm",
+          "100 cm (dalla mascella inferiore alla forca)",
+          "120 cm"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Pesca in apnea",
+    "description": "Segnalazione, attrezzatura, comportamento e sicurezza in mare.",
+    "id": "40000000-0000-4000-8000-000000000102",
+    "version": 2,
+    "pass_percent": 80,
+    "is_demo": true,
+    "questions": [
+      {
+        "id": "50000000-0000-4000-8000-000000001201",
+        "position": 1,
+        "prompt": "A quale distanza minima dalle spiagge frequentate da bagnanti è consentita la pesca in apnea?",
+        "options": [
+          "100 metri",
+          "300 metri",
+          "500 metri"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001202",
+        "position": 2,
+        "prompt": "È consentita la raccolta del Dattero di mare se effettuata a mano senza attrezzi?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001203",
+        "position": 3,
+        "prompt": "Come deve essere segnalato un pescatore in apnea in immersione?",
+        "options": [
+          "Boa rossa con striscia bianca",
+          "Pallone nero",
+          "Boa gialla"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001204",
+        "position": 4,
+        "prompt": "A quale distanza massima dalla boa di segnalazione può operare il subacqueo?",
+        "options": [
+          "25 metri",
+          "50 metri",
+          "100 metri"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001205",
+        "position": 5,
+        "prompt": "Qual è l'età minima per poter utilizzare un fucile subacqueo?",
+        "options": [
+          "14 anni",
+          "16 anni",
+          "18 anni"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001206",
+        "position": 6,
+        "prompt": "È consentita la pesca in apnea nelle ore notturne (dal tramonto all'alba) con l'ausilio di una torcia?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001207",
+        "position": 7,
+        "prompt": "Qual è la misura minima consentita per la cattura di una Cernia (Epinephelus spp.) in apnea?",
+        "options": [
+          "30 cm",
+          "45 cm",
+          "60 cm"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001208",
+        "position": 8,
+        "prompt": "Qual è il rischio fisiologico principale derivante dall'eccessiva iperventilazione prima di un tuffo?",
+        "options": [
+          "Embolia gassosa",
+          "Sincope anossica (blackout)",
+          "Ipotermia"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001209",
+        "position": 9,
+        "prompt": "L'uso dell'acquascooter nella pesca in apnea è:",
+        "options": [
+          "Vietato",
+          "Consentito con fucile carico",
+          "Consentito ma il fucile deve essere scarico durante il moto"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001210",
+        "position": 10,
+        "prompt": "È consentito caricare, o mantenere carico, il fucile subacqueo fuori dall'acqua (es. sulla spiaggia o in barca)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001211",
+        "position": 11,
+        "prompt": "È possibile praticare la pesca subacquea avvalendosi di apparecchi ausiliari di respirazione (es. bombole, A.R.A.)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001212",
+        "position": 12,
+        "prompt": "A quale distanza minima deve mantenersi un pescatore in apnea dagli impianti fissi da pesca e dalle reti da posta?",
+        "options": [
+          "50 metri",
+          "100 metri",
+          "200 metri"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001213",
+        "position": 13,
+        "prompt": "Il corallo rosso può essere prelevato da un pescatore sportivo in apnea?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001214",
+        "position": 14,
+        "prompt": "Qual è il limite di cattura giornaliero per i cefalopodi (es. polpi, seppie) in apnea?",
+        "options": [
+          "Rientrano nel limite totale dei 5 kg",
+          "10 kg",
+          "Nessun limite"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001215",
+        "position": 15,
+        "prompt": "È consentito pescare le aragoste e gli astici praticando la pesca in apnea?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Pesca professionale con reti",
+    "description": "Attrezzi da posta, tracciabilità e protezione della fauna marina.",
+    "id": "40000000-0000-4000-8000-000000000103",
+    "version": 2,
+    "pass_percent": 80,
+    "is_demo": true,
+    "questions": [
+      {
+        "id": "50000000-0000-4000-8000-000000001301",
+        "position": 1,
+        "prompt": "Da quante \"pezze\" (pareti di rete) è composta una rete da posta di tipo \"Tramaglio\"?",
+        "options": [
+          "Una",
+          "Due",
+          "Tre"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001302",
+        "position": 2,
+        "prompt": "Come devono essere obbligatoriamente etichettati i segnali (boe) delle reti da posta fisse?",
+        "options": [
+          "Nessun obbligo",
+          "Con la matricola e sigla dell'imbarcazione",
+          "Con il nome del capitano"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001303",
+        "position": 3,
+        "prompt": "Come deve essere segnalata una rete da posta fissa calata durante la notte?",
+        "options": [
+          "Con fari rotanti",
+          "Con boe radarabili e luci lampeggianti (gialle/bianche)",
+          "Nessuna segnalazione"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001304",
+        "position": 4,
+        "prompt": "Qual è la causa principale della creazione di \"Reti Fantasma\" (Ghost Fishing)?",
+        "options": [
+          "Ancoraggio errato e forti correnti/maltempo",
+          "Reti troppo nuove",
+          "Presenza di pesci di grossa taglia"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001305",
+        "position": 5,
+        "prompt": "Le reti da posta fisse possono essere calate ostruendo il canale di accesso di un porto?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001306",
+        "position": 6,
+        "prompt": "Quale fattore determina principalmente la dimensione minima della maglia autorizzata in una rete da posta?",
+        "options": [
+          "La specie bersaglio (Target)",
+          "Il fondale",
+          "La lunghezza della barca"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001307",
+        "position": 7,
+        "prompt": "Cosa deve fare un professionista in caso di cattura accidentale di una Tartaruga Marina (Caretta caretta) viva nella rete?",
+        "options": [
+          "Rimetterla subito in mare anche se comatosa",
+          "Issarla a bordo, applicare le procedure di rianimazione e avvisare la Capitaneria",
+          "Portarla al mercato"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001308",
+        "position": 8,
+        "prompt": "In generale, qual è la lunghezza massima consentita per un tramaglio per una piccola imbarcazione costiera?",
+        "options": [
+          "1.000 metri",
+          "Fino a 4.000 - 6.000 metri",
+          "Nessun limite"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001309",
+        "position": 9,
+        "prompt": "I pescatori professionali hanno l'obbligo di registrare il pescato su un \"Giornale di Pesca\" (Logbook)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001310",
+        "position": 10,
+        "prompt": "Le reti da posta fisse possono essere calate all'interno delle Zone A delle Aree Marine Protette (AMP)?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001311",
+        "position": 11,
+        "prompt": "Quale istituzione è principalmente preposta al controllo delle attività di pesca marittima in Italia?",
+        "options": [
+          "Polizia Municipale",
+          "Corpo delle Capitanerie di Porto - Guardia Costiera",
+          "Esercito"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001312",
+        "position": 12,
+        "prompt": "L'utilizzo delle reti da posta derivanti (le cosiddette \"spadare\") per la pesca dei grandi pelagici è consentito nell'UE?",
+        "options": [
+          "Vero",
+          "Falso"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001313",
+        "position": 13,
+        "prompt": "Che scopo ha il \"fermo pesca\" biologico obbligatorio?",
+        "options": [
+          "Risparmiare carburante",
+          "Tutelare le risorse ittiche nel periodo di massima riproduzione",
+          "Evitare il maltempo autunnale"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001314",
+        "position": 14,
+        "prompt": "Cos'è la rete da \"circuizione\" (es. cianciolo o lampara)?",
+        "options": [
+          "Una rete trascinata sul fondo",
+          "Una rete fissa che aspetta il pesce",
+          "Una rete che circonda banchi di pesci pelagici per poi chiudersi sul fondo"
+        ]
+      },
+      {
+        "id": "50000000-0000-4000-8000-000000001315",
+        "position": 15,
+        "prompt": "Da quale lunghezza \"fuori tutto\" dell'imbarcazione scatta l'obbligo di avere a bordo il VMS (Vessel Monitoring System) per il tracciamento satellitare?",
+        "options": [
+          "Tutte le barche",
+          "Oltre i 12 metri",
+          "Oltre i 24 metri"
+        ]
+      }
+    ]
+  }
+]

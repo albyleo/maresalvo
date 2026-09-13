@@ -42,7 +42,7 @@ export const PUBLIC_NAV: NavItem[] = [
   { label: "Mappa marina", href: "/mappa" },
   { label: "Segnala rete", href: "/segnala-rete" },
   { label: "Verifica Certificato", href: "/verifica" },
-  { label: "Qualifiche", href: "/qualifiche" },
+  { label: "Questionari", href: "/questionari" },
 ];
 
 export const DASHBOARD_NAV: NavItem[] = [

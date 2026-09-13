@@ -1,8 +1,8 @@
 /**
  * Configurazione layer cartografici marini.
  *
- * Le fonti sono servizi cartografici UFFICIALI / pubblici esposti via WMS/WMTS/XYZ,
- * così la mappa resta sempre aggiornata senza dover ospitare dataset statici.
+ * Servizi cartografici pubblici WMS/XYZ. La frequenza di aggiornamento dipende
+ * dal fornitore; i poligoni locali hanno fonti e versioni esplicite.
  *
  * - Aree Marine Protette: MASE / ISPRA / EMODnet Human Activities (WMS/WFS)
  * - Batimetria (profondità): EMODnet Bathymetry (WMS/WMTS) + GEBCO (fallback globale)
@@ -52,13 +52,14 @@ export const OPENSEAMAP_SEAMARK_TILES = [
 
 /**
  * Aree Marine Protette — WMS ufficiale.
- * Sostituire con l'endpoint MASE/ISPRA definitivo quando disponibile;
- * EMODnet Human Activities espone un dataset MPA europeo utilizzabile da subito.
+ * EMODnet Human Activities: CDDA (Europa) e WDPA (copertura internazionale).
+ * Nomi verificati nel GetCapabilities: cddaareas, wdpaareas (emodnet:mpa non esiste).
+ * Non contiene una zonazione A/B/C uniforme: queste zone sono un overlay locale.
  */
 export const MPA_WMS =
   "https://ows.emodnet-humanactivities.eu/wms" +
   "?service=WMS&request=GetMap&version=1.3.0" +
-  "&layers=emodnet:mpa&styles=" +
+  "&layers=cddaareas,wdpaareas&styles=" +
   "&format=image/png&transparent=true" +
   "&crs=EPSG:3857&width=256&height=256&bbox={bbox-epsg-3857}";
 
@@ -84,10 +85,10 @@ export interface LayerToggles {
 }
 
 export const DEFAULT_LAYERS: LayerToggles = {
-  satellite: false,
+  satellite: true,
   bathymetry: true,
-  seamarks: false,
-  mpaOfficial: false,
+  seamarks: true,
+  mpaOfficial: true,
   ghostNets: true,
   ais: false,
 };

@@ -10,6 +10,7 @@ import type {
 } from "@/types";
 import { MarineMap } from "@/components/map/MarineMap";
 import { cn } from "@/lib/utils";
+import { MapInteractionGate } from './MapInteractionGate';
 
 const EarthGlobe = dynamic(
   () => import("@/components/map/EarthGlobe").then((m) => m.EarthGlobe),
@@ -64,9 +65,9 @@ export function MapExplorer({ areas, ghostNets = [], aisVessels = [] }: Props) {
       {mode === "marine" ? (
         <MarineMap areas={areas} ghostNets={ghostNets} aisVessels={aisVessels} fullScreen />
       ) : (
-        <div className="h-[calc(100vh-8rem)] overflow-hidden rounded-2xl border border-white/10">
+        <MapInteractionGate className="marine-map-shell marine-map-expanded relative overflow-hidden rounded-2xl border border-white/10">
           <EarthGlobe areas={areas} />
-        </div>
+        </MapInteractionGate>
       )}
     </div>
   );

@@ -124,6 +124,20 @@ export interface MarineProtectedArea {
   area_km2: number | null;
   geometry?: GeoJSON.MultiPolygon | GeoJSON.Polygon;
   centroid?: GeoJSON.Point;
+  bounds?: [number, number, number, number];
+  source_url?: string;
+  source_label?: string;
+  source_date?: string;
+  zones?: MarineZone[];
+}
+
+export interface MarineZone {
+  id: string;
+  zone: string;
+  name: string;
+  source_url: string;
+  source_label: string;
+  notes: string;
 }
 
 // --- Segnalazione reti perse a mare (ghost nets) ---

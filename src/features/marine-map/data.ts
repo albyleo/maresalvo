@@ -5,113 +5,12 @@ import type {
   IllegalFishingReport,
 } from "@/types";
 
-/** Centroidi [lng, lat] delle AMP campione (per marker e flyTo). */
-export const AREA_COORDS: Record<string, [number, number]> = {
-  portofino: [9.215, 44.303],
-  plemmirio: [15.3, 37.0],
-  "santuario-pelagos": [8.0, 43.5],
-  "torre-guaceto": [17.78, 40.72],
-  "cinque-terre": [9.72, 44.12],
-};
+import officialAreas from './official-areas.json';
 
-export const SAMPLE_AMP_AREAS: MarineProtectedArea[] = [
-  {
-    id: "1",
-    name: "Portofino",
-    slug: "portofino",
-    area_type: "amp",
-    region_name: "Liguria",
-    managing_body: "Ente Parco di Portofino",
-    description:
-      "Area Marina Protetta istituita nel 1999, tra le più note del Mediterraneo.",
-    regulation_url: "https://www.portofinoamp.it",
-    fishing_status: "prohibited",
-    fishing_notes: "Pesca sportiva e commerciale vietata nella zona A integrale",
-    seasonality: null,
-    area_km2: 3.46,
-  },
-  {
-    id: "2",
-    name: "Plemmirio",
-    slug: "plemmirio",
-    area_type: "amp",
-    region_name: "Sicilia",
-    managing_body: "Regione Sicilia",
-    description: "AMP istituita nel 2004, costa sud-est di Siracusa.",
-    regulation_url: "https://www.regione.sicilia.it",
-    fishing_status: "restricted",
-    fishing_notes: "Zone A vietate; zone B con regolamentazione stagionale",
-    seasonality: "Maggiori restrizioni maggio-settembre",
-    area_km2: 24.0,
-  },
-  {
-    id: "3",
-    name: "Santuario Pelagos",
-    slug: "santuario-pelagos",
-    area_type: "santuario",
-    region_name: "Internazionale",
-    managing_body: "Accordo Italia-Francia-Monaco",
-    description:
-      "Santuario internazionale per la protezione dei mammiferi marini.",
-    regulation_url: "https://www.sanctuary.pelagos.org",
-    fishing_status: "restricted",
-    fishing_notes: "Regolamentazione specifica per cetacei e attività umane",
-    seasonality: null,
-    area_km2: 87400.0,
-  },
-  {
-    id: "4",
-    name: "Torre Guaceto",
-    slug: "torre-guaceto",
-    area_type: "amp",
-    region_name: "Puglia",
-    managing_body: "Consorzio di Gestione Torre Guaceto",
-    description: "AMP in Puglia, istituita nel 1991, estesa nel 2000.",
-    regulation_url: "https://www.riservatorreguaceto.it",
-    fishing_status: "restricted",
-    fishing_notes: "Zone A integrali; zone B con limitazioni",
-    seasonality: null,
-    area_km2: 22.0,
-  },
-  {
-    id: "5",
-    name: "Cinque Terre",
-    slug: "cinque-terre",
-    area_type: "amp",
-    region_name: "Liguria",
-    managing_body: "Ente Parco Nazionale Cinque Terre",
-    description: "AMP istituita nel 1997 nel Parco Nazionale delle Cinque Terre.",
-    regulation_url: "https://www.parconazionale5terre.it",
-    fishing_status: "restricted",
-    fishing_notes: "Regolamentazione differenziata per zone A, B, C",
-    seasonality: "Restrizioni estive nelle zone B",
-    area_km2: 4.0,
-  },
-];
-
+/** Published cartographic catalog, independent of CRM development seed data. */
 export async function getMarineAreas(): Promise<MarineProtectedArea[]> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-  if (!supabaseUrl) {
-    return SAMPLE_AMP_AREAS;
-  }
-
-  try {
-    const { createClient } = await import("@/lib/supabase/server");
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("marine_protected_areas")
-      .select("*")
-      .eq("is_active", true)
-      .order("name");
-
-    if (error || !data?.length) return SAMPLE_AMP_AREAS;
-    return data as MarineProtectedArea[];
-  } catch {
-    return SAMPLE_AMP_AREAS;
-  }
+  return officialAreas as MarineProtectedArea[];
 }
-
 /** Reti perse di esempio (sostituite dai dati Supabase quando configurato). */
 export const SAMPLE_GHOST_NETS: GhostNetReport[] = [
   {

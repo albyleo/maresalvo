@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { MarineProtectedArea } from "@/types";
-import { AREA_COORDS } from "@/features/marine-map/data";
 
 /**
  * Globo 3D fotorealistico (Cesium).
@@ -78,7 +77,7 @@ export function EarthGlobe({ areas = [] }: Props) {
 
         // Marker AMP
         for (const a of areas) {
-          const c = AREA_COORDS[a.slug];
+          const c = a.centroid?.coordinates;
           if (!c) continue;
           viewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(c[0], c[1]),

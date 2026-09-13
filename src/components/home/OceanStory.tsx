@@ -1,0 +1,109 @@
+"use client";
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function OceanStory() {
+  const rootRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const [staticView, setStaticView] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    const video = videoRef.current;
+    if (!root || !video) return;
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      if (staticView) return;
+      root.dataset.motion = 'on';
+      video.src = '/videos/tartaruga-scroll.mp4';
+      video.load();
+      const frames = root.querySelectorAll<HTMLElement>('.story-frame');
+      const playhead = { progress: 0 };
+      let raf = 0;
+      let disposed = false;
+      // Seek only when the decoder is ready. Fast scrolls keep the latest target.
+      const seek = () => {
+        raf = 0;
+        if (disposed || video.seeking || !Number.isFinite(video.duration) || video.readyState < 1) return;
+        const target = Math.min(Math.max(0, video.duration - 0.04), playhead.progress * video.duration);
+        if (Math.abs(video.currentTime - target) > 0.035) video.currentTime = target;
+      };
+      const scheduleSeek = () => { if (!raf && !disposed) raf = requestAnimationFrame(seek); };
+      video.addEventListener('loadedmetadata', scheduleSeek);
+      video.addEventListener('seeked', scheduleSeek);
+      gsap.set(frames, { autoAlpha: 0, y: 36 });
+      gsap.set(frames[0], { autoAlpha: 1, y: 0 });
+      const timeline = gsap.timeline({
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: 0.65, invalidateOnRefresh: true },
+      });
+      timeline.to(playhead, { progress: 1, duration: 1, ease: 'none', onUpdate: scheduleSeek }, 0)
+        .to(progressRef.current, { scaleX: 1, duration: 1, ease: 'none' }, 0)
+        .to(frames[0], { autoAlpha: 0, y: -30, duration: 0.08 }, 0.10)
+        .fromTo(frames[1], { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.09 }, 0.23)
+        .to(frames[1], { autoAlpha: 0, y: -30, duration: 0.08 }, 0.42)
+        .fromTo(frames[2], { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.09 }, 0.51)
+        .to(frames[2], { autoAlpha: 0, y: -30, duration: 0.08 }, 0.70)
+        .fromTo(frames[3], { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.09 }, 0.79);
+      ScrollTrigger.refresh();
+      return () => {
+        disposed = true;
+        cancelAnimationFrame(raf);
+        video.removeEventListener('loadedmetadata', scheduleSeek);
+        video.removeEventListener('seeked', scheduleSeek);
+        root.dataset.motion = 'off';
+        video.removeAttribute('src');
+        video.load();
+      };
+    }, root);
+    return () => media.revert();
+  }, [staticView]);
+
+  return <section ref={rootRef} className="ocean-story" data-motion="off" aria-label="Il progetto MareSalvo">
+    <div className="story-scene">
+      <div className="story-media" aria-hidden="true">
+        <video ref={videoRef} muted playsInline preload="auto" poster="/images/tartaruga-poster.jpg" onError={() => setVideoError(true)} />
+        <div className="story-shade" />
+      </div>
+      <div className="story-frames">
+        <div className="story-frame story-intro">
+          <p className="story-eyebrow">MARESALVO / UN PROGETTO PER IL MEDITERRANEO</p>
+          <h1>Il mare è vita.<br /><span>Prendiamocene cura.</span></h1>
+          <p className="story-description">Conoscere il mare. Viverlo con rispetto.<br />Proteggere ciò che lo rende unico.</p>
+          <Link href="/questionari" className="story-link">Esplora i questionari <ArrowUpRight size={19} /></Link>
+        </div>
+        <div className="story-frame">
+          <p className="story-eyebrow">01 / CONOSCERE</p>
+          <h2>Ogni gesto in mare<br />inizia dalla <em>consapevolezza.</em></h2>
+          <p className="story-description">Pesca sportiva, apnea e reti professionali.<br />Tre percorsi per mettere alla prova le tue conoscenze.</p>
+          <Link href="/questionari" className="story-link">Scegli il tuo percorso <ArrowUpRight size={19} /></Link>
+        </div>
+        <div className="story-frame">
+          <p className="story-eyebrow">02 / PROTEGGERE</p>
+          <h2>Una rete persa.<br />Un impatto che <em>rimane.</em></h2>
+          <p className="story-description">Le reti abbandonate continuano a intrappolare la vita marina. Una segnalazione è il primo passo verso il recupero.</p>
+          <Link href="/segnala-rete" className="story-link">Segnala una rete <ArrowUpRight size={19} /></Link>
+        </div>
+        <div className="story-frame">
+          <p className="story-eyebrow">03 / ESPLORARE</p>
+          <h2>Un mare da vivere.<br />Un mondo da <em>preservare.</em></h2>
+          <p className="story-description">Esplora fondali, aree marine protette e segnalazioni. Il viaggio continua sulla mappa.</p>
+          <a href="#mappa" className="story-link">Esplora la mappa <ArrowDown size={19} /></a>
+        </div>
+      </div>
+      <div className="story-bottom">
+        <span className="story-scroll-hint"><ArrowDown size={15} /> Scorri per immergerti</span>
+        <button type="button" onClick={() => setStaticView(value => !value)} aria-pressed={staticView} className="story-motion-toggle">{staticView ? 'Attiva animazioni' : 'Leggi senza animazioni'}</button>
+      </div>
+      {videoError && <p role="status" className="story-video-error">Video non disponibile. Puoi continuare a esplorare il progetto.</p>}
+      <div className="story-progress" aria-hidden="true"><div ref={progressRef} /></div>
+    </div>
+  </section>;
+}

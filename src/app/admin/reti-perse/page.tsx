@@ -3,6 +3,9 @@ import { Badge } from "@/components/ui/Badge";
 import { getGhostNets } from "@/features/marine-map/data";
 import { formatDate } from "@/lib/utils";
 import type { GhostNetStatus } from "@/types";
+import { createClient, getCurrentProfile } from '@/lib/supabase/server';
+import { NetAdmin } from '@/features/ghost-nets/NetAdmin';
+import type { ReviewNet } from '@/features/ghost-nets/types';
 
 const STATUS_LABEL: Record<GhostNetStatus, string> = {
   reported: "Segnalata",
@@ -29,6 +32,17 @@ const GEAR_LABEL: Record<string, string> = {
 };
 
 export default async function AdminRetiPerse() {
+  const profile = await getCurrentProfile();
+  if (profile?.role === 'super_admin') {
+    const supabase = await createClient();
+    const [queue, users, permissions] = await Promise.all([
+      supabase.rpc('ghost_net_review_queue'),
+      supabase.from('profiles').select('id,first_name,last_name').eq('is_active', true).neq('role', 'super_admin').order('last_name').limit(1000),
+      supabase.from('ghost_net_reporters').select('profile_id,enabled'),
+    ]);
+    if (queue.error || users.error || permissions.error) return <div className="rounded-xl border border-amber-200/20 p-6 text-amber-100">Gestione reti in preparazione. Esegui la migrazione 006_ghost_net_observations.sql nel SQL Editor di Supabase e ricarica questa pagina.</div>;
+    return <NetAdmin reports={(queue.data ?? []) as ReviewNet[]} people={(users.data ?? []).map(user => ({ ...user, enabled: permissions.data?.some(permission => permission.profile_id===user.id && permission.enabled) ?? false }))}/>;
+  }
   const reports = await getGhostNets();
   const open = reports.filter((r) => r.status === "reported").length;
   const recovered = reports.filter((r) => r.status === "recovered").length;
@@ -84,7 +98,7 @@ export default async function AdminRetiPerse() {
       </Card>
 
       <CardDescription className="mt-4">
-        Workflow: segnalazione (pubblica o pescatore) → verifica staff →
+        Workflow: osservazioni da utenti abilitati → verifica amministratore →
         pianificazione recupero → recupero. Le segnalazioni verificate appaiono
         sul layer pubblico della mappa marina.
       </CardDescription>
