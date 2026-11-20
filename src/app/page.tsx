@@ -34,7 +34,7 @@ export default async function HomePage() {
             </div>
             <Link href="/mappa">
               <Button variant="outline" size="sm">
-                Mappa completa
+                Mappa AMP completa
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>

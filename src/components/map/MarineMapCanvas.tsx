@@ -136,14 +136,16 @@ export function MarineMapCanvas({
   const loadedRef = useRef(false);
   const onSelectRef = useRef(onSelectArea);
   const areasRef = useRef(areas);
+  const selectedRef = useRef(selectedArea);
   const latestRef = useRef({ areas, ghostNets, aisVessels, layers });
   const errorRef = useRef(onLayerError);
   useEffect(() => {
     onSelectRef.current = onSelectArea;
     areasRef.current = areas;
+    selectedRef.current = selectedArea;
     latestRef.current = { areas, ghostNets, aisVessels, layers };
     errorRef.current = onLayerError;
-  }, [onSelectArea, onLayerError, areas, ghostNets, aisVessels, layers]);
+  }, [onSelectArea, onLayerError, areas, ghostNets, aisVessels, layers, selectedArea]);
 
   function emptyFC(): GeoJSON.FeatureCollection {
     return { type: "FeatureCollection", features: [] };
@@ -230,7 +232,10 @@ export function MarineMapCanvas({
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
     map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
     map.addControl(new maplibregl.FullscreenControl({container:containerRef.current.closest('.marine-map-shell') as HTMLElement}), 'top-right');
-    const resize = new ResizeObserver(() => map.resize());
+    const resize = new ResizeObserver(() => {
+      map.resize();
+      if (selectedRef.current?.bounds) map.fitBounds(selectedRef.current.bounds, {padding:{top:65,bottom:35,left:30,right:45}, pitch:0, duration:0, maxZoom:13});
+    });
     resize.observe(containerRef.current);
     let identifyRequest: AbortController | undefined;
     const identifyPopup = new maplibregl.Popup({maxWidth:'320px',className:'marine-identify-popup'});

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, Waves } from "lucide-react";
 import { APP_NAME, PUBLIC_NAV } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,63 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrollHidden, setScrollHidden] = useState(false);
+  const header = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Match the hamburger navigation breakpoint. Keep native scrolling and
+    // ignore tiny direction changes from touch momentum / browser chrome.
+    const mobile = window.matchMedia('(max-width: 1279px)');
+    const position = () => Math.max(0, Math.min(window.scrollY, document.documentElement.scrollHeight - window.innerHeight));
+    let previous = position();
+    let direction = 0;
+    let distance = 0;
+    let frame = 0;
+    const reset = () => {
+      previous = position();
+      direction = 0;
+      distance = 0;
+      setScrollHidden(false);
+    };
+    const update = () => {
+      frame = 0;
+      const current = position();
+      const delta = current - previous;
+      previous = current;
+      const keyboardFocus = header.current?.contains(document.activeElement) && document.activeElement?.matches(':focus-visible');
+      if (!mobile.matches || mobileOpen || current <= 24 || keyboardFocus) {
+        distance = 0;
+        direction = 0;
+        setScrollHidden(false);
+        return;
+      }
+      if (!delta) return;
+      const nextDirection = Math.sign(delta);
+      if (nextDirection !== direction) distance = 0;
+      direction = nextDirection;
+      distance += Math.abs(delta);
+      if (direction > 0 && current > 96 && distance >= 12) {
+        setScrollHidden(true);
+        distance = 0;
+      } else if (direction < 0 && distance >= 8) {
+        setScrollHidden(false);
+        distance = 0;
+      }
+    };
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const initialFrame = requestAnimationFrame(reset);
+    window.addEventListener('scroll', scroll, {passive:true});
+    window.addEventListener('pageshow', reset);
+    mobile.addEventListener('change', reset);
+    return () => {
+      cancelAnimationFrame(initialFrame);
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', scroll);
+      window.removeEventListener('pageshow', reset);
+      mobile.removeEventListener('change', reset);
+    };
+  }, [pathname, mobileOpen]);
+
   useEffect(() => {
     if (!mobileOpen) return;
     const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setMobileOpen(false); };
@@ -18,7 +75,8 @@ export function Header() {
   }, [mobileOpen]);
 
   return (
-    <header className="site-header fixed top-0 left-0 right-0 z-50" data-menu-open={mobileOpen}>
+    <header ref={header} className="site-header fixed top-0 left-0 right-0 z-50" data-menu-open={mobileOpen} data-scroll-hidden={scrollHidden && !mobileOpen}
+      onFocusCapture={event => { if (event.target.matches(':focus-visible')) setScrollHidden(false); }}>
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8">
         <nav aria-label="Navigazione principale" className="flex min-h-20 items-center justify-between gap-4">
           <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 group">

@@ -4,11 +4,16 @@ The map opens with Esri satellite imagery, EMODnet bathymetry, OpenSeaMap seamar
 and the EMODnet WDPA WMS enabled. The map fills the viewport height below the navigation,
 uses the available page width and offers a fullscreen control.
 
-On the homepage only, both map modes start behind an explicit “Attiva mappa” entry control. Inactive
+The public map is named “Mappa AMP”. The Earth 3D view is no longer mounted or
+offered in the interface; satellite imagery remains a layer of the AMP map.
+On the homepage only, the map starts behind a single “Attiva la mappa” button, without an explanatory banner. Inactive
 canvas controls are inert and receive no pointer events, so wheel and vertical
-touch gestures scroll the page. Once activated, the sticky exit button, Escape,
-a click outside, or leaving the viewport returns to page navigation. Switching
-map modes remounts the gate in its inactive state. Fullscreen includes the gate.
+touch gestures scroll the page. Once activated, a compact back-arrow in the
+upper-left map corner, Escape, a click outside, or leaving the viewport returns
+to page navigation. Mobile browser Back also exits. The arrow follows the canvas
+when a details panel opens and leaves room for the map controls. Fullscreen includes the gate.
+The color key is collapsed under “Legenda” by default; opening it shows the
+boundary and A/B/C meanings. No instructional paragraph overlays the map.
 The dedicated map, net reporting map and Windy weather map are immediately
 interactive; they do not add a gesture-entry step or a map-only history entry.
 

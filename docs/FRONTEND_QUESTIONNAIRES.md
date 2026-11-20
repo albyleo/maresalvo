@@ -31,7 +31,13 @@
 - Page backgrounds use document-height blue/cyan gradients without an animated
   blur or scroll handler. The translucent header keeps one Login link, including
   on mobile; its expanded menu has a darker background for readability.
-- The map with marine/3D globe selection and a compact footer finish the page.
+- Below the desktop navigation breakpoint (1280px), the header slides out on
+  downward page scroll and returns on upward scroll or near the page top.
+  Direction thresholds suppress touch jitter. An open menu or keyboard focus
+  keeps navigation visible; route changes and breakpoint changes reset it.
+  The scroll listener is passive and coalesced through animation frames, and
+  reduced-motion preferences disable the slide transition.
+- The Mappa AMP with satellite and marine layers and a compact footer finish the page.
 
 ### Responsive verification (2026-11-20)
 

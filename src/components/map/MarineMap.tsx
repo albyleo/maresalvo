@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Search, Layers, X, ArrowLeft } from 'lucide-react';
+import { Search, Layers, X, ArrowLeft, ChevronDown } from 'lucide-react';
 import type { MarineProtectedArea, GhostNetReport, AisVesselPoint } from '@/types';
 import { DEFAULT_LAYERS, type LayerToggles } from '@/features/marine-map/config';
 import { ZONE_STYLES } from '@/features/marine-map/zones';
@@ -39,11 +39,20 @@ export function MarineMap({areas,ghostNets=[],aisVessels=[],fullScreen=false,act
     panelClose.current?.focus({preventScroll:true});
     const shell = layout.current?.closest<HTMLElement>('.marine-map-shell');
     if (!shell || document.fullscreenElement) return;
-    const bounds = shell.getBoundingClientRect();
-    const headerBottom = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 80;
-    if (bounds.top < headerBottom + 8 || bounds.bottom > window.innerHeight - 8) {
-      shell.scrollIntoView({block:'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
-    }
+    const align = () => {
+      const bounds = shell.getBoundingClientRect();
+      const headerBottom = document.querySelector('.site-header')?.getBoundingClientRect().bottom ?? 80;
+      if (bounds.top < headerBottom + 8 || bounds.bottom > window.innerHeight - 8) {
+        shell.scrollIntoView({block:'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+      }
+    };
+    align();
+    let width = shell.clientWidth;
+    const resize = new ResizeObserver(() => {
+      if (shell.clientWidth !== width) { width = shell.clientWidth; align(); }
+    });
+    resize.observe(shell);
+    return () => resize.disconnect();
   }, [sidebarOpen, layersOpen, selectedArea?.id]);
   const closePanel = () => {
     const trigger = layersOpen ? layersButton : areasButton;
@@ -67,10 +76,12 @@ export function MarineMap({areas,ghostNets=[],aisVessels=[],fullScreen=false,act
           <button ref={layersButton} type="button" aria-expanded={layersOpen} aria-controls="marine-layers-panel" onClick={()=>{setLayersOpen(!layersOpen);setSidebarOpen(false);}}
             className="marine-tool-button"><Layers size={16}/>Layer</button>
         </div>
-    {!sidebarOpen && !layersOpen && <div className="marine-map-legend absolute left-3 bottom-12 z-10 max-w-[calc(100%-24px)] bg-[#0b2942]/95 border border-white/15 px-4 py-3 text-xs">
-      <div className="flex flex-wrap gap-x-4 gap-y-2"><span className="text-sky-300">━ Perimetro AMP</span>{['A','B','C'].map(code=><span key={code} style={{color:ZONE_STYLES[code].color}}>● {code} · {ZONE_STYLES[code].title}</span>)}</div>
-      <p className="text-white/50 mt-2">Tocca i poligoni per i dettagli. Zonazioni disponibili per {areas.filter(a=>a.zones?.length).length} AMP italiane.</p>
-      {!!errors.length && <p role="status" className="text-amber-200 mt-2">Alcune tessere non sono state caricate: {errors.map(e=>SOURCE_LABELS[e]).join(', ')}.</p>}
+    {!sidebarOpen && !layersOpen && <div className="marine-map-legend absolute left-3 z-10 max-w-[calc(100%-24px)] bg-[#0b2942]/95 border border-white/15 text-xs">
+      <details className="group">
+        <summary className="flex items-center justify-between gap-5 min-h-11 px-3 text-white/85 list-none [&::-webkit-details-marker]:hidden">Legenda<ChevronDown size={14} className="transition-transform group-open:rotate-180"/></summary>
+        <div className="grid gap-2 px-3 pb-3 border-t border-white/10 pt-3"><span className="text-sky-300">━ Perimetro AMP</span>{['A','B','C'].map(code=><span key={code} style={{color:ZONE_STYLES[code].color}}>● {code} · {ZONE_STYLES[code].title}</span>)}</div>
+      </details>
+      {!!errors.length && <p role="status" className="text-amber-200 px-3 pb-3 max-w-64">Alcune tessere non sono state caricate: {errors.map(e=>SOURCE_LABELS[e]).join(', ')}.</p>}
     </div>}
       </div>
     {sidebarOpen && <aside id="marine-area-panel" aria-label="Aree marine protette" className="marine-map-panel">

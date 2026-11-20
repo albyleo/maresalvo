@@ -7,9 +7,9 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mappa marina 3D",
+  title: "Mappa AMP",
   description:
-    "Mappa interattiva 3D: aree marine protette, profondità, simbologia nautica, reti perse, monitoraggio AIS e globo Earth 3D.",
+    "Esplora le aree marine protette, le zone di tutela, la batimetria e le segnalazioni di reti perse nel Mediterraneo.",
 };
 
 export default async function MappaPage() {
@@ -24,11 +24,10 @@ export default async function MappaPage() {
       <div className="mx-auto w-full px-5 sm:px-8">
         <div className="mb-8">
           <p className="section-kicker mb-5">Atlante marino / Mediterraneo</p>
-          <h1 className="page-title text-4xl sm:text-5xl text-white mb-4">Mappa marina 3D</h1>
+          <h1 className="page-title text-4xl sm:text-5xl text-white mb-4">Mappa AMP</h1>
           <p className="text-white/50 max-w-2xl">
-            Scegli tra la <strong>Mappa marina</strong> (AMP, batimetria EMODnet,
-            simbologia nautica, reti perse, AIS) e il globo <strong>Earth 3D</strong>{" "}
-            fotorealistico. Perimetri EMODnet, zonazioni regionali e ricostruzioni
+            Esplora aree marine protette, batimetria EMODnet, simbologia nautica e reti perse.
+            Perimetri EMODnet, zonazioni regionali e ricostruzioni
             documentate dai decreti. La copertura delle zone interne è parziale.
           </p>
         </div>
