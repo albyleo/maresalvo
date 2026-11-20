@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getGhostNets } from '@/features/marine-map/data';
+import { getPublicGhostNets } from '@/features/marine-map/data';
 import { createClient } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 
@@ -17,7 +17,7 @@ const reportSchema = z.object({
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  if (!url.searchParams.has('lat')) return NextResponse.json(await getGhostNets());
+  if (!url.searchParams.has('lat')) return NextResponse.json(await getPublicGhostNets(), { headers: { 'Cache-Control': 'private, no-store' } });
   if (!isSupabaseConfigured()) return NextResponse.json({ error: 'Servizio non configurato.' }, { status: 503 });
   const lat = Number(url.searchParams.get('lat')), lng = Number(url.searchParams.get('lng'));
   if (!url.searchParams.get('lat') || !url.searchParams.get('lng') || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat)>90 || Math.abs(lng)>180)

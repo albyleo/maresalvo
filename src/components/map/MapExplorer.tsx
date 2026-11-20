@@ -30,32 +30,35 @@ interface Props {
   areas: MarineProtectedArea[];
   ghostNets?: GhostNetReport[];
   aisVessels?: AisVesselPoint[];
+  activationRequired?: boolean;
 }
 
-export function MapExplorer({ areas, ghostNets = [], aisVessels = [] }: Props) {
+export function MapExplorer({ areas, ghostNets = [], aisVessels = [], activationRequired = false }: Props) {
   const [mode, setMode] = useState<Mode>("marine");
 
   return (
     <div>
-      <div className="mb-4 inline-flex rounded-full border border-white/10 bg-[var(--color-deep-blue)]/80 p-1">
+      <div aria-label="Tipo di mappa" className="mb-5 flex gap-6 border-b border-white/15">
         <button
           onClick={() => setMode("marine")}
+          aria-pressed={mode === 'marine'}
           className={cn(
-            "flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors",
+            "flex items-center gap-2 border-b-2 py-3 text-sm transition-colors",
             mode === "marine"
-              ? "bg-[var(--color-aqua)] text-[var(--color-deep-blue)]"
-              : "text-white/70 hover:text-white"
+              ? "border-[var(--color-aqua)] text-[var(--color-aqua)]"
+              : "border-transparent text-white/60 hover:text-white"
           )}
         >
           <MapIcon className="h-4 w-4" /> Mappa marina
         </button>
         <button
           onClick={() => setMode("earth")}
+          aria-pressed={mode === 'earth'}
           className={cn(
-            "flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors",
+            "flex items-center gap-2 border-b-2 py-3 text-sm transition-colors",
             mode === "earth"
-              ? "bg-[var(--color-aqua)] text-[var(--color-deep-blue)]"
-              : "text-white/70 hover:text-white"
+              ? "border-[var(--color-aqua)] text-[var(--color-aqua)]"
+              : "border-transparent text-white/60 hover:text-white"
           )}
         >
           <Globe className="h-4 w-4" /> Earth 3D
@@ -63,9 +66,9 @@ export function MapExplorer({ areas, ghostNets = [], aisVessels = [] }: Props) {
       </div>
 
       {mode === "marine" ? (
-        <MarineMap areas={areas} ghostNets={ghostNets} aisVessels={aisVessels} fullScreen />
+        <MarineMap areas={areas} ghostNets={ghostNets} aisVessels={aisVessels} fullScreen activationRequired={activationRequired}/>
       ) : (
-        <MapInteractionGate className="marine-map-shell marine-map-expanded relative overflow-hidden rounded-2xl border border-white/10">
+        <MapInteractionGate enabled={activationRequired} className="marine-map-shell marine-map-expanded relative overflow-hidden border-y border-white/10">
           <EarthGlobe areas={areas} />
         </MapInteractionGate>
       )}

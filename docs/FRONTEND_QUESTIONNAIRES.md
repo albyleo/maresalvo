@@ -4,7 +4,10 @@
 
 - The 30-second `public/videos/tartaruga.mp4` is preserved.
 - `npm run video:prepare` generates `tartaruga-scroll.mp4` (1280px, H.264,
-  keyframe every 10 frames, faststart, no audio) and the initial poster.
+  keyframe every 10 frames, faststart, no audio), `tartaruga-scroll-mobile.mp4`
+  (960px, 24 fps, H.264 Main, keyframe every 6 frames, faststart, no audio)
+  and the initial poster. `npm run video:prepare -- --mobile-only` rebuilds only
+  the mobile asset (9.2 MB versus 17.8 MB for desktop).
 - The prepared files are committed/deployed with the app. Video preparation is
   intentionally not part of the Vercel build.
 - GSAP ScrollTrigger drives the entire film and the four text stages. Initial
@@ -15,7 +18,30 @@
 - Below 641px, `object-position: 40% center` shifts the film right relative
   to the original centered framing; desktop framing stays centered.
 - Reduced motion and “Leggi senza animazioni” expose a static reading layout.
+- Mobile/coarse-pointer devices load the lighter source once per animation
+  session, including after rotation. Seeks are coalesced with animation frames
+  and wait for decoded data; `loadeddata`, `canplay` and `seeked` resume the
+  latest target after buffering. A first pointer gesture primes and pauses the
+  decoder if the browser requires user interaction. Native scrolling is retained.
+- [GSAP ignoreMobileResize](https://gsap.com/docs/v3/Plugins/ScrollTrigger/static.config/)
+  avoids timeline refreshes for small browser-chrome height changes. Orientation
+  and significant resizes still refresh. CSS includes small/landscape typography,
+  dynamic viewport coverage and safe-area padding. Inline muted playback follows
+  [WebKit video guidance](https://webkit.org/blog/6784/new-video-policies-for-ios/).
+- Page backgrounds use document-height blue/cyan gradients without an animated
+  blur or scroll handler. The translucent header keeps one Login link, including
+  on mobile; its expanded menu has a darker background for readability.
 - The map with marine/3D globe selection and a compact footer finish the page.
+
+### Responsive verification (2026-11-20)
+
+Production build checked in the local browser at 320×568, 390×844, 430×932,
+844×390 (rotation) and 1440×900. Verified full-height video, no horizontal
+overflow, forward/reverse scrubbing, retained mobile source on rotation,
+static-reading toggle, mobile menu/Escape and the single Login destination.
+Lint and production build pass. Viewport checks do not emulate iOS decoding,
+low-power mode or mobile-network throughput; Safari/iPhone and Android hardware
+checks remain necessary before claiming smooth playback on every device.
 
 ## Activate the questionnaires in Supabase
 

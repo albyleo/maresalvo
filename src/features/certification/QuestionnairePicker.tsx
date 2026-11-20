@@ -10,11 +10,11 @@ export function QuestionnairePicker({ items, preview = false }: { items: (Questi
   const selected = items.find(q => q.id === selectedId);
   if (selected) return <div>
     <button type="button" onClick={() => setSelectedId(null)} className="flex gap-2 items-center text-sm text-white/60 mb-7 hover:text-white"><ArrowLeft size={16} />Tutti i percorsi</button>
-    <div className="rounded-2xl border border-white/10 bg-white/[.03] p-5 sm:p-9 max-w-3xl"><QuestionnaireForm key={selected.id} questionnaire={selected} questions={selected.questions} preview={preview} /></div>
+    <div className="editorial-section max-w-3xl"><QuestionnaireForm key={selected.id} questionnaire={selected} questions={selected.questions} preview={preview} /></div>
   </div>;
-  return <div className="grid md:grid-cols-3 gap-5">{items.map((item, index) => <button key={item.id} type="button" onClick={() => setSelectedId(item.id)} className="text-left group border border-white/15 rounded-2xl p-7 bg-white/[.025] hover:bg-white/[.06] transition-colors focus-visible:outline-2 focus-visible:outline-[#b7e5d5]">
-    <div className="flex items-center justify-between mb-12"><span className="text-sm text-[#b7e5d5]">0{index + 1}</span><ArrowUpRight className="text-white/40 group-hover:text-white" size={21} /></div>
-    <h2 className="text-2xl tracking-tight font-medium mb-4">{item.title}</h2><p className="text-white/55 text-sm leading-relaxed min-h-16">{item.description}</p>
-    <p className="border-t border-white/10 mt-7 pt-5 text-xs text-white/55">{item.questions.length} domande · {item.pass_percent}% per superare</p>
+  return <div className="course-list">{items.map((item, index) => <button key={item.id} type="button" onClick={() => setSelectedId(item.id)} className="course-row group">
+    <span className="course-number">0{index + 1}</span>
+    <div className="course-copy"><div><h2 className="text-xl sm:text-2xl tracking-tight font-normal">{item.title}</h2><p className="mt-4 text-[11px] text-[#b7d6c9]">{item.questions.length} domande <span className="text-white/25 mx-2">/</span> {item.pass_percent}% per superare</p></div><p className="text-white/55 text-sm leading-relaxed max-w-md">{item.description}</p></div>
+    <ArrowUpRight className="text-white/40 group-hover:text-[#b7d6c9] mt-1 transition-colors" size={21} />
   </button>)}</div>;
 }

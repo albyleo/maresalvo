@@ -9,8 +9,8 @@ import type { GearType } from '@/types';
 const ReportMap = dynamic(() => import('./ReportMap'), { ssr: false, loading: () => <div className="h-[55svh] min-h-[360px] rounded-2xl bg-white/5 animate-pulse"/> });
 const input = 'mt-2 w-full rounded-xl border border-white/15 bg-[#0b242b] px-3 py-3 text-sm text-white focus:outline-2 focus:outline-emerald-200 disabled:opacity-40';
 
-export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boolean; signedIn: boolean; unavailable: boolean }) {
-  const [lat, setLat] = useState(''), [lng, setLng] = useState('');
+export function NetReportForm({ allowed, signedIn, unavailable, initial }: { allowed: boolean; signedIn: boolean; unavailable: boolean; initial?:Position }) {
+  const [lat, setLat] = useState(initial?String(initial.lat):''), [lng, setLng] = useState(initial?String(initial.lng):'');
   const [gear, setGear] = useState<GearType>('net');
   const [selection, setSelection] = useState('');
   const [search, setSearch] = useState<{ key: string; items: NearbyNet[]; error: string }>({ key: '', items: [], error: '' });
@@ -40,6 +40,7 @@ export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boo
     return () => { clearTimeout(timer); controller.abort(); };
   }, [allowed, position, key, retry]);
   function choosePosition(point: Position) {
+    if(busy) return;
     setLat(point.lat.toFixed(6)); setLng(point.lng.toFixed(6)); setSelection(''); setDone(false);
   }
   function locate() {
@@ -52,7 +53,7 @@ export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boo
   }
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError('');
-    if (!allowed || !position || searching || lookupError || (nearby.length>0 && !selected && selection!=='new')) return;
+    if (!allowed || busy || geoBusy || !position || searching || lookupError || (nearby.length>0 && !selected && selection!=='new')) return;
     const form = event.currentTarget, values = new FormData(form);
     const observed = new Date(String(values.get('observed_at')));
     if (!Number.isFinite(observed.getTime()) || observed.getTime()>Date.now()) { setError('Inserisci una data di osservazione valida, non futura.'); return; }
@@ -71,13 +72,14 @@ export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boo
   }
   return <div className="mt-9 grid gap-8 lg:grid-cols-[1.35fr_1fr] items-start">
     <div className="space-y-6">
-      <ReportMap position={position} nearby={nearby} onPosition={choosePosition} enabled={allowed}/>
-      {allowed && <div className="rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <ReportMap position={position} nearby={nearby} onPosition={choosePosition} enabled={allowed&&!busy&&!geoBusy}/>
+      {position&&<Link href={`/meteo?lat=${position.lat}&lng=${position.lng}`} className="block text-sm text-sky-200 underline">Consulta il meteo marino in questo punto →</Link>}
+      {allowed && <div className="surface-rule">
         <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="font-medium text-white">1. Il punto del ritrovamento</h2>
-          <button type="button" onClick={locate} disabled={geoBusy} className="inline-flex items-center gap-2 text-xs text-emerald-200 disabled:opacity-50"><Crosshair size={15}/>{geoBusy ? 'Ricerca posizione…' : 'Usa la mia posizione'}</button></div>
+          <button type="button" onClick={locate} disabled={geoBusy||busy} className="inline-flex items-center gap-2 text-xs text-emerald-200 disabled:opacity-50"><Crosshair size={15}/>{geoBusy ? 'Ricerca posizione…' : 'Usa la mia posizione'}</button></div>
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <label className="text-xs text-white/60">Latitudine<input aria-label="Latitudine" type="number" min="-90" max="90" step="any" value={lat} onChange={e => { setLat(e.target.value); setSelection(''); setDone(false); }} className={input} placeholder="40.250000"/></label>
-          <label className="text-xs text-white/60">Longitudine<input aria-label="Longitudine" type="number" min="-180" max="180" step="any" value={lng} onChange={e => { setLng(e.target.value); setSelection(''); setDone(false); }} className={input} placeholder="17.900000"/></label>
+          <label className="text-xs text-white/60">Latitudine<input disabled={busy||geoBusy} aria-label="Latitudine" type="number" min="-90" max="90" step="any" value={lat} onChange={e => { setLat(e.target.value); setSelection(''); setDone(false); }} className={input} placeholder="40.250000"/></label>
+          <label className="text-xs text-white/60">Longitudine<input disabled={busy||geoBusy} aria-label="Longitudine" type="number" min="-180" max="180" step="any" value={lng} onChange={e => { setLng(e.target.value); setSelection(''); setDone(false); }} className={input} placeholder="17.900000"/></label>
         </div>
         <p className="text-xs text-white/40 mt-3">Usa il GPS solo se ti trovi sul luogo del ritrovamento.</p>
         <div className="mt-5 text-sm" aria-live="polite">
@@ -92,7 +94,7 @@ export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boo
       </div>}
       <div className="flex gap-3 text-sm text-white/55"><ShieldCheck className="shrink-0 text-emerald-200" size={20}/><p>Ogni account conta una sola volta per rete. Più osservazioni aiutano la revisione: la conferma definitiva resta allo staff.</p></div>
     </div>
-    <div className="rounded-2xl border border-white/10 bg-white/[.03] p-5 sm:p-7">
+    <div className="border-t border-white/20 pt-6 lg:pl-8 lg:border-t-0 lg:border-l">
       {!allowed ? <div className="space-y-5"><ShieldCheck size={28} className="text-emerald-200"/><h2 className="text-xl font-medium text-white">Segnalazioni da utenti abilitati</h2><p className="text-sm leading-relaxed text-white/60">{unavailable ? 'Il servizio è in preparazione. Lo staff deve completare l’aggiornamento del database.' : signedIn ? 'Il tuo account non è ancora abilitato. Chiedi al referente del progetto di autorizzarti a inviare osservazioni.' : 'Accedi o crea un account. Lo staff potrà poi abilitarti a segnalare reti e contribuire alle segnalazioni esistenti.'}</p>{!signedIn && <div className="flex flex-wrap gap-4"><Link href="/login?redirect=/segnala-rete" className="rounded-xl bg-emerald-200 px-5 py-3 text-sm font-medium text-slate-950">Accedi</Link><Link href="/registrazione" className="py-3 text-sm text-white/70 underline">Crea un account</Link></div>}</div> : <>
         {done && <div role="status" className="flex gap-3 rounded-xl bg-emerald-200/10 border border-emerald-200/25 p-4 mb-5 text-emerald-100"><CheckCircle2 size={22} className="shrink-0"/><p className="text-sm">Osservazione salvata. Lo staff la confronterà con gli altri riscontri. La segnalazione non viene verificata automaticamente.</p></div>}
         <h2 className="font-medium text-white mb-5">2. {selected ? 'Aggiungi il tuo riscontro' : 'Documenta il ritrovamento'}</h2>
@@ -106,7 +108,7 @@ export function NetReportForm({ allowed, signedIn, unavailable }: { allowed: boo
             <label className="flex items-start gap-3 text-xs leading-relaxed text-white/65"><input type="checkbox" required className="mt-1 accent-emerald-300"/>Confermo che descrivo una mia osservazione e che ho confrontato eventuali segnalazioni vicine.</label>
           </fieldset>
           {error && <p role="alert" className="text-sm text-amber-200">{error}</p>}
-          <button type="submit" disabled={busy || !position || searching || !!lookupError || (nearby.length>0 && !selected && selection!=='new') || !!selected?.contributed} className="w-full rounded-xl bg-emerald-200 text-slate-950 py-3.5 font-medium text-sm disabled:opacity-40 hover:bg-emerald-100 transition-colors">{busy ? 'Invio in corso…' : selected ? 'Invia osservazione sulla rete' : 'Invia nuova segnalazione'}</button>
+          <button type="submit" disabled={busy || geoBusy || !position || searching || !!lookupError || (nearby.length>0 && !selected && selection!=='new') || !!selected?.contributed} className="w-full rounded-xl bg-emerald-200 text-slate-950 py-3.5 font-medium text-sm disabled:opacity-40 hover:bg-emerald-100 transition-colors">{busy ? 'Invio in corso…' : selected ? 'Invia osservazione sulla rete' : 'Invia nuova segnalazione'}</button>
           {!position && <p className="text-xs text-white/40">Seleziona prima la posizione sulla mappa o inserisci le coordinate.</p>}
         </form>
       </>}

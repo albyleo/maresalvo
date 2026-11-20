@@ -2,26 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, Waves } from "lucide-react";
 import { APP_NAME, PUBLIC_NAV } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
 
 export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setMobileOpen(false); };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [mobileOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <nav className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-[#061719]/75 px-5 py-3 backdrop-blur-xl">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Waves className="h-7 w-7 text-[var(--color-aqua)] transition-transform group-hover:scale-110" />
-            <span className="text-lg font-bold text-white tracking-tight">
+    <header className="site-header fixed top-0 left-0 right-0 z-50" data-menu-open={mobileOpen}>
+      <div className="mx-auto max-w-[1600px] px-5 sm:px-8">
+        <nav aria-label="Navigazione principale" className="flex min-h-20 items-center justify-between gap-4">
+          <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 group">
+            <Waves className="h-6 w-6 text-[var(--color-aqua)]" />
+            <span className="text-lg font-medium text-white tracking-tight">
               {APP_NAME}
             </span>
-            <span className="hidden sm:inline text-xs text-white/40 font-normal ml-1">
+            <span className="hidden sm:inline border-l border-white/35 pl-3 ml-2 text-[9px] tracking-[.12em] text-white/80 font-normal">
               FIPSAS
             </span>
           </Link>
@@ -31,11 +36,12 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={pathname === item.href ? 'page' : undefined}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm transition-colors",
+                  "px-3 py-2 border-b text-[13px] transition-colors",
                   pathname === item.href
-                    ? "text-[var(--color-aqua)] bg-white/5"
-                    : "text-white/70 hover:text-white hover:bg-white/5"
+                    ? "text-white border-sky-200"
+                    : "text-white/90 border-transparent hover:text-white hover:border-white/60"
                 )}
               >
                 {item.label}
@@ -43,19 +49,8 @@ export function Header() {
             ))}
           </div>
 
-          <div className="hidden xl:flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost" size="sm">
-                Accedi
-              </Button>
-            </Link>
-            <Link href="/dashboard">
-              <Button variant="primary" size="sm">
-                Area Pescatore
-              </Button>
-            </Link>
-          </div>
-
+          <div className="flex items-center gap-3">
+            <Link href="/login" onClick={() => setMobileOpen(false)} className="text-sm text-white border border-white/45 px-4 py-2.5 hover:bg-white/10 hover:border-white transition-colors">Login</Link>
           <button
             className="xl:hidden text-white p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -65,27 +60,22 @@ export function Header() {
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
+          </div>
         </nav>
 
         {mobileOpen && (
-          <div id="mobile-navigation" className="xl:hidden mt-2 rounded-2xl border border-white/10 bg-[var(--color-deep-blue)]/95 backdrop-blur-xl p-4 space-y-2">
+          <div id="mobile-navigation" className="xl:hidden border-t border-white/15 pb-6 max-h-[calc(100dvh-80px)] overflow-y-auto">
             {PUBLIC_NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-4 py-3 rounded-xl text-white/80 hover:bg-white/5"
+                aria-current={pathname === item.href ? 'page' : undefined}
+                className={cn("block py-3 border-b border-white/10 text-base hover:text-[var(--color-aqua)]",pathname===item.href?'text-[var(--color-aqua)]':'text-white/80')}
                 onClick={() => setMobileOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="pt-2 flex flex-col gap-2">
-              <Link href="/login" onClick={() => setMobileOpen(false)}>
-                <Button variant="secondary" size="sm" className="w-full">
-                  Accedi
-                </Button>
-              </Link>
-            </div>
           </div>
         )}
       </div>

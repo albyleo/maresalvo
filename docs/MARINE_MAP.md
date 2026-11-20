@@ -1,14 +1,26 @@
 # Marine map sources and coverage
 
 The map opens with Esri satellite imagery, EMODnet bathymetry, OpenSeaMap seamarks
-and the EMODnet WDPA WMS enabled. The map occupies 90% of the viewport height,
+and the EMODnet WDPA WMS enabled. The map fills the viewport height below the navigation,
 uses the available page width and offers a fullscreen control.
 
-Both map modes start behind an explicit “Esplora la mappa” entry control. Inactive
+On the homepage only, both map modes start behind an explicit “Attiva mappa” entry control. Inactive
 canvas controls are inert and receive no pointer events, so wheel and vertical
 touch gestures scroll the page. Once activated, the sticky exit button, Escape,
 a click outside, or leaving the viewport returns to page navigation. Switching
 map modes remounts the gate in its inactive state. Fullscreen includes the gate.
+The dedicated map, net reporting map and Windy weather map are immediately
+interactive; they do not add a gesture-entry step or a map-only history entry.
+
+Area details and layers occupy their own grid track: a left sidebar on desktop
+and a lower panel below the canvas on screens under 800px. The map resizes to
+the remaining space and fits selected areas inside that canvas. Panel headers
+and close controls stay visible while the body scrolls independently. Escape
+closes an open panel before the homepage map gate. Async WMS popups recalculate
+their anchor after loading; popup widths/heights are constrained to the map.
+Opening a panel or selecting an area brings the map below the fixed navigation
+if it is partly outside the viewport. Short landscape screens retain side-by-side
+panels so the map and panel header both have room.
 
 The previous `emodnet:mpa` layer did not exist in the service capabilities.
 It is replaced by `cddaareas,wdpaareas` (European and worldwide inventories).
@@ -54,7 +66,11 @@ means an AMP boundary, never zone C. WMS boundaries outside the local catalog
 can be clicked to query the published CDDA/WDPA name, designation and IUCN category
 through a fixed-endpoint GetFeatureInfo proxy. These categories are not A/B/C.
 CRM development seed rows no longer override the
-published geographic catalog. Net/AIS sample data retain their separate status.
+published geographic catalog. Public net layers show only reviewed Supabase reports;
+AIS remains explicitly demonstrative. Missing Supabase data never produces sample nets.
 
 `npm run test:marine` checks geometry integrity, catalog joins and the nonoverlap
 and complete partition of the Porto Cesareo reconstruction.
+
+See [WEATHER_AND_SOURCES.md](WEATHER_AND_SOURCES.md) for area-specific activity
+cards, official-source dates, the `/meteo` forecast integration and licensing.

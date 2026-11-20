@@ -7,6 +7,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
+// Mobile browser chrome changes height during a swipe; avoid refreshing the timeline on each change.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 export function OceanStory() {
   const rootRef = useRef<HTMLElement>(null);
@@ -23,26 +25,45 @@ export function OceanStory() {
     media.add('(prefers-reduced-motion: no-preference)', () => {
       if (staticView) return;
       root.dataset.motion = 'on';
-      video.src = '/videos/tartaruga-scroll.mp4';
+      // Choose once per animation session: rotating a phone must not reload its video.
+      const mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
+      video.src = mobile ? '/videos/tartaruga-scroll-mobile.mp4' : '/videos/tartaruga-scroll.mp4';
+      video.muted = true;
       video.load();
       const frames = root.querySelectorAll<HTMLElement>('.story-frame');
       const playhead = { progress: 0 };
       let raf = 0;
       let disposed = false;
+      let priming = false;
       // Seek only when the decoder is ready. Fast scrolls keep the latest target.
       const seek = () => {
         raf = 0;
-        if (disposed || video.seeking || !Number.isFinite(video.duration) || video.readyState < 1) return;
+        if (disposed || priming || document.hidden || video.seeking || !Number.isFinite(video.duration) || video.readyState < 2) return;
         const target = Math.min(Math.max(0, video.duration - 0.04), playhead.progress * video.duration);
         if (Math.abs(video.currentTime - target) > 0.035) video.currentTime = target;
       };
       const scheduleSeek = () => { if (!raf && !disposed) raf = requestAnimationFrame(seek); };
-      video.addEventListener('loadedmetadata', scheduleSeek);
-      video.addEventListener('seeked', scheduleSeek);
+      // Some mobile WebKit versions initialize their decoder only after a user gesture.
+      // Playback is immediately paused; ScrollTrigger remains the only playhead driver.
+      const primeVideo = () => {
+        if (priming || disposed) return;
+        priming = true;
+        void video.play().then(() => {
+          if (disposed) return;
+          video.pause();
+          priming = false;
+          root.removeEventListener('pointerdown', primeVideo);
+          scheduleSeek();
+        }, () => { priming = false; scheduleSeek(); });
+      };
+      const readyEvents = ['loadeddata', 'canplay', 'seeked'] as const;
+      readyEvents.forEach(event => video.addEventListener(event, scheduleSeek));
+      root.addEventListener('pointerdown', primeVideo, { passive: true });
+      document.addEventListener('visibilitychange', scheduleSeek);
       gsap.set(frames, { autoAlpha: 0, y: 36 });
       gsap.set(frames[0], { autoAlpha: 1, y: 0 });
       const timeline = gsap.timeline({
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: 0.65, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: mobile ? 0.35 : 0.65, invalidateOnRefresh: true },
       });
       timeline.to(playhead, { progress: 1, duration: 1, ease: 'none', onUpdate: scheduleSeek }, 0)
         .to(progressRef.current, { scaleX: 1, duration: 1, ease: 'none' }, 0)
@@ -56,9 +77,11 @@ export function OceanStory() {
       return () => {
         disposed = true;
         cancelAnimationFrame(raf);
-        video.removeEventListener('loadedmetadata', scheduleSeek);
-        video.removeEventListener('seeked', scheduleSeek);
+        readyEvents.forEach(event => video.removeEventListener(event, scheduleSeek));
+        root.removeEventListener('pointerdown', primeVideo);
+        document.removeEventListener('visibilitychange', scheduleSeek);
         root.dataset.motion = 'off';
+        video.pause();
         video.removeAttribute('src');
         video.load();
       };
@@ -69,7 +92,7 @@ export function OceanStory() {
   return <section ref={rootRef} className="ocean-story" data-motion="off" aria-label="Il progetto MareSalvo">
     <div className="story-scene">
       <div className="story-media" aria-hidden="true">
-        <video ref={videoRef} muted playsInline preload="auto" poster="/images/tartaruga-poster.jpg" onError={() => setVideoError(true)} />
+        <video ref={videoRef} muted playsInline preload="auto" disablePictureInPicture poster="/images/tartaruga-poster.jpg" onLoadedData={() => setVideoError(false)} onError={() => setVideoError(true)} />
         <div className="story-shade" />
       </div>
       <div className="story-frames">

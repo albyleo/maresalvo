@@ -1,6 +1,4 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import clipping from 'polygon-clipping';
 
 // Reproducible import of published geometries. No invented boundaries for missing zones.
@@ -9,15 +7,14 @@ const sources = {
   sardinia: 'https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=dbu:areemarineprotette&outputFormat=application/json&srsName=EPSG:4326&count=1000',
   milazzo: 'https://map.sitr.regione.sicilia.it/orbs/rest/services/aree_protette/aree_marine_protette/MapServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson',
 };
-const cacheNames = { italy: 'maresalvo-italy-areas.json', sardinia: 'maresalvo-sardinia-zones.json', milazzo: 'maresalvo-sicily-0.json' };
 const data = {};
+const previous=JSON.parse(await readFile(new URL('../public/data/marine-sources.json',import.meta.url),'utf8'));
+// Cached files have no retrieval metadata: do not present today's date as a fresh download.
+if(process.argv.includes('--cached')) throw new Error('Cached import disabled: refresh from official sources to preserve provenance.');
 for (const [key, url] of Object.entries(sources)) {
-  if (process.argv.includes('--cached')) data[key] = JSON.parse(await readFile(join(tmpdir(), cacheNames[key]), 'utf8'));
-  else {
-    const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
-    if (!response.ok) throw new Error(`${key}: ${response.status}`);
-    data[key] = await response.json();
-  }
+  const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
+  if (!response.ok) throw new Error(`${key}: ${response.status}`);
+  data[key] = await response.json();
   if (!data[key].features?.length || data[key].numberMatched > data[key].features.length || data[key].exceededTransferLimit) throw new Error(`Incomplete source: ${key}`);
 }
 const sourcePage = 'https://emodnet.ec.europa.eu/en/human-activities';
@@ -86,6 +83,17 @@ porto.description = 'AMP lungo circa 32 km di costa tra Punta Prosciutto e Torre
 porto.managing_body = 'Consorzio di gestione AMP Porto Cesareo';
 porto.fishing_status = 'restricted';
 areas.sort((a,b) => a.name.localeCompare(b.name,'it'));
+// Fail before touching the published catalog when a service returns incomplete or invalid data.
+if(areas.length<previous.area_count || features.length-areas.length<previous.zone_count) throw new Error('Source coverage decreased: inspect upstream data before replacing the catalog.');
+if(new Set(areas.map(a=>a.id)).size!==areas.length || new Set(features.map(f=>f.properties.id)).size!==features.length) throw new Error('Duplicate identifiers in sources.');
+for(const feature of features) {
+  if(!['Polygon','MultiPolygon'].includes(feature.geometry?.type)) throw new Error('Invalid geometry type.');
+  const polygons=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;
+  if(!polygons.length || polygons.some(p=>!p.length)) throw new Error('Empty geometry in sources.');
+  for(const polygon of polygons) for(const ring of polygon) {
+    if(ring.length<4 || JSON.stringify(ring[0])!==JSON.stringify(ring.at(-1)) || !ring.every(([x,y])=>Number.isFinite(x)&&Number.isFinite(y)&&Math.abs(x)<=180&&Math.abs(y)<=90)) throw new Error('Invalid geographic coordinates or ring.');
+  }
+}
 await mkdir(new URL('../public/data/',import.meta.url),{recursive:true});
 await writeFile(new URL('../public/data/marine-areas.geojson',import.meta.url),JSON.stringify({type:'FeatureCollection',features}));
 await writeFile(new URL('../src/features/marine-map/official-areas.json',import.meta.url),JSON.stringify(areas,null,2)+'\n');

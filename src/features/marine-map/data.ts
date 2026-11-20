@@ -6,57 +6,19 @@ import type {
 } from "@/types";
 
 import officialAreas from './official-areas.json';
+import { GUIDANCE } from './guidance';
 
 /** Published cartographic catalog, independent of CRM development seed data. */
 export async function getMarineAreas(): Promise<MarineProtectedArea[]> {
-  return officialAreas as MarineProtectedArea[];
+  return (officialAreas as MarineProtectedArea[]).map(area=>({
+    ...area,
+    managing_body:GUIDANCE[area.id]?.manager??area.managing_body,
+    regulation_url:GUIDANCE[area.id]?.sources[0]?.url??area.regulation_url,
+  }));
 }
-/** Reti perse di esempio (sostituite dai dati Supabase quando configurato). */
-export const SAMPLE_GHOST_NETS: GhostNetReport[] = [
-  {
-    id: "g1",
-    reporter_id: null,
-    status: "reported",
-    gear_type: "net",
-    lat: 44.31,
-    lng: 9.22,
-    depth_m: 18,
-    description: "Rete da posta abbandonata su parete rocciosa.",
-    photo_url: null,
-    reported_at: "2026-06-20T09:30:00Z",
-    recovered_at: null,
-  },
-  {
-    id: "g2",
-    reporter_id: null,
-    status: "verified",
-    gear_type: "trap",
-    lat: 37.02,
-    lng: 15.31,
-    depth_m: 25,
-    description: "Nassa con boa rotta, segnalata da diver locale.",
-    photo_url: null,
-    reported_at: "2026-06-15T14:10:00Z",
-    recovered_at: null,
-  },
-  {
-    id: "g3",
-    reporter_id: null,
-    status: "recovered",
-    gear_type: "longline",
-    lat: 40.73,
-    lng: 17.79,
-    depth_m: 12,
-    description: "Palamito recuperato durante intervento del circolo.",
-    photo_url: null,
-    reported_at: "2026-05-30T07:45:00Z",
-    recovered_at: "2026-06-10T11:00:00Z",
-  },
-];
-
 export async function getGhostNets(): Promise<GhostNetReport[]> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!supabaseUrl) return SAMPLE_GHOST_NETS;
+  if (!supabaseUrl) return [];
   try {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
@@ -69,6 +31,12 @@ export async function getGhostNets(): Promise<GhostNetReport[]> {
   } catch {
     return [];
   }
+}
+
+/** Public layers only contain reviewed reports and never expose reporter identities or free text. */
+export async function getPublicGhostNets(): Promise<GhostNetReport[]> {
+  return (await getGhostNets()).filter(net=>['verified','recovery_planned','recovered'].includes(net.status))
+    .map(net=>({...net,reporter_id:null,description:null,photo_url:null}));
 }
 
 /**

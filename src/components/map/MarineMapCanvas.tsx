@@ -337,7 +337,8 @@ export function MarineMapCanvas({
               content.append(title,detail);
             }
             const note=document.createElement('p');note.textContent='Fonte: EMODnet / CDDA / WDPA. La categoria IUCN non equivale alle zone A/B/C; consultare il regolamento locale.';content.append(note);
-          }).catch(()=>{if(!controller.signal.aborted)content.textContent='Scheda non disponibile. Riprova tra poco.';});
+          }).catch(()=>{if(!controller.signal.aborted)content.textContent='Scheda non disponibile. Riprova tra poco.';})
+            .finally(()=>{if(!controller.signal.aborted && identifyPopup.isOpen()) identifyPopup.setDOMContent(content);});
           return;
         }
         identifyRequest?.abort(); identifyPopup.remove();
@@ -357,20 +358,25 @@ export function MarineMapCanvas({
       map.on("mouseleave", "amp-points", () => (map.getCanvas().style.cursor = ""));
 
       // Popup reti perse
-      const popup = new maplibregl.Popup({ closeButton: false, offset: 12 });
-      map.on("mouseenter", "ghost-nets", (e) => {
+      const popup = new maplibregl.Popup({ closeButton: true, offset: 12 });
+      map.on("click", "ghost-nets", (e) => {
         map.getCanvas().style.cursor = "pointer";
         const p = e.features?.[0]?.properties as Record<string, string>;
         const lngLat = (e.features?.[0]?.geometry as GeoJSON.Point).coordinates as [number, number];
         const content = document.createElement('div');
         content.style.color = '#102c33';
-        content.textContent = `Rete segnalata · ${p.gear_type} · ${p.status} · Prof. ${p.depth_m || '?'} m`;
+        const statuses:Record<string,string>={verified:'Verificata',recovery_planned:'Recupero pianificato',recovered:'Recuperata'};
+        content.textContent = `Attrezzo segnalato · ${statuses[p.status]??'Da verificare'} · Prof. ${p.depth_m ?? '?'} m`;
+        for(const [label,path] of [['Meteo in questo punto','/meteo'],...(p.status==='recovered'?[]:[['Hai visto questo attrezzo?','/segnala-rete']])]) {
+          const link=document.createElement('a');
+          link.textContent=label; link.href=`${path}?lat=${lngLat[1]}&lng=${lngLat[0]}`;
+          link.style.cssText='display:block;margin-top:12px;color:#075985;text-decoration:underline';
+          content.appendChild(link);
+        }
         popup.setLngLat(lngLat).setDOMContent(content).addTo(map);
       });
-      map.on("mouseleave", "ghost-nets", () => {
-        map.getCanvas().style.cursor = "";
-        popup.remove();
-      });
+      map.on("mouseenter", "ghost-nets", () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "ghost-nets", () => { map.getCanvas().style.cursor = ""; });
 
       loadedRef.current = true;
       syncData();
@@ -402,7 +408,9 @@ export function MarineMapCanvas({
     if (!map) return;
     if (map.getLayer('amp-selection')) map.setFilter('amp-selection', ['==',['get','id'],selectedArea?.id ?? '']);
     if (!selectedArea) return;
-    if (selectedArea.bounds) map.fitBounds(selectedArea.bounds, {padding: window.innerWidth > 640 ? {top:70,bottom:70,left:390,right:80} : 45, pitch:0, duration:900, maxZoom:13});
+    // The details panel now has its own grid track: fit within the actual canvas.
+    map.resize();
+    if (selectedArea.bounds) map.fitBounds(selectedArea.bounds, {padding: {top:65,bottom:35,left:30,right:45}, pitch:0, duration:900, maxZoom:13});
     else if (selectedArea.centroid) map.flyTo({center:selectedArea.centroid.coordinates as [number,number],zoom:10,pitch:0,duration:900});
   }, [selectedArea]);
 

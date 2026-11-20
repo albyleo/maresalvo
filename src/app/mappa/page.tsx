@@ -1,7 +1,7 @@
 import { MapExplorer } from "@/components/map/MapExplorer";
 import {
   getMarineAreas,
-  getGhostNets,
+  getPublicGhostNets,
   getAisVessels,
 } from "@/features/marine-map/data";
 import type { Metadata } from "next";
@@ -15,15 +15,16 @@ export const metadata: Metadata = {
 export default async function MappaPage() {
   const [areas, ghostNets, aisVessels] = await Promise.all([
     getMarineAreas(),
-    getGhostNets(),
+    getPublicGhostNets(),
     getAisVessels(),
   ]);
 
   return (
     <div className="pt-28 pb-12">
-      <div className="mx-auto w-full px-2 sm:px-4 lg:px-6">
+      <div className="mx-auto w-full px-5 sm:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Mappa Marina 3D</h1>
+          <p className="section-kicker mb-5">Atlante marino / Mediterraneo</p>
+          <h1 className="page-title text-4xl sm:text-5xl text-white mb-4">Mappa marina 3D</h1>
           <p className="text-white/50 max-w-2xl">
             Scegli tra la <strong>Mappa marina</strong> (AMP, batimetria EMODnet,
             simbologia nautica, reti perse, AIS) e il globo <strong>Earth 3D</strong>{" "}

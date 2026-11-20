@@ -11,7 +11,7 @@
     "video:prepare": "node scripts/prepare-ocean-video.mjs",
     "questionnaires:generate": "node scripts/import-questionnaires.mjs",
     "marine:sync": "node scripts/sync-marine-areas.mjs",
-    "test:marine": "node --test scripts/test-marine-areas.mjs",
+    "test:marine": "node --test scripts/test-marine-areas.mjs scripts/test-weather.mjs",
     "check:release": "npm run lint && npm test && npm run test:marine && npm run build",
     "test": "node --test scripts/test-certification.mjs scripts/test-certificate-pdf.mjs scripts/test-ghost-nets.mjs",
     "db:generate": "prisma generate",

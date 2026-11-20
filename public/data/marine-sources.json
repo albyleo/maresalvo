@@ -1,5 +1,5 @@
 {
-  "retrieved_at": "2026-09-13T07:39:16.301Z",
+  "retrieved_at": "2026-11-19T23:20:24.803Z",
   "sources": {
     "italy": "https://ows.emodnet-humanactivities.eu/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=emodnet:cddaareas&outputFormat=application/json&srsName=EPSG:4326&count=1000&CQL_FILTER=cddacountr%3D%27IT%27",
     "sardinia": "https://webgis.regione.sardegna.it/geoserver/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=dbu:areemarineprotette&outputFormat=application/json&srsName=EPSG:4326&count=1000",
