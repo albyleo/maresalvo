@@ -7,6 +7,7 @@ export function Footer() {
       <nav aria-label="Link nel footer" className="flex flex-wrap md:items-end gap-x-6 gap-y-4">
         <Link href="/questionari" className="site-footer-link">Questionari</Link>
         <Link href="/meteo" className="site-footer-link">Meteo marino</Link>
+        <Link href="/osservatorio" className="site-footer-link">Osservatorio</Link>
         <Link href="/segnala-rete" className="site-footer-link">Segnala una rete</Link>
         <Link href="/verifica" className="site-footer-link">Verifica certificato</Link>
         <a href="https://www.fipsas.it" target="_blank" rel="noreferrer" className="site-footer-link">FIPSAS ↗</a>

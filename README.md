@@ -12,6 +12,12 @@ Webapp moderna per la gestione delle qualifiche in apnea, certificati digitali c
 
 ## Stack
 
+L’[Osservatorio del Mediterraneo](docs/OBSERVATORY.md) è disponibile in
+`/osservatorio`: clorofilla satellitare recente e ultime campagne regionali
+EMODnet/EEA, con date, unità, fonti e tabella accessibile. Non richiede nuove
+chiavi o migrazioni Supabase. Le raccolte annuali si aggiornano con
+`npm run observatory:sync`; il satellite verifica la data automaticamente.
+
 | Layer | Tecnologia |
 |-------|------------|
 | Frontend | Next.js 16, React 19, Tailwind CSS 4 |

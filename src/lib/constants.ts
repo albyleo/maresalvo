@@ -40,6 +40,7 @@ export const FISHING_STATUS_COLORS: Record<AmpFishingStatus, string> = {
 export const PUBLIC_NAV: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Mappa AMP", href: "/mappa" },
+  { label: "Osservatorio", href: "/osservatorio" },
   { label: "Meteo marino", href: "/meteo" },
   { label: "Segnala rete", href: "/segnala-rete" },
   { label: "Verifica Certificato", href: "/verifica" },

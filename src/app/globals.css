@@ -48,6 +48,45 @@ body {
 
 button, summary { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
+.observatory-themes { display: flex; flex-wrap: wrap; border-block: 1px solid rgb(255 255 255 / .22); margin-bottom: 24px; }
+.observatory-themes button { flex: 1 1 auto; padding: 17px 14px; font-size: 14px; color: #bed0df; border-bottom: 2px solid transparent; text-align: left; }
+.observatory-themes button[aria-pressed='true'] { color: white; border-color: #b7d6c9; background: rgb(255 255 255 / .06); }
+.observatory-themes button:hover { background: rgb(255 255 255 / .05); }
+.observatory-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 330px; border-bottom: 1px solid rgb(255 255 255 / .18); }
+.observatory-map-column { min-width: 0; }
+.observatory-map-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 0 22px 20px 0; min-height: 88px; }
+.observatory-map-stage { position: relative; background: #0b2e42; }
+.observatory-map { width: 100%; height: min(70dvh, 760px); min-height: 430px; }
+.observatory-map-reset { position: absolute; top: 12px; left: 12px; width: 42px; height: 42px; display: grid; place-items: center; color: #173c4c; background: white; box-shadow: 0 1px 5px #0003; }
+.observatory-map-message { position: absolute; bottom: 55px; left: 16px; max-width: min(400px, calc(100% - 32px)); padding: 16px 20px; background: #092b46; border-left: 2px solid #b7d6c9; font-size: 14px; color: #e7f2f8; }
+.observatory-map-caption { display: flex; flex-wrap: wrap; gap: 10px 25px; justify-content: space-between; font-size: 12px; color: #c6dce9; padding: 14px 20px 14px 0; }
+.observatory-map-caption a { text-decoration: underline; text-underline-offset: 3px; }
+.observatory-detail { border-left: 1px solid rgb(255 255 255 / .18); padding: 0 0 24px 26px; min-width: 0; max-height: calc(min(70dvh, 760px) + 140px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #608ba5 transparent; scroll-margin-top: 100px; }
+.observatory-filters { display: grid; gap: 14px; margin-bottom: 24px; }
+.observatory-detail label { font-size: 14px; color: #c6dce9; }
+.observatory-detail select { display: block; appearance: none; width: 100%; margin-top: 7px; border: 1px solid #60819a; padding: 12px 32px 12px 12px; background: #0b2b45 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c6dce9' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; color: #fff; font-size: 14px; border-radius: 0; }
+.observatory-measurements > div { padding: 16px 0; border-bottom: 1px solid rgb(255 255 255 / .14); overflow-wrap: anywhere; }
+.observatory-selection { overflow-wrap: anywhere; }
+.observatory-note { display: flex; align-items: start; gap: 10px; margin-top: 24px; border-top: 1px solid rgb(255 255 255 / .14); padding-top: 20px; color: #b5cedf; font-size: 14px; line-height: 1.65; }
+.observatory-legend { display: block; max-width: 100%; max-height: 280px; background: white; padding: 10px; }
+.observatory-data-list { border-bottom: 1px solid rgb(255 255 255 / .18); padding: 20px 0; font-size: 14px; }
+.observatory-table-scroll { overflow: auto; max-height: 360px; margin-top: 20px; }
+.observatory-table-scroll table { width: 100%; border-collapse: collapse; text-align: left; }
+.observatory-table-scroll :is(th,td) { padding: 12px; border-bottom: 1px solid rgb(255 255 255 / .14); }
+.observatory-table-scroll th { position: sticky; top: 0; background: #0a2c48; }
+.observatory-table-scroll button { text-decoration: underline; text-underline-offset: 4px; padding: 8px; }
+.observatory-provenance { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 28px 0; }
+.observatory-sources { border-top: 1px solid rgb(255 255 255 / .18); padding-top: 20px; font-size: 13px; color: #aac5d8; }
+@media (max-width: 900px) {
+  .observatory-workspace { grid-template-columns: minmax(0, 1fr); }
+  .observatory-detail { max-height: none; overflow: visible; border-left: 0; border-top: 1px solid rgb(255 255 255 / .18); padding: 22px 0; }
+  .observatory-map { height: 60svh; min-height: 360px; }
+  .observatory-map-heading { padding-right: 0; }
+  .observatory-themes { display: grid; grid-template-columns: 1fr 1fr; }
+  .observatory-themes button { font-size: 14px; padding: 14px 10px; }
+  .observatory-provenance { grid-template-columns: 1fr; gap: 16px; }
+  .observatory-map-caption { padding-right: 0; }
+}
 a, button, input, select, textarea, summary { -webkit-tap-highlight-color: transparent; }
 :where(a, button, summary):focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 5px; }
 h1, h2, h3 { text-wrap: balance; }
