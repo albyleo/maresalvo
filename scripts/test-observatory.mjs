@@ -10,8 +10,8 @@ async function compiled(path, replacements = {}) {
   return `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`;
 }
 const dataUrl = await compiled('../src/features/observatory/data.ts');
-const { isSatelliteRecent, satelliteTileUrl, filterObservations } = await import(dataUrl);
-const { parseSatelliteCapabilities } = await import(await compiled('../src/features/observatory/satellite.ts', {
+const { isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
+const { parseSatelliteCapabilities, parseSatelliteLegend } = await import(await compiled('../src/features/observatory/satellite.ts', {
   './data': dataUrl, 'fast-xml-parser': import.meta.resolve('fast-xml-parser'),
 }));
 const now = Date.parse('2026-11-20T12:00:00Z');
@@ -37,12 +37,47 @@ test('satellite tiles pin the verified date, projection and chlorophyll style', 
   assert.equal(url.searchParams.get('tilematrix'), '{z}');
   assert.equal(url.searchParams.get('style'), 'cmap:algae,logScale,range:0.03/10');
 });
+test('coastal variables keep independent dates, units and styles and never fall back to another layer', () => {
+  const ids = ['coastal-chlorophyll', 'turbidity', 'suspended-matter'];
+  const xml = '<Capabilities><Contents>' + ids.map((id, i) => capabilities(`2026-11-${19-i}T00:00:00Z`, SATELLITES[id].sourceUnit)
+    .replace(layer, SATELLITES[id].layer).replace('<Capabilities><Contents>', '').replace('</Contents></Capabilities>', '')).join('') + '</Contents></Capabilities>';
+  for (const [i, id] of ids.entries()) {
+    const config = SATELLITES[id];
+    const parsed = parseSatelliteCapabilities(xml, now, id);
+    assert.equal(parsed.id, id);
+    assert.equal(parsed.layer, config.layer);
+    assert.equal(parsed.unit, config.unit);
+    assert.equal(parsed.observedAt, `2026-11-${19-i}T00:00:00.000Z`);
+    const url = new URL(satelliteTileUrl(parsed.layer, parsed.observedAt, config.style));
+    assert.equal(url.searchParams.get('style'), config.style);
+    assert.equal(url.searchParams.get('layer'), config.layer);
+    assert.equal(url.searchParams.get('time'), parsed.observedAt);
+    assert.throws(() => parseSatelliteCapabilities(capabilities(), now, id));
+    assert.throws(() => parseSatelliteCapabilities(capabilities('2026-11-19T00:00:00Z', 'wrong').replace(layer, config.layer), now, id));
+    assert.throws(() => parseSatelliteCapabilities(capabilities('2026-11-01T00:00:00Z', config.sourceUnit).replace(layer, config.layer), now, id));
+  }
+  assert.equal(new Set(ids.map(id => SATELLITES[id].style)).size, 3);
+  assert.equal(isSatelliteTheme('turbidity'), true);
+  assert.equal(isSatelliteTheme('__proto__'), false);
+  assert.equal(isSatelliteTheme('beach'), false);
+});
 test('missing bottles stay missing, zero remains a real observation, chemical matrices stay separate', () => {
   const f = p => ({ properties: p });
   const all = [f({ bottles: 0 }), f({ bottles: null }), f({}), f({ bottles: 2 })];
   assert.deepEqual(filterObservations(all, { bottles: true, substance: '', matrix: '' }), [all[0], all[3]]);
   const chemical = [f({ substance: 'Mercurio totale', matrix: 'acqua' }), f({ substance: 'Mercurio totale', matrix: 'sedimento' })];
   assert.deepEqual(filterObservations(chemical, { bottles: false, substance: 'Mercurio totale', matrix: 'acqua' }), [chemical[0]]);
+});
+test('legend rejects silent provider style fallbacks and malformed colors', () => {
+  for (const [id, config] of Object.entries(SATELLITES)) {
+    const [valueMin, valueMax] = config.style.split('range:')[1].split('/').map(Number);
+    const continuous = { valueMin, valueMax, variableId: config.layer.split('/').at(-1), cmapName: config.style.split(',')[0].slice(5),
+      logScale: true, clamp: true, cmap: { colorMap: [[0, 20, 40], [200, 240, 255]] } };
+    assert.deepEqual(parseSatelliteLegend({ continuous }, id), { min: valueMin, max: valueMax, colors: ['rgb(0,20,40)', 'rgb(200,240,255)'] });
+    for (const invalid of [{ logScale: false }, { cmapName: 'invalid' }, { valueMin: -1 }, { variableId: 'wrong' }, { cmap: { colorMap: [[999, 0, 0], [0, 0, 0]] } }]) {
+      assert.throws(() => parseSatelliteLegend({ continuous: { ...continuous, ...invalid } }, id));
+    }
+  }
 });
 test('published collections retain source/date/unit and only one campaign, with unique ids and no contact fields', async () => {
   const manifest = JSON.parse(await readFile(new URL('../public/data/observatory/manifest.json', import.meta.url), 'utf8'));

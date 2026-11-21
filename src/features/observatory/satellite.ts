@@ -1,22 +1,44 @@
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
-import { isSatelliteRecent, type SatelliteData } from './data';
+import { isSatelliteRecent, SATELLITES, type SatelliteData, type SatelliteId, type SatelliteLegend } from './data';
 
-export const CAPABILITIES_URL = 'https://wmts.marine.copernicus.eu/teroWmts/OCEANCOLOUR_MED_BGC_L3_NRT_009_141/cmems_obs-oc_med_bgc-plankton_nrt_l3-multi-1km_P1D_202211?request=GetCapabilities&service=WMTS';
+export function legendUrl(id: SatelliteId) {
+  return `https://wmts.marine.copernicus.eu/teroWmts?${new URLSearchParams({ SERVICE: 'WMTS', REQUEST: 'GetLegend',
+    LAYER: SATELLITES[id].layer, STYLE: SATELLITES[id].style, FORMAT: 'application/json' })}`;
+}
 
-export function parseSatelliteCapabilities(xml: string, now = Date.now()): SatelliteData {
+export function parseSatelliteLegend(value: unknown, id: SatelliteId): SatelliteLegend {
+  const continuous = (value as { continuous?: { logScale?: boolean; clamp?: boolean; valueMin?: number; valueMax?: number;
+    variableId?: string; cmapName?: string; cmap?: { colorMap?: unknown } } })?.continuous;
+  const config = SATELLITES[id];
+  const [min, max] = config.style.split('range:')[1].split('/').map(Number);
+  if (!continuous || continuous.logScale !== true || continuous.clamp !== true || continuous.valueMin !== min || continuous.valueMax !== max
+    || continuous.variableId !== config.layer.split('/').at(-1) || continuous.cmapName !== config.style.split(',')[0].slice(5)) throw new Error('Unexpected legend style');
+  const colors = continuous.cmap?.colorMap;
+  if (!Array.isArray(colors) || colors.length < 2 || colors.length > 1024 || !colors.every(rgb => Array.isArray(rgb) && rgb.length === 3
+    && rgb.every(c => Number.isInteger(c) && c >= 0 && c <= 255))) throw new Error('Invalid legend colors');
+  return { min, max, colors: colors.map(rgb => `rgb(${rgb.join(',')})`) };
+}
+
+export function capabilitiesUrl(id: SatelliteId) {
+  const dataset = SATELLITES[id].layer.slice(0, SATELLITES[id].layer.lastIndexOf('/'));
+  return `https://wmts.marine.copernicus.eu/teroWmts/${dataset}?request=GetCapabilities&service=WMTS`;
+}
+
+export function parseSatelliteCapabilities(xml: string, now = Date.now(), id: SatelliteId = 'chlorophyll'): SatelliteData {
+  const config = SATELLITES[id];
   if (xml.length > 1000000 || /<!DOCTYPE|<!ENTITY/i.test(xml) || XMLValidator.validate(xml) !== true) throw new Error('Invalid capabilities');
   const parser = new XMLParser({ removeNSPrefix: true, parseTagValue: false, ignoreAttributes: false, processEntities: false });
   const root = parser.parse(xml);
   const raw = root.Capabilities?.Contents?.Layer;
   const layers = Array.isArray(raw) ? raw : [raw];
-  const layer = layers.find(l => typeof l?.Identifier === 'string' && l.Identifier.endsWith('/CHL'));
-  if (!layer || !layer.Identifier.startsWith('OCEANCOLOUR_MED_BGC_L3_NRT_009_141/')) throw new Error('Missing chlorophyll');
+  const layer = layers.find(l => l?.Identifier === config.layer);
+  if (!layer) throw new Error('Missing satellite variable');
   const dimensions = Array.isArray(layer.Dimension) ? layer.Dimension : [layer.Dimension];
   const time = dimensions.find((d: { Identifier?: string }) => d?.Identifier === 'time');
   const latest = time?.Default;
   if (typeof latest !== 'string' || !isSatelliteRecent(latest, now)) throw new Error('No recent satellite observations');
   const unit = layer.Metadata?.VariableInformation?.Unit;
-  if (unit !== 'milligram m^-3') throw new Error('Unexpected chlorophyll unit');
+  if (unit !== config.sourceUnit) throw new Error('Unexpected satellite unit');
   const ranges = Array.isArray(time.Value) ? time.Value : [time.Value];
   const dates = new Set<string>();
   for (const range of ranges) {
@@ -32,5 +54,5 @@ export function parseSatelliteCapabilities(xml: string, now = Date.now()): Satel
     }
   }
   dates.add(new Date(latest).toISOString());
-  return { layer: layer.Identifier, observedAt: new Date(latest).toISOString(), dates: [...dates].sort().reverse(), checkedAt: new Date(now).toISOString(), unit: 'mg/m³' };
+  return { id, layer: layer.Identifier, observedAt: new Date(latest).toISOString(), dates: [...dates].sort().reverse(), checkedAt: new Date(now).toISOString(), unit: config.unit };
 }

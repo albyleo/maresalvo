@@ -4,7 +4,7 @@ import manifest from '../../../public/data/observatory/manifest.json';
 
 export const metadata: Metadata = {
   title: 'Osservatorio del Mediterraneo',
-  description: 'Clorofilla da satellite e ultime campagne disponibili su rifiuti, microplastiche, contaminanti e scarichi costieri. Fonti e date sempre visibili.',
+  description: 'Clorofilla, torbidità e materiale sospeso da satellite. Ultime campagne su rifiuti, microplastiche, contaminanti e scarichi costieri, con fonti e date.',
 };
 
 export default function ObservatoryPage() {

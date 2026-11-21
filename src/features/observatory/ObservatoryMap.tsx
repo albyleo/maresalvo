@@ -7,7 +7,7 @@ import { satelliteTileUrl, type ObservationFeature } from './data';
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
 
 export default function ObservatoryMap({ features, satellite, onSelect, onStatus, resetKey }: {
-  features: ObservationFeature[]; satellite: { layer: string; date: string } | null;
+  features: ObservationFeature[]; satellite: { layer: string; date: string; style: string; maxzoom: number } | null;
   onSelect: (features: ObservationFeature[]) => void;
   onStatus: (status: 'loading' | 'ready' | 'error') => void; resetKey: number;
 }) {
@@ -64,8 +64,8 @@ export default function ObservatoryMap({ features, satellite, onSelect, onStatus
       if (map.getLayer('satellite')) map.removeLayer('satellite');
       if (map.getSource('satellite')) map.removeSource('satellite');
       if (current.satellite) {
-        map.addSource('satellite', { type: 'raster', tiles: [satelliteTileUrl(current.satellite.layer, current.satellite.date)],
-          tileSize: 256, maxzoom: 10, bounds: [-5.994, 30.005, 36.494, 45.995], attribution: 'Dati © Copernicus Marine Service' });
+        map.addSource('satellite', { type: 'raster', tiles: [satelliteTileUrl(current.satellite.layer, current.satellite.date, current.satellite.style)],
+          tileSize: 256, maxzoom: current.satellite.maxzoom, bounds: [-6, 30, 37, 46], attribution: 'Dati © Copernicus Marine Service' });
         map.addLayer({ id: 'satellite', type: 'raster', source: 'satellite', paint: { 'raster-opacity': 1, 'raster-fade-duration': 0 } }, 'labels');
       }
     };
