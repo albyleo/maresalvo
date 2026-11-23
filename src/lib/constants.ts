@@ -2,7 +2,7 @@ import type { AmpFishingStatus, NavItem, UserRole } from "@/types";
 
 export const APP_NAME = "MareSalvo";
 export const APP_DESCRIPTION =
-  "Piattaforma FIPSAS per qualifiche apnea, certificati, autorizzazioni e aree marine protette italiane.";
+  "Progetto FIPASAS: un’iniziativa non profit per la conoscenza e la tutela del Mediterraneo.";
 
 export const FIPSAS_COLORS = {
   deepBlue: "#0B1D3A",

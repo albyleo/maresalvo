@@ -23,7 +23,7 @@ const COASTAL_DATASET = 'OCEANCOLOUR_MED_BGC_HR_L3_NRT_009_205/cmems_obs_oc_med_
 const COASTAL_URL = 'https://data.marine.copernicus.eu/product/OCEANCOLOUR_MED_BGC_HR_L3_NRT_009_205/description';
 export const SATELLITES = {
   chlorophyll: { layer: 'OCEANCOLOUR_MED_BGC_L3_NRT_009_141/cmems_obs-oc_med_bgc-plankton_nrt_l3-multi-1km_P1D_202211/CHL',
-    sourceUnit: 'milligram m^-3', unit: 'mg/m³', resolution: '~1 km', style: 'cmap:algae,logScale,range:0.03/10', range: '0,03–10', maxzoom: 10 },
+    sourceUnit: 'milligram m^-3', unit: 'mg/m³', resolution: '~1 km', style: 'cmap:algae,logScale,range:0.03/30', range: '0,03–30', maxzoom: 10 },
   'coastal-chlorophyll': { layer: `${COASTAL_DATASET}/CHL`, sourceUnit: 'mg m-3', unit: 'mg/m³', resolution: '100 m · fascia costiera',
     style: 'cmap:algae,logScale,range:0.03/30', range: '0,03–30', maxzoom: 12 },
   turbidity: { layer: `${COASTAL_DATASET}/TUR`, sourceUnit: 'FNU', unit: 'FNU', resolution: '100 m · fascia costiera',
@@ -35,13 +35,9 @@ export function isSatelliteTheme(id: string): id is SatelliteId { return Object.
 
 export const THEMES: { id: ThemeId; label: string; subtitle: string; description: string; note: string; source: string; url: string }[] = [
   { id: 'chlorophyll', label: 'Clorofilla', subtitle: 'Osservazioni satellitari',
-    description: 'Il colore del mare racconta la presenza di fitoplancton. Concentrazione di clorofilla superficiale stimata da più sensori, a risoluzione di circa 1 km.',
+    description: 'Il colore del mare racconta la presenza di fitoplancton. Clorofilla superficiale del bacino a circa 1 km, con dettaglio Sentinel-2 a 100 m nella fascia costiera. I due prodotti condividono data e scala cromatica; il dettaglio costiero si sovrappone dove disponibile, senza interpolare le zone mancanti.',
     note: 'Le aree trasparenti possono essere prive di osservazioni valide, anche per nuvole. La clorofilla non identifica specie tossiche e non determina la balneabilità.',
     source: 'Copernicus Marine', url: 'https://data.marine.copernicus.eu/product/OCEANCOLOUR_MED_BGC_L3_NRT_009_141/description' },
-  { id: 'coastal-chlorophyll', label: 'Clorofilla costiera', subtitle: 'Satellite · dettaglio a 100 m',
-    description: 'Concentrazione di clorofilla superficiale stimata da Sentinel-2 nella fascia di circa 20 km dalla costa. Il dettaglio a 100 metri affianca la vista dell’intero bacino.',
-    note: 'Nuvole e passaggi del satellite possono lasciare zone senza dati. La clorofilla non identifica specie tossiche e non determina la balneabilità.',
-    source: 'Copernicus Marine · Sentinel-2', url: COASTAL_URL },
   { id: 'turbidity', label: 'Torbidità', subtitle: 'Satellite · dettaglio a 100 m',
     description: 'Stima della torbidità dell’acqua nella fascia di circa 20 km dalla costa. La scala mostra la diffusione della luce associata alle particelle presenti in acqua.',
     note: 'Una torbidità elevata può avere cause naturali o antropiche. Il colore non identifica scarichi, plastica o batteri. Le aree trasparenti non hanno una stima valida per la data selezionata.',
@@ -93,4 +89,17 @@ export function satelliteTileUrl(layer: string, date: string, style: string = SA
   const query = new URLSearchParams({ service: 'WMTS', version: '1.0.0', request: 'GetTile', layer,
     tilematrixset: 'EPSG:3857', time: date, style, format: 'image/png' });
   return `https://wmts.marine.copernicus.eu/teroWmts?${query}&tilematrix={z}&tilerow={y}&tilecol={x}`;
+}
+
+/** Overlay only observations for the same day, with coastal pixels above the basin. */
+export function satelliteView(theme: ThemeId, data: Partial<Record<SatelliteId, SatelliteData>>, requestedDate: string) {
+  const ids: SatelliteId[] = theme === 'chlorophyll' ? ['chlorophyll', 'coastal-chlorophyll'] : isSatelliteTheme(theme) ? [theme] : [];
+  const dates = [...new Set(ids.flatMap(id => data[id]?.dates ?? []))].sort().reverse();
+  const commonDate = theme === 'chlorophyll' ? dates.find(d => ids.every(id => data[id]?.dates.includes(d))) : undefined;
+  const date = dates.includes(requestedDate) ? requestedDate : commonDate ?? dates[0];
+  const rasters = ids.flatMap(id => {
+    const item = data[id];
+    return item && date && item.dates.includes(date) ? [{ layer: item.layer, date, style: SATELLITES[id].style, maxzoom: SATELLITES[id].maxzoom }] : [];
+  });
+  return { dates, date, rasters };
 }

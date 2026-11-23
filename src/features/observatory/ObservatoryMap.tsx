@@ -7,7 +7,7 @@ import { satelliteTileUrl, type ObservationFeature } from './data';
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
 
 export default function ObservatoryMap({ features, satellite, onSelect, onStatus, resetKey }: {
-  features: ObservationFeature[]; satellite: { layer: string; date: string; style: string; maxzoom: number } | null;
+  features: ObservationFeature[]; satellite: { layer: string; date: string; style: string; maxzoom: number }[];
   onSelect: (features: ObservationFeature[]) => void;
   onStatus: (status: 'loading' | 'ready' | 'error') => void; resetKey: number;
 }) {
@@ -61,13 +61,16 @@ export default function ObservatoryMap({ features, satellite, onSelect, onStatus
       sourceFailed = false;
       status('loading');
       (map.getSource('observations') as maplibregl.GeoJSONSource).setData({ type: 'FeatureCollection', features: current.features });
-      if (map.getLayer('satellite')) map.removeLayer('satellite');
-      if (map.getSource('satellite')) map.removeSource('satellite');
-      if (current.satellite) {
-        map.addSource('satellite', { type: 'raster', tiles: [satelliteTileUrl(current.satellite.layer, current.satellite.date, current.satellite.style)],
-          tileSize: 256, maxzoom: current.satellite.maxzoom, bounds: [-6, 30, 37, 46], attribution: 'Dati © Copernicus Marine Service' });
-        map.addLayer({ id: 'satellite', type: 'raster', source: 'satellite', paint: { 'raster-opacity': 1, 'raster-fade-duration': 0 } }, 'labels');
+      for (const id of ['satellite-0', 'satellite-1']) {
+        if (map.getLayer(id)) map.removeLayer(id);
+        if (map.getSource(id)) map.removeSource(id);
       }
+      current.satellite.forEach((raster, index) => {
+        const id = `satellite-${index}`;
+        map.addSource(id, { type: 'raster', tiles: [satelliteTileUrl(raster.layer, raster.date, raster.style)],
+          tileSize: 256, maxzoom: raster.maxzoom, bounds: [-6, 30, 37, 46], attribution: 'Dati © Copernicus Marine Service' });
+        map.addLayer({ id, type: 'raster', source: id, paint: { 'raster-opacity': 1, 'raster-fade-duration': 0 } }, 'labels');
+      });
     };
     map.on('load', () => {
       ready = true;

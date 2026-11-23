@@ -1,4 +1,5 @@
 "use client";
+import { InfoDisclosure } from '@/components/ui/InfoDisclosure';
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Search, Layers, X, ArrowLeft, ChevronDown } from 'lucide-react';
@@ -92,7 +93,7 @@ export function MarineMap({areas,ghostNets=[],aisVessels=[],fullScreen=false,act
       <div key={selectedArea?.id ?? 'catalog'} className="marine-panel-body" tabIndex={0} role="region" aria-label="Contenuto aree marine protette">
         {selectedArea ? <div className="space-y-5">
           <div><p className="text-xs text-white/50 mb-2">{selectedArea.region_name} · {selectedArea.area_km2?.toLocaleString('it-IT')} km²</p><h3 className="text-2xl tracking-tight">{selectedArea.name}</h3></div>
-          <p className="text-sm leading-relaxed text-white/70">{selectedArea.description}</p>
+          <InfoDisclosure key={selectedArea.id} label="Info sull’area"><p>{selectedArea.description}</p></InfoDisclosure>
           {!!selectedArea.zones?.length ? <div><h4 className="text-sm font-medium mb-3">Zone di tutela</h4><div className="space-y-2">{selectedArea.zones.map(zone=><button type="button" key={zone.id} onClick={()=>setSelectedZoneId(zone.id)} aria-pressed={selectedZoneId===zone.id}
             className={`w-full text-left rounded-lg border p-3 ${selectedZoneId===zone.id?'border-white/70 bg-white/10':'border-white/10'}`}>
             <span className="font-semibold text-sm" style={{color:ZONE_STYLES[zone.zone]?.color}}>Zona {zone.zone} · {ZONE_STYLES[zone.zone]?.title}</span><span className="block text-xs text-white/60 mt-1">{zone.name}</span>

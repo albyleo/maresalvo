@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `${APP_NAME} — FIPSAS Apnea`,
+    default: `${APP_NAME} — Progetto FIPASAS`,
     template: `%s | ${APP_NAME}`,
   },
   description: APP_DESCRIPTION,

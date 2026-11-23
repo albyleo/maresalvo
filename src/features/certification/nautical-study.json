@@ -1,0 +1,439 @@
+{
+  "reviewedAt": "2026-11-23",
+  "sources": {
+    "law": {
+      "label": "Codice della nautica · art. 39",
+      "url": "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2005-07-18;171~art39"
+    },
+    "category": {
+      "label": "Regolamento nautica · art. 25",
+      "url": "https://www.normattiva.it/atto/caricaDettaglioAtto?atto.articolo.numero=25&atto.articolo.sottoArticolo=1&atto.articolo.tipoArticolo=0&atto.codiceRedazionale=008G0166&atto.dataPubblicazioneGazzetta=2008-09-22"
+    },
+    "program": {
+      "label": "MIT · Programma categoria A, DM 323/2021",
+      "url": "https://www.mit.gov.it/normativa/decreto-ministeriale-numero-323-del-10-agosto-2021"
+    },
+    "bank": {
+      "label": "MIT · Elenco nazionale, DD 131/2022",
+      "url": "https://www.mit.gov.it/normativa/decreto-dirigenziale-numero-131-del-31052022"
+    },
+    "rules": {
+      "label": "US Coast Guard · COLREG internazionali (non regole Inland USA)",
+      "url": "https://www.navcen.uscg.gov/navigation-rules-amalgamated"
+    },
+    "imo": {
+      "label": "IMO · Regole internazionali per prevenire gli abbordi",
+      "url": "https://www.imo.org/en/about/conventions/pages/colreg.aspx"
+    },
+    "units": {
+      "label": "NOAA · Miglio nautico e nodo",
+      "url": "https://oceanservice.noaa.gov/facts/nautical-mile-knot.html"
+    }
+  },
+  "topics": [
+    {
+      "id": "obblighi",
+      "label": "Obblighi e abilitazione"
+    },
+    {
+      "id": "abbordi",
+      "label": "Prevenzione degli abbordi"
+    },
+    {
+      "id": "calcoli",
+      "label": "Navigazione · distanze, tempi e consumi"
+    }
+  ],
+  "questions": [
+    {
+      "id": "obblighi-01",
+      "topic": "obblighi",
+      "prompt": "Per unità da diporto fino a 24 m, quale distanza fa scattare l’obbligo di patente indipendentemente dal motore?",
+      "options": [
+        "Oltre 6 miglia dalla costa.",
+        "Oltre 8 miglia dalla costa.",
+        "Solo oltre 12 miglia dalla costa."
+      ],
+      "answer": 0,
+      "explanation": "Art. 39: la soglia generale è oltre 6 miglia.",
+      "source": "law"
+    },
+    {
+      "id": "obblighi-02",
+      "topic": "obblighi",
+      "prompt": "Quale potenza del motore comporta l’obbligo di patente anche entro 6 miglia?",
+      "options": [
+        "Qualsiasi potenza, senza eccezioni.",
+        "Superiore a 30 kW, circa 40,8 CV.",
+        "Superiore a 60 CV soltanto."
+      ],
+      "answer": 1,
+      "explanation": "La soglia di potenza è 30 kW; rilevano anche altre condizioni.",
+      "source": "law"
+    },
+    {
+      "id": "obblighi-03",
+      "topic": "obblighi",
+      "prompt": "Un motore dichiarato da 40 CV garantisce da solo la possibilità di navigare senza patente?",
+      "options": [
+        "Sì, in ogni situazione.",
+        "Sì, anche oltre 6 miglia.",
+        "No, vanno verificati anche cilindrata, tipo di motore, distanza e attività."
+      ],
+      "answer": 2,
+      "explanation": "La potenza non è l’unico requisito dell’art. 39.",
+      "source": "law"
+    },
+    {
+      "id": "obblighi-04",
+      "topic": "obblighi",
+      "prompt": "Per condurre una moto d’acqua è richiesta la patente anche vicino alla costa?",
+      "options": [
+        "Sì.",
+        "No, entro un miglio non serve mai.",
+        "Solo se si trasporta un passeggero."
+      ],
+      "answer": 0,
+      "explanation": "L’art. 39 prevede l’obbligo per le moto d’acqua.",
+      "source": "law"
+    },
+    {
+      "id": "obblighi-05",
+      "topic": "obblighi",
+      "prompt": "A 7 miglia dalla costa, con unità fino a 24 m e motore di bassa potenza, serve la patente?",
+      "options": [
+        "No, finché si vede terra.",
+        "Sì.",
+        "No, se il motore non supera 40 CV."
+      ],
+      "answer": 1,
+      "explanation": "Sette miglia superano la soglia delle sei.",
+      "source": "law"
+    },
+    {
+      "id": "obblighi-06",
+      "topic": "obblighi",
+      "prompt": "La patente A entro 12 miglia e l’obbligo oltre 6 miglia indicano la stessa cosa?",
+      "options": [
+        "Sì, sono due nomi della stessa soglia.",
+        "Sì, entrambe autorizzano senza limiti.",
+        "No: una è un’abilitazione, l’altro è un criterio di obbligatorietà."
+      ],
+      "answer": 2,
+      "explanation": "Il limite dell’abilitazione non coincide con la soglia dell’obbligo.",
+      "source": "category"
+    },
+    {
+      "id": "obblighi-07",
+      "topic": "obblighi",
+      "prompt": "La categoria A entro 12 miglia autorizza una navigazione a 15 miglia dalla costa?",
+      "options": [
+        "No.",
+        "Sì, se si naviga solo di giorno.",
+        "Sì, con meteo favorevole."
+      ],
+      "answer": 0,
+      "explanation": "Quindici miglia oltrepassano il limite dell’abilitazione.",
+      "source": "category"
+    },
+    {
+      "id": "obblighi-08",
+      "topic": "obblighi",
+      "prompt": "Quale distinzione di navigazione è prevista per la categoria A?",
+      "options": [
+        "Solo entro 6 miglia.",
+        "Entro 12 miglia oppure senza alcun limite dalla costa.",
+        "Entro 8 miglia oppure entro 40 miglia."
+      ],
+      "answer": 1,
+      "explanation": "Sono le due specie di navigazione indicate dall’art. 25.",
+      "source": "category"
+    },
+    {
+      "id": "obblighi-09",
+      "topic": "obblighi",
+      "prompt": "Una patente A limitata alle unità a motore abilita automaticamente alla conduzione a vela?",
+      "options": [
+        "Sì, sempre.",
+        "Sì, se la vela è piccola.",
+        "No."
+      ],
+      "answer": 2,
+      "explanation": "Occorre rispettare l’abilitazione riportata sulla patente.",
+      "source": "category"
+    },
+    {
+      "id": "obblighi-10",
+      "topic": "obblighi",
+      "prompt": "Completare queste esercitazioni sostituisce l’esame ufficiale?",
+      "options": [
+        "No, sono un supporto allo studio.",
+        "Sì, ottenendo il 100%.",
+        "Sì, con la revisione dello staff del sito."
+      ],
+      "answer": 0,
+      "explanation": "Programma, prove e rilascio della patente appartengono al percorso ufficiale.",
+      "source": "program"
+    },
+    {
+      "id": "abbordi-01",
+      "topic": "abbordi",
+      "prompt": "La regola 5 COLREG richiede un servizio di vedetta:",
+      "options": [
+        "Continuo, visivo e uditivo, usando i mezzi disponibili appropriati.",
+        "Solo di notte.",
+        "Solo nei porti."
+      ],
+      "answer": 0,
+      "explanation": "La vedetta deve consentire di valutare situazione e rischio.",
+      "source": "imo"
+    },
+    {
+      "id": "abbordi-02",
+      "topic": "abbordi",
+      "prompt": "La velocità di sicurezza è sempre un numero fisso?",
+      "options": [
+        "Sì, sempre la massima dell’unità.",
+        "No, dipende dalle condizioni e dalla possibilità di manovrare e arrestarsi.",
+        "Sì, sempre 5 nodi."
+      ],
+      "answer": 1,
+      "explanation": "La regola 6 richiede una velocità adeguata alla situazione.",
+      "source": "imo"
+    },
+    {
+      "id": "abbordi-03",
+      "topic": "abbordi",
+      "prompt": "In caso di dubbio sull’esistenza di un rischio di abbordo:",
+      "options": [
+        "Si presume che non esista.",
+        "Si attende senza osservare l’altra unità.",
+        "Il rischio deve essere considerato esistente."
+      ],
+      "answer": 2,
+      "explanation": "È il criterio prudenziale della regola 7.",
+      "source": "imo"
+    },
+    {
+      "id": "abbordi-04",
+      "topic": "abbordi",
+      "prompt": "Chi raggiunge un’altra unità deve:",
+      "options": [
+        "Tenersi discosto dall’unità raggiunta.",
+        "Pretendere che questa si sposti.",
+        "Accelerare passando il più vicino possibile."
+      ],
+      "answer": 0,
+      "explanation": "La regola 13 disciplina il sorpasso.",
+      "source": "imo"
+    },
+    {
+      "id": "abbordi-05",
+      "topic": "abbordi",
+      "prompt": "Due unità a motore in vista si avvicinano su rotte opposte con rischio di abbordo, in acque libere. Come agiscono?",
+      "options": [
+        "Entrambe mantengono obbligatoriamente la rotta.",
+        "Entrambe accostano a dritta.",
+        "Entrambe accostano a sinistra."
+      ],
+      "answer": 1,
+      "explanation": "Regola 14: passaggio lasciando l’altra unità a sinistra.",
+      "source": "rules"
+    },
+    {
+      "id": "abbordi-06",
+      "topic": "abbordi",
+      "prompt": "Due unità a motore in vista hanno rotte incrociate con rischio di abbordo, senza situazioni particolari. Chi si tiene discosto?",
+      "options": [
+        "Quella che vede l’altra sulla propria sinistra.",
+        "Sempre quella più grande.",
+        "Quella che vede l’altra sulla propria dritta."
+      ],
+      "answer": 2,
+      "explanation": "Regola 15: evitare, se possibile, di attraversare la prua dell’altra.",
+      "source": "rules"
+    },
+    {
+      "id": "abbordi-07",
+      "topic": "abbordi",
+      "prompt": "L’unità che deve lasciare libera la rotta dovrebbe manovrare:",
+      "options": [
+        "Per tempo e in modo deciso.",
+        "Solo all’ultimo istante.",
+        "Con piccole variazioni difficili da notare."
+      ],
+      "answer": 0,
+      "explanation": "La regola 16 richiede un’azione tempestiva e sostanziale.",
+      "source": "rules"
+    },
+    {
+      "id": "abbordi-08",
+      "topic": "abbordi",
+      "prompt": "Chi deve inizialmente mantenere rotta e velocità può ignorare il rischio se l’altra unità non manovra?",
+      "options": [
+        "Sì, purché suoni la tromba.",
+        "No, restano gli obblighi di intervento della regola 17.",
+        "Sì, ha una precedenza assoluta."
+      ],
+      "answer": 1,
+      "explanation": "La precedenza non esonera dall’evitare l’abbordo.",
+      "source": "rules"
+    },
+    {
+      "id": "abbordi-09",
+      "topic": "abbordi",
+      "prompt": "Quale colore identifica il fanale laterale di dritta?",
+      "options": [
+        "Rosso.",
+        "Giallo.",
+        "Verde."
+      ],
+      "answer": 2,
+      "explanation": "Regola 21: verde a dritta, rosso a sinistra.",
+      "source": "rules"
+    },
+    {
+      "id": "abbordi-10",
+      "topic": "abbordi",
+      "prompt": "Una barca con vele alzate sta anche usando il motore per avanzare. Ai fini COLREG è:",
+      "options": [
+        "Un’unità a propulsione meccanica.",
+        "Sempre un’unità a vela.",
+        "Un’unità impossibilitata a manovrare."
+      ],
+      "answer": 0,
+      "explanation": "La definizione di unità a vela esclude l’uso della propulsione meccanica.",
+      "source": "rules"
+    },
+    {
+      "id": "calcoli-01",
+      "topic": "calcoli",
+      "prompt": "A quanti metri corrisponde un miglio nautico internazionale?",
+      "options": [
+        "1.852 m.",
+        "1.000 m.",
+        "1.609 m."
+      ],
+      "answer": 0,
+      "explanation": "Il miglio nautico misura 1.852 metri.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-02",
+      "topic": "calcoli",
+      "prompt": "Un nodo corrisponde a:",
+      "options": [
+        "Un miglio nautico al minuto.",
+        "Un miglio nautico all’ora.",
+        "Un chilometro all’ora."
+      ],
+      "answer": 1,
+      "explanation": "Il nodo è un’unità di velocità.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-03",
+      "topic": "calcoli",
+      "prompt": "A velocità sul fondo costante di 6 nodi, quanta strada percorri in 30 minuti?",
+      "options": [
+        "6 miglia nautiche.",
+        "12 miglia nautiche.",
+        "3 miglia nautiche."
+      ],
+      "answer": 2,
+      "explanation": "Distanza = 6 × 0,5 ore = 3 miglia.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-04",
+      "topic": "calcoli",
+      "prompt": "Quanto tempo occorre per 12 miglia a 8 nodi sul fondo costanti?",
+      "options": [
+        "1 ora e 30 minuti.",
+        "40 minuti.",
+        "2 ore."
+      ],
+      "answer": 0,
+      "explanation": "Tempo = 12 ÷ 8 = 1,5 ore.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-05",
+      "topic": "calcoli",
+      "prompt": "Percorri 9 miglia in 45 minuti. Qual è la velocità media sul fondo?",
+      "options": [
+        "6 nodi.",
+        "12 nodi.",
+        "9 nodi."
+      ],
+      "answer": 1,
+      "explanation": "45 minuti = 0,75 ore; 9 ÷ 0,75 = 12.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-06",
+      "topic": "calcoli",
+      "prompt": "Un tratto di 4 miglia a 4 nodi sul fondo dura:",
+      "options": [
+        "15 minuti.",
+        "4 ore.",
+        "1 ora."
+      ],
+      "answer": 2,
+      "explanation": "Tempo = distanza ÷ velocità: 4 ÷ 4 = 1 ora.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-07",
+      "topic": "calcoli",
+      "prompt": "In un esercizio teorico il motore consuma 10 litri all’ora. Quanti litri servono per 2,5 ore, prima di aggiungere riserve?",
+      "options": [
+        "25 litri.",
+        "20 litri.",
+        "40 litri."
+      ],
+      "answer": 0,
+      "explanation": "10 × 2,5 = 25 litri. Non è un piano reale di rifornimento.",
+      "source": "program"
+    },
+    {
+      "id": "calcoli-08",
+      "topic": "calcoli",
+      "prompt": "Con 60 litri utilizzabili e consumo costante di 15 litri/ora, qual è l’autonomia teorica, prima delle riserve?",
+      "options": [
+        "6 ore.",
+        "4 ore.",
+        "3 ore."
+      ],
+      "answer": 1,
+      "explanation": "60 ÷ 15 = 4 ore; nella realtà servono margini e riserve.",
+      "source": "program"
+    },
+    {
+      "id": "calcoli-09",
+      "topic": "calcoli",
+      "prompt": "Un esercizio prevede 18 miglia a 6 nodi sul fondo. Qual è la durata teorica?",
+      "options": [
+        "2 ore.",
+        "30 minuti.",
+        "3 ore."
+      ],
+      "answer": 2,
+      "explanation": "18 ÷ 6 = 3 ore, senza soste o variazioni.",
+      "source": "units"
+    },
+    {
+      "id": "calcoli-10",
+      "topic": "calcoli",
+      "prompt": "Per usare distanza ÷ velocità e ottenere ore, quali unità sono coerenti?",
+      "options": [
+        "Miglia nautiche e nodi.",
+        "Metri e nodi, senza conversione.",
+        "Miglia nautiche e litri/ora."
+      ],
+      "answer": 0,
+      "explanation": "I nodi esprimono miglia nautiche per ora.",
+      "source": "units"
+    }
+  ]
+}

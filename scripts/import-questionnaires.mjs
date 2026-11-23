@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
+import { generateMarineQuestionnaires } from './import-marine-questionnaires.mjs';
 
 const source = await readFile(new URL('../supabase/content/questionnaires-source-v2.txt', import.meta.url), 'utf8');
 const matches = [...source.matchAll(/([123]\.(?:1[0-5]|[1-9]))(?=[A-ZÈ])/gu)];
@@ -59,5 +60,5 @@ for (const key of privateKeys) sql += `INSERT INTO public.questionnaire_answer_k
 sql += "UPDATE public.questionnaires SET is_active = false WHERE id IN ('40000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000003');\nCOMMIT;\n";
 await writeFile(new URL('../supabase/migrations/005_training_questionnaires_v2.sql', import.meta.url), sql);
 // The browser catalog deliberately contains no correct answers or explanations.
-await writeFile(new URL('../src/features/certification/catalog.json', import.meta.url), JSON.stringify(catalog, null, 2) + '\n');
+await writeFile(new URL('../src/features/certification/catalog.json', import.meta.url), JSON.stringify([...catalog, ...await generateMarineQuestionnaires()], null, 2) + '\n');
 console.log('Generated 3 version-2 training questionnaires, 45 questions, and migration 005.');

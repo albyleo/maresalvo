@@ -22,7 +22,8 @@ export default async function DashboardQualifichePage() {
   if (error) return <Card>Impossibile caricare le domande. Riprova più tardi.</Card>;
   return <div className="space-y-6">
     <h1 className="text-2xl font-bold">Qualifiche e questionari</h1>
-    <p className="text-amber-200 bg-amber-300/10 border border-amber-300/20 p-4 rounded-xl">Ambiente pilota: i questionari e i certificati dimostrativi non sono qualifiche FIPSAS e non autorizzano alcuna attività sportiva o di pesca.</p>
+    <Link href="/questionari/patente-nautica" className="block border-y border-sky-200/30 py-5 text-sky-100">Preparazione patente nautica · 30 esercizi con correzioni →</Link>
+    <p className="text-amber-200 bg-amber-300/10 border border-amber-300/20 p-4 rounded-xl">Ambiente pilota: i questionari e i certificati dimostrativi non sono qualifiche FIPSAS e non sono patenti nautiche e non autorizzano la conduzione di imbarcazioni o altre attività sportive e di pesca.</p>
     {applications.length > 0 && <section className="space-y-3"><h2 className="text-xl font-semibold">Le tue richieste</h2>
       {applications.map(a => <Card key={a.id} glass>
         <div className="flex flex-wrap justify-between gap-2"><h3 className="font-semibold">{a.questionnaire_title}</h3><span>{APPLICATION_STATUS[a.status]}</span></div>

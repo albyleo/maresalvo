@@ -1,0 +1,37 @@
+{
+  "41000000-0000-4000-8000-000000000001": {
+    "reviewedAt": "2026-11-23",
+    "sources": [
+      {
+        "label": "MIT · Patenti nautiche e normativa italiana",
+        "url": "https://www.mit.gov.it/temi/patenti-mezzi-abilitazioni/patenti-nautiche/normativa"
+      },
+      {
+        "label": "RNLI · Preparazione e sicurezza a bordo",
+        "url": "https://rnli.org/water-safety/choose-your-activity/yacht-sailing-and-motorboating/how-to-stay-safe-when-you-go-afloat"
+      }
+    ]
+  },
+  "41000000-0000-4000-8000-000000000002": {
+    "reviewedAt": "2026-11-23",
+    "sources": [
+      {
+        "label": "RNLI · Sicurezza in SUP",
+        "url": "https://rnli.org/safety/choose-your-activity/stand-up-paddle-boarding"
+      },
+      {
+        "label": "Water Safety New Zealand · Kayak e SUP",
+        "url": "https://www.watersafetynz.org/stay-safe/kayaking-and-stand-up-paddleboarding"
+      }
+    ]
+  },
+  "41000000-0000-4000-8000-000000000003": {
+    "reviewedAt": "2026-11-23",
+    "sources": [
+      {
+        "label": "BSAC · Preparazione allo snorkeling",
+        "url": "https://www.bsac.com/advice-and-support/club-support/snorkelling-support/snorkelling-tips/"
+      }
+    ]
+  }
+}

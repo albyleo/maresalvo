@@ -1,9 +1,10 @@
 "use client";
 
+import { BrandMark } from './BrandMark';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Waves } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { APP_NAME, PUBLIC_NAV } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +15,8 @@ export function Header() {
   const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Match the hamburger navigation breakpoint. Keep native scrolling and
+    // Keep native scrolling on every screen and
     // ignore tiny direction changes from touch momentum / browser chrome.
-    const mobile = window.matchMedia('(max-width: 1279px)');
     const position = () => Math.max(0, Math.min(window.scrollY, document.documentElement.scrollHeight - window.innerHeight));
     let previous = position();
     let direction = 0;
@@ -34,7 +34,7 @@ export function Header() {
       const delta = current - previous;
       previous = current;
       const keyboardFocus = header.current?.contains(document.activeElement) && document.activeElement?.matches(':focus-visible');
-      if (!mobile.matches || mobileOpen || current <= 24 || keyboardFocus) {
+      if (mobileOpen || current <= 24 || keyboardFocus) {
         distance = 0;
         direction = 0;
         setScrollHidden(false);
@@ -57,13 +57,13 @@ export function Header() {
     const initialFrame = requestAnimationFrame(reset);
     window.addEventListener('scroll', scroll, {passive:true});
     window.addEventListener('pageshow', reset);
-    mobile.addEventListener('change', reset);
+    window.addEventListener('resize', reset);
     return () => {
       cancelAnimationFrame(initialFrame);
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', scroll);
       window.removeEventListener('pageshow', reset);
-      mobile.removeEventListener('change', reset);
+      window.removeEventListener('resize', reset);
     };
   }, [pathname, mobileOpen]);
 
@@ -80,12 +80,10 @@ export function Header() {
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8">
         <nav aria-label="Navigazione principale" className="flex min-h-20 items-center justify-between gap-4">
           <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 group">
-            <Waves className="h-6 w-6 text-[var(--color-aqua)]" />
-            <span className="text-lg font-medium text-white tracking-tight">
-              {APP_NAME}
-            </span>
-            <span className="hidden sm:inline border-l border-white/35 pl-3 ml-2 text-[9px] tracking-[.12em] text-white/80 font-normal">
-              FIPSAS
+            <BrandMark className="h-10 w-10 shrink-0 text-[var(--color-aqua)]" />
+            <span className="flex flex-col gap-0.5">
+              <span className="text-lg font-medium text-white tracking-tight">{APP_NAME}</span>
+              <span className="text-[10px] tracking-[.08em] text-white/75">Progetto FIPASAS</span>
             </span>
           </Link>
 

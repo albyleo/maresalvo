@@ -37,10 +37,8 @@ body {
 .site-header { padding-top: env(safe-area-inset-top, 0px); background: linear-gradient(180deg, rgb(3 18 36 / .7), rgb(3 18 36 / .22)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); text-shadow: 0 1px 8px rgb(0 12 28 / .7); }
 .site-header[data-menu-open='true'] { background: rgb(5 25 46 / .97); }
 .site-header > div { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
-@media (max-width: 1279px) {
-  .site-header { transition: transform 220ms ease; }
-  .site-header[data-scroll-hidden='true'][data-menu-open='false']:not(:has(:focus-visible)) { transform: translateY(calc(-100% - 1px)); pointer-events: none; }
-}
+.site-header { transition: transform 220ms ease; }
+.site-header[data-scroll-hidden='true'][data-menu-open='false']:not(:has(:focus-visible)) { transform: translateY(calc(-100% - 1px)); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .site-header { transition: none; }
 }

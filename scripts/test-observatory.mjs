@@ -10,7 +10,7 @@ async function compiled(path, replacements = {}) {
   return `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`;
 }
 const dataUrl = await compiled('../src/features/observatory/data.ts');
-const { isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
+const { satelliteView, isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
 const { parseSatelliteCapabilities, parseSatelliteLegend } = await import(await compiled('../src/features/observatory/satellite.ts', {
   './data': dataUrl, 'fast-xml-parser': import.meta.resolve('fast-xml-parser'),
 }));
@@ -35,7 +35,7 @@ test('satellite tiles pin the verified date, projection and chlorophyll style', 
   assert.equal(url.searchParams.get('time'), '2026-11-19T00:00:00Z');
   assert.equal(url.searchParams.get('tilematrixset'), 'EPSG:3857');
   assert.equal(url.searchParams.get('tilematrix'), '{z}');
-  assert.equal(url.searchParams.get('style'), 'cmap:algae,logScale,range:0.03/10');
+  assert.equal(url.searchParams.get('style'), 'cmap:algae,logScale,range:0.03/30');
 });
 test('coastal variables keep independent dates, units and styles and never fall back to another layer', () => {
   const ids = ['coastal-chlorophyll', 'turbidity', 'suspended-matter'];
@@ -96,4 +96,18 @@ test('published collections retain source/date/unit and only one campaign, with 
       if (key === 'chemicals') assert.ok(['1', '2', '6'].includes(f.properties.quality));
     }
   }
+});
+
+test('combined chlorophyll uses one date and scale, coastal overlay last, and handles partial outages', () => {
+  const basin = { layer: SATELLITES.chlorophyll.layer, dates: ['2026-11-20', '2026-11-19'] };
+  const coast = { layer: SATELLITES['coastal-chlorophyll'].layer, dates: ['2026-11-19', '2026-11-18'] };
+  const data = { chlorophyll: basin, 'coastal-chlorophyll': coast };
+  const combined = satelliteView('chlorophyll', data, '');
+  assert.equal(combined.date, '2026-11-19');
+  assert.deepEqual(combined.rasters.map(r => r.layer), [basin.layer, coast.layer]);
+  assert.equal(new Set(combined.rasters.map(r => r.style)).size, 1);
+  assert.equal(satelliteView('chlorophyll', data, '2026-11-20').rasters.length, 1);
+  assert.equal(satelliteView('chlorophyll', { 'coastal-chlorophyll': coast }, '').rasters[0].layer, coast.layer);
+  assert.deepEqual(satelliteView('chlorophyll', {}, '').rasters, []);
+  assert.deepEqual(satelliteView('beach', data, '').rasters, []);
 });
