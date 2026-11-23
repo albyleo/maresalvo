@@ -464,35 +464,35 @@
     ]
   },
   {
-    "id": "41000000-0000-4000-8000-000000000001",
+    "id": "42000000-0000-4000-8000-000000000001",
     "title": "Nautica da diporto · basi per la conduzione",
     "description": "Preparazione dell’uscita, responsabilità al comando e sicurezza a bordo. Introduzione formativa, non corso abilitante né simulazione dell’esame ministeriale.",
-    "version": 1,
+    "version": 2,
     "pass_percent": 80,
     "is_demo": true,
     "questions": [
       {
-        "id": "51000000-0000-4000-8000-000000000101",
+        "id": "52000000-0000-4000-8000-000000000101",
         "position": 1,
-        "prompt": "Superare questo questionario consente di ottenere una patente nautica?",
+        "prompt": "Quale caratteristica deve avere l’ancora imbarcata?",
         "options": [
-          "No: la patente richiede il percorso ufficiale previsto per la categoria.",
-          "Sì, basta raggiungere l’80%.",
-          "Sì, se si naviga solo nel Mediterraneo."
+          "Essere adatta all’unità e al luogo di utilizzo.",
+          "Essere sempre la più leggera disponibile.",
+          "Avere solo una funzione decorativa."
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000102",
+        "id": "52000000-0000-4000-8000-000000000102",
         "position": 2,
-        "prompt": "Dove verificare quali requisiti servono per condurre una specifica unità in Italia?",
+        "prompt": "La lunghezza di catena e cima dell’ancora va scelta considerando:",
         "options": [
-          "Nel risultato di un quiz generico online.",
-          "Nella normativa vigente e presso gli uffici competenti, considerando unità e navigazione prevista.",
-          "In base al solo nome commerciale della barca."
+          "Solo il colore dello scafo.",
+          "L’area in cui si prevede di navigare e ancorare.",
+          "Soltanto il numero di passeggeri."
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000103",
+        "id": "52000000-0000-4000-8000-000000000103",
         "position": 3,
         "prompt": "Come preparare il dispositivo individuale di galleggiamento prima di partire?",
         "options": [
@@ -502,7 +502,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000104",
+        "id": "52000000-0000-4000-8000-000000000104",
         "position": 4,
         "prompt": "Quale controllo richiede un giubbotto di salvataggio?",
         "options": [
@@ -512,7 +512,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000105",
+        "id": "52000000-0000-4000-8000-000000000105",
         "position": 5,
         "prompt": "Dove tenere un mezzo per chiedere aiuto?",
         "options": [
@@ -522,7 +522,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000106",
+        "id": "52000000-0000-4000-8000-000000000106",
         "position": 6,
         "prompt": "Quale informazione è essenziale per farsi localizzare in emergenza?",
         "options": [
@@ -532,7 +532,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000107",
+        "id": "52000000-0000-4000-8000-000000000107",
         "position": 7,
         "prompt": "A cosa serve il dispositivo di arresto del motore con cordino, sulle unità che lo prevedono?",
         "options": [
@@ -542,7 +542,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000108",
+        "id": "52000000-0000-4000-8000-000000000108",
         "position": 8,
         "prompt": "Come usare il cordino di arresto del motore?",
         "options": [
@@ -552,7 +552,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000109",
+        "id": "52000000-0000-4000-8000-000000000109",
         "position": 9,
         "prompt": "Perché predisporre un’ancora adatta all’unità e al luogo?",
         "options": [
@@ -562,7 +562,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000110",
+        "id": "52000000-0000-4000-8000-000000000110",
         "position": 10,
         "prompt": "Un aiuto al galleggiamento è necessariamente progettato per girare una persona incosciente a faccia in su?",
         "options": [
@@ -574,15 +574,15 @@
     ]
   },
   {
-    "id": "41000000-0000-4000-8000-000000000002",
+    "id": "42000000-0000-4000-8000-000000000002",
     "title": "Kayak e SUP · uscire preparati",
     "description": "Vento, attrezzatura, comunicazioni e pianificazione di un’uscita a pagaia. Le indicazioni generali vanno adattate al luogo e alle ordinanze locali.",
-    "version": 1,
+    "version": 2,
     "pass_percent": 80,
     "is_demo": true,
     "questions": [
       {
-        "id": "51000000-0000-4000-8000-000000000201",
+        "id": "52000000-0000-4000-8000-000000000201",
         "position": 1,
         "prompt": "Quale vento è particolarmente insidioso per chi inizia a usare il SUP?",
         "options": [
@@ -592,7 +592,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000202",
+        "id": "52000000-0000-4000-8000-000000000202",
         "position": 2,
         "prompt": "Una superficie calma vicino alla spiaggia garantisce un rientro facile con vento da terra?",
         "options": [
@@ -602,7 +602,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000203",
+        "id": "52000000-0000-4000-8000-000000000203",
         "position": 3,
         "prompt": "Come scegliere un aiuto al galleggiamento per pagaiare?",
         "options": [
@@ -612,7 +612,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000204",
+        "id": "52000000-0000-4000-8000-000000000204",
         "position": 4,
         "prompt": "Come portare un telefono durante l’uscita?",
         "options": [
@@ -622,7 +622,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000205",
+        "id": "52000000-0000-4000-8000-000000000205",
         "position": 5,
         "prompt": "Un leash per SUP è adatto indistintamente a qualsiasi ambiente?",
         "options": [
@@ -632,17 +632,17 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000206",
+        "id": "52000000-0000-4000-8000-000000000206",
         "position": 6,
-        "prompt": "Qual è un buon primo passo per iniziare il SUP?",
+        "prompt": "Perché una corrente intensa può essere un problema per chi pagaia?",
         "options": [
-          "Provare da soli nel tratto più esposto.",
-          "Imparare soltanto quando si è già al largo.",
-          "Una lezione per apprendere tecnica, risalita e valutazione dell’ambiente."
+          "Può rendere difficile avanzare nella direzione scelta e aumentare la fatica.",
+          "Rende sempre più facile il rientro.",
+          "Non ha effetti sulle tavole SUP."
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000207",
+        "id": "52000000-0000-4000-8000-000000000207",
         "position": 7,
         "prompt": "Cosa valutare oltre al meteo prima di pagaiare?",
         "options": [
@@ -652,7 +652,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000208",
+        "id": "52000000-0000-4000-8000-000000000208",
         "position": 8,
         "prompt": "Come scegliere percorso e durata di un’uscita?",
         "options": [
@@ -662,7 +662,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000209",
+        "id": "52000000-0000-4000-8000-000000000209",
         "position": 9,
         "prompt": "Perché comunicare a qualcuno a terra il programma dell’uscita?",
         "options": [
@@ -672,7 +672,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000210",
+        "id": "52000000-0000-4000-8000-000000000210",
         "position": 10,
         "prompt": "Quali condizioni del vento considerare nella pianificazione?",
         "options": [
@@ -684,15 +684,15 @@
     ]
   },
   {
-    "id": "41000000-0000-4000-8000-000000000003",
+    "id": "42000000-0000-4000-8000-000000000003",
     "title": "Snorkeling · esplorare in sicurezza",
     "description": "Scelta del sito, compagno, attrezzatura e condizioni del mare per lo snorkeling in superficie. Non abilita all’apnea profonda o alle immersioni con autorespiratore.",
-    "version": 1,
+    "version": 2,
     "pass_percent": 80,
     "is_demo": true,
     "questions": [
       {
-        "id": "51000000-0000-4000-8000-000000000301",
+        "id": "52000000-0000-4000-8000-000000000301",
         "position": 1,
         "prompt": "Quale organizzazione raccomanda BSAC per un’uscita di snorkeling?",
         "options": [
@@ -702,7 +702,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000302",
+        "id": "52000000-0000-4000-8000-000000000302",
         "position": 2,
         "prompt": "Prima di entrare in acqua, cosa controllare?",
         "options": [
@@ -712,7 +712,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000303",
+        "id": "52000000-0000-4000-8000-000000000303",
         "position": 3,
         "prompt": "Un cinghiolo della pinna danneggiato va ignorato per una breve uscita?",
         "options": [
@@ -722,7 +722,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000304",
+        "id": "52000000-0000-4000-8000-000000000304",
         "position": 4,
         "prompt": "Quale sito è preferibile per iniziare?",
         "options": [
@@ -732,7 +732,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000305",
+        "id": "52000000-0000-4000-8000-000000000305",
         "position": 5,
         "prompt": "Perché individuare un’uscita alternativa dall’acqua?",
         "options": [
@@ -742,7 +742,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000306",
+        "id": "52000000-0000-4000-8000-000000000306",
         "position": 6,
         "prompt": "Quale condizione rende un sito inadatto a un principiante?",
         "options": [
@@ -752,7 +752,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000307",
+        "id": "52000000-0000-4000-8000-000000000307",
         "position": 7,
         "prompt": "Quali informazioni consultare prima dell’uscita?",
         "options": [
@@ -762,7 +762,7 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000308",
+        "id": "52000000-0000-4000-8000-000000000308",
         "position": 8,
         "prompt": "Come considerare maree e correnti locali nella pianificazione?",
         "options": [
@@ -772,23 +772,23 @@
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000309",
+        "id": "52000000-0000-4000-8000-000000000309",
         "position": 9,
-        "prompt": "Un quiz introduttivo basta per iniziare immersioni in apnea impegnative?",
+        "prompt": "Per lo snorkeling, quale zona è opportuno evitare?",
         "options": [
-          "Sì, se tutte le risposte sono corrette.",
-          "Sì, usando pinne più lunghe.",
-          "No, servono formazione specifica e preparazione adeguata."
+          "Una zona con accesso agevole.",
+          "Un tratto riparato adatto al gruppo.",
+          "Una zona con intenso traffico di imbarcazioni."
         ]
       },
       {
-        "id": "51000000-0000-4000-8000-000000000310",
+        "id": "52000000-0000-4000-8000-000000000310",
         "position": 10,
-        "prompt": "Qual è il modo appropriato per apprendere le tecniche di snorkeling?",
+        "prompt": "Perché una maschera che non aderisce bene va sistemata prima dell’uscita?",
         "options": [
-          "Seguire una formazione riconosciuta e progressiva.",
-          "Sperimentarle da soli lontano dalla riva.",
-          "Imitare video senza pratica assistita."
+          "Perché può far entrare acqua e creare difficoltà durante l’attività.",
+          "Solo per migliorare le fotografie.",
+          "Perché modifica le correnti marine."
         ]
       }
     ]

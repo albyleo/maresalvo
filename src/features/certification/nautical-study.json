@@ -165,15 +165,15 @@
     {
       "id": "obblighi-10",
       "topic": "obblighi",
-      "prompt": "Completare queste esercitazioni sostituisce l’esame ufficiale?",
+      "prompt": "A 9 miglia dalla costa, quale limite di abilitazione della categoria A comprende la navigazione prevista?",
       "options": [
-        "No, sono un supporto allo studio.",
-        "Sì, ottenendo il 100%.",
-        "Sì, con la revisione dello staff del sito."
+        "La categoria A entro 12 miglia, ferma restando ogni altra condizione.",
+        "Nessuna patente: 9 miglia sono entro la soglia di esenzione.",
+        "Solo la patente senza limiti, perché si superano 8 miglia."
       ],
       "answer": 0,
-      "explanation": "Programma, prove e rilascio della patente appartengono al percorso ufficiale.",
-      "source": "program"
+      "explanation": "Nove miglia superano la soglia di obbligo delle sei, ma rientrano nel limite delle dodici dell’abilitazione indicata.",
+      "source": "category"
     },
     {
       "id": "abbordi-01",

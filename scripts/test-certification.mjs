@@ -175,7 +175,7 @@ test('certification workflow and database permissions', async t => {
       assert.deepEqual((await db.query('SELECT * FROM public.questionnaire_answer_keys WHERE question_id = ANY($1::uuid[]) ORDER BY question_id', [oldKeys.map(k => k.question_id)])).rows, oldKeys);
       assert.deepEqual((await db.query('SELECT * FROM public.certification_applications ORDER BY id')).rows, oldApplications);
       assert.deepEqual((await db.query('SELECT * FROM public.certificates ORDER BY id')).rows, oldCertificates);
-      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8')).filter(item => item.version === 2);
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8')).filter(item => item.id.startsWith('40000000'));
       assert.equal(catalog.length, 3);
       assert.deepEqual((await db.query('SELECT id, version, is_demo, pass_percent FROM public.questionnaires WHERE is_active ORDER BY id')).rows,
         catalog.map(({ id }) => ({ id, version: 2, is_demo: true, pass_percent: 80 })));
@@ -203,7 +203,7 @@ test('certification workflow and database permissions', async t => {
       assert.equal((await db.query('SELECT metadata FROM public.certificates WHERE id = $1', [issued])).rows[0].metadata.questionnaire_version, 1);
     });
     await t.test('version 2 rejects incomplete answers, fails at 11/15 and passes at 12/15', async () => {
-      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8')).filter(item => item.version === 2);
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8')).filter(item => item.id.startsWith('40000000'));
       for (const item of catalog) {
         await root();
         const keys = (await db.query('SELECT k.question_id, k.correct_option FROM public.questionnaire_answer_keys k JOIN public.questionnaire_questions q ON q.id = k.question_id WHERE q.questionnaire_id = $1', [item.id])).rows;
@@ -229,7 +229,8 @@ test('certification workflow and database permissions', async t => {
       assert.equal((await db.query('SELECT id FROM public.questionnaires WHERE is_active')).rows.length, 6);
       const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8'));
       assert.equal(catalog.length, 6);
-      for (const item of catalog.filter(q => q.id.startsWith('41000000'))) {
+      const original = JSON.parse(await readFile(new URL('../supabase/content/marine-activities.json', import.meta.url), 'utf8'));
+      for (const item of original.courses.map(course => ({ ...course, questions: course.questions.map(({ id, position, prompt, options }) => ({ id, position, prompt, options })) }))) {
         await root();
         assert.equal(item.questions.length, 10);
         assert.equal(item.is_demo, true);
@@ -245,6 +246,29 @@ test('certification workflow and database permissions', async t => {
           const result = await db.query('SELECT public.submit_questionnaire($1,$2) AS id', [item.id, JSON.stringify(answers)]);
           assert.deepEqual((await db.query('SELECT status,score_percent,is_demo,certificate_id FROM public.certification_applications WHERE id=$1', [result.rows[0].id])).rows[0], { status,score_percent:score,is_demo:true,certificate_id:null });
         }
+      }
+    });
+    await t.test('revised marine courses preserve past results and retire generic questions', async () => {
+      await root();
+      const oldApplications = (await db.query('SELECT * FROM public.certification_applications ORDER BY id')).rows;
+      const oldQuestions = (await db.query('SELECT * FROM public.questionnaire_questions ORDER BY id')).rows;
+      await db.exec(await readFile(new URL('../supabase/migrations/008_marine_activity_questionnaires_v2.sql', import.meta.url), 'utf8'));
+      assert.deepEqual((await db.query('SELECT * FROM public.certification_applications ORDER BY id')).rows, oldApplications);
+      assert.deepEqual((await db.query('SELECT * FROM public.questionnaire_questions WHERE id = ANY($1::uuid[]) ORDER BY id', [oldQuestions.map(q => q.id)])).rows, oldQuestions);
+      const active = (await db.query('SELECT id FROM public.questionnaires WHERE is_active ORDER BY id')).rows.map(q => q.id);
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8'));
+      assert.deepEqual(active, catalog.map(q => q.id).sort());
+      for (const item of catalog.filter(q => q.id.startsWith('42000000'))) {
+        await root();
+        assert.equal(item.version, 2);
+        assert.deepEqual((await db.query('SELECT id,position,prompt,options FROM public.questionnaire_questions WHERE questionnaire_id=$1 ORDER BY position', [item.id])).rows, item.questions);
+        for (const q of item.questions) assert.doesNotMatch(q.prompt, /superare questo questionario|quiz introduttivo|primo passo|apprendere le tecniche/i);
+        const keys = (await db.query('SELECT k.question_id,k.correct_option FROM public.questionnaire_answer_keys k JOIN public.questionnaire_questions q ON q.id=k.question_id WHERE q.questionnaire_id=$1', [item.id])).rows;
+        const answers = Object.fromEntries(keys.map(k => [k.question_id,k.correct_option]));
+        await as(alice);
+        const result = await db.query('SELECT public.submit_questionnaire($1,$2) AS id', [item.id, JSON.stringify(answers)]);
+        assert.deepEqual((await db.query('SELECT score_percent,status,questionnaire_version FROM public.certification_applications WHERE id=$1', [result.rows[0].id])).rows[0], { score_percent:100,status:'pending',questionnaire_version:2 });
+        await assert.rejects(db.query('SELECT * FROM public.questionnaire_answer_keys'), /permission denied/);
       }
     });
   } finally { await db.close(); }
