@@ -258,7 +258,12 @@ h1, h2, h3 { text-wrap: balance; }
 
 .story-sequence { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
 .story-sequence[data-ready="true"] { opacity: 1; }
-/* A stable drawing surface avoids clearing the canvas whenever mobile browser bars move. */
-@media (max-width: 767px) {
-  .ocean-story[data-motion='on'] .story-sequence { height: 100lvh; }
+/* Keep the entire sticky scene stable while mobile browser bars collapse.
+   Only text/controls follow the visible viewport; the sea always fills the screen. */
+@media (max-width: 767px), (pointer: coarse) {
+  .ocean-story[data-motion='on'] .story-scene { height: 100vh; height: 100lvh; }
+  .ocean-story[data-motion='on'] .story-sequence { height: 100%; }
+  .ocean-story[data-motion='on'] .story-frames { bottom: auto; height: 100dvh; }
+  .ocean-story[data-motion='on'] .story-bottom,
+  .ocean-story[data-motion='on'] .story-progress { bottom: max(0px, calc(100lvh - 100dvh)); }
 }

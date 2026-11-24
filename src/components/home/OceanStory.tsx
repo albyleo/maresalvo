@@ -32,6 +32,7 @@ export function OceanStory() {
       const sequence = mobile && canvasRef.current ? createOceanSequence(canvasRef.current) : null;
       if (!sequence) { video.src = mobile ? '/videos/tartaruga-scroll-mobile.mp4' : '/videos/tartaruga-scroll.mp4'; video.muted = true; video.load(); }
       const frames = root.querySelectorAll<HTMLElement>('.story-frame');
+      const scene = root.querySelector<HTMLElement>('.story-scene');
       const playhead = { progress: 0 };
       let raf = 0;
       let disposed = false;
@@ -64,7 +65,10 @@ export function OceanStory() {
       gsap.set(frames, { autoAlpha: 0, y: 36 });
       gsap.set(frames[0], { autoAlpha: 1, y: 0 });
       const timeline = gsap.timeline({
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: mobile ? 0.2 : 0.65, invalidateOnRefresh: true, onToggle: self => sequence?.setActive(self.isActive) },
+        scrollTrigger: { trigger: root, start: 'top top',
+          // Match the sticky container's actual travel, including stable mobile viewport height.
+          end: () => `+=${Math.max(1, root.offsetHeight - (scene?.offsetHeight ?? window.innerHeight))}`,
+          scrub: mobile ? 0.2 : 0.65, invalidateOnRefresh: true, onToggle: self => sequence?.setActive(self.isActive) },
       });
       timeline.to(playhead, { progress: 1, duration: 1, ease: 'none', onUpdate: scheduleSeek }, 0)
         .to(progressRef.current, { scaleX: 1, duration: 1, ease: 'none' }, 0)
