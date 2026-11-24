@@ -258,3 +258,7 @@ h1, h2, h3 { text-wrap: balance; }
 
 .story-sequence { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
 .story-sequence[data-ready="true"] { opacity: 1; }
+/* A stable drawing surface avoids clearing the canvas whenever mobile browser bars move. */
+@media (max-width: 767px) {
+  .ocean-story[data-motion='on'] .story-sequence { height: 100lvh; }
+}
