@@ -1,0 +1,32 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import ts from 'typescript';
+
+test('mobile frames follow latest target, bound requests, redraw on resize and stop on cleanup', async () => {
+  const text = (await readFile('src/components/home/oceanSequence.ts', 'utf8')).replace("import manifest from './ocean-frames.json';", "const manifest = { count: 720, base: '/frames/' };");
+  const js = ts.transpileModule(text, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const pending = [], drawings = [], rafs = new Map(); let counter = 0, resize;
+  globalThis.Image = class { naturalWidth = 960; naturalHeight = 540; set src(value) { this.url = value; if (value) pending.push(this); } };
+  globalThis.window = { devicePixelRatio: 3, matchMedia: () => ({ matches: true }) };
+  globalThis.document = { hidden: false, addEventListener() {}, removeEventListener() {} };
+  globalThis.ResizeObserver = class { constructor(callback) { resize = callback; } observe() {} disconnect() {} };
+  globalThis.requestAnimationFrame = fn => { rafs.set(++counter, fn); return counter; };
+  globalThis.cancelAnimationFrame = id => rafs.delete(id);
+  const flush = () => { const callbacks = [...rafs.values()]; rafs.clear(); callbacks.forEach(fn => fn()); };
+  const canvas = { clientWidth: 390, clientHeight: 844, width: 0, height: 0, dataset: {}, getContext: () => ({ drawImage: (...args) => drawings.push(args) }) };
+  const { createOceanSequence } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
+  const sequence = createOceanSequence(canvas);
+  assert.equal(pending.length, 4);
+  sequence.update(1);
+  assert.equal(pending.length, 4, 'rapid scroll cannot queue unlimited requests');
+  pending[0].onload(); flush();
+  assert.equal(drawings.length, 0, 'an obsolete loaded frame must not replace the latest target');
+  const last = pending.find(image => image.url.endsWith('0719.webp'));
+  assert.ok(last); last.onload(); flush();
+  assert.equal(drawings.at(-1)[0], last);
+  assert.equal(canvas.width, 585, 'render resolution is capped');
+  canvas.clientWidth = 400; resize(); flush(); assert.equal(canvas.width, 600);
+  sequence.destroy(); const count = pending.length; sequence.update(0); flush();
+  assert.equal(pending.length, count); assert.equal(canvas.dataset.ready, undefined);
+});

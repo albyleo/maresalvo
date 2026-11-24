@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
+import { createOceanSequence } from './oceanSequence';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 
@@ -13,6 +14,7 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 export function OceanStory() {
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [staticView, setStaticView] = useState(false);
   const [videoError, setVideoError] = useState(false);
@@ -27,9 +29,8 @@ export function OceanStory() {
       root.dataset.motion = 'on';
       // Choose once per animation session: rotating a phone must not reload its video.
       const mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
-      video.src = mobile ? '/videos/tartaruga-scroll-mobile.mp4' : '/videos/tartaruga-scroll.mp4';
-      video.muted = true;
-      video.load();
+      const sequence = mobile && canvasRef.current ? createOceanSequence(canvasRef.current) : null;
+      if (!sequence) { video.src = mobile ? '/videos/tartaruga-scroll-mobile.mp4' : '/videos/tartaruga-scroll.mp4'; video.muted = true; video.load(); }
       const frames = root.querySelectorAll<HTMLElement>('.story-frame');
       const playhead = { progress: 0 };
       let raf = 0;
@@ -42,7 +43,7 @@ export function OceanStory() {
         const target = Math.min(Math.max(0, video.duration - 0.04), playhead.progress * video.duration);
         if (Math.abs(video.currentTime - target) > 0.035) video.currentTime = target;
       };
-      const scheduleSeek = () => { if (!raf && !disposed) raf = requestAnimationFrame(seek); };
+      const scheduleSeek = () => { if (sequence) { sequence.update(playhead.progress); return; } if (!raf && !disposed) raf = requestAnimationFrame(seek); };
       // Some mobile WebKit versions initialize their decoder only after a user gesture.
       // Playback is immediately paused; ScrollTrigger remains the only playhead driver.
       const primeVideo = () => {
@@ -58,12 +59,12 @@ export function OceanStory() {
       };
       const readyEvents = ['loadeddata', 'canplay', 'seeked'] as const;
       readyEvents.forEach(event => video.addEventListener(event, scheduleSeek));
-      root.addEventListener('pointerdown', primeVideo, { passive: true });
+      if (!sequence) root.addEventListener('pointerdown', primeVideo, { passive: true });
       document.addEventListener('visibilitychange', scheduleSeek);
       gsap.set(frames, { autoAlpha: 0, y: 36 });
       gsap.set(frames[0], { autoAlpha: 1, y: 0 });
       const timeline = gsap.timeline({
-        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: mobile ? 0.35 : 0.65, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: mobile ? 0.2 : 0.65, invalidateOnRefresh: true, onToggle: self => sequence?.setActive(self.isActive) },
       });
       timeline.to(playhead, { progress: 1, duration: 1, ease: 'none', onUpdate: scheduleSeek }, 0)
         .to(progressRef.current, { scaleX: 1, duration: 1, ease: 'none' }, 0)
@@ -76,6 +77,7 @@ export function OceanStory() {
       ScrollTrigger.refresh();
       return () => {
         disposed = true;
+        sequence?.destroy();
         cancelAnimationFrame(raf);
         readyEvents.forEach(event => video.removeEventListener(event, scheduleSeek));
         root.removeEventListener('pointerdown', primeVideo);
@@ -93,6 +95,7 @@ export function OceanStory() {
     <div className="story-scene">
       <div className="story-media" aria-hidden="true">
         <video ref={videoRef} muted playsInline preload="auto" disablePictureInPicture poster="/images/tartaruga-poster.jpg" onLoadedData={() => setVideoError(false)} onError={() => setVideoError(true)} />
+        <canvas ref={canvasRef} className="story-sequence" />
         <div className="story-shade" />
       </div>
       <div className="story-frames">
