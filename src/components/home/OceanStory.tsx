@@ -112,7 +112,7 @@ export function OceanStory() {
         <div className="story-frame">
           <p className="story-eyebrow">01 / CONOSCERE</p>
           <h2>Ogni gesto in mare<br />inizia dalla <em>consapevolezza.</em></h2>
-          <p className="story-description">Pesca, apnea, nautica, kayak, SUP e snorkeling.<br />Sei percorsi per conoscere e vivere il mare.</p>
+          <p className="story-description">Percorsi per conoscere il mare,<br />viverlo con consapevolezza e rispettarlo.</p>
           <Link href="/questionari" className="story-link">Scegli il tuo percorso <ArrowUpRight size={19} /></Link>
         </div>
         <div className="story-frame">
