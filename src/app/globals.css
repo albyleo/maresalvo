@@ -155,10 +155,7 @@ h1, h2, h3 { text-wrap: balance; }
 .story-description { max-width: 490px; font-size: clamp(15px, 1.2vw, 19px); line-height: 1.7; color: #e3ebe9; }
 .story-link { display: inline-flex; align-items: center; gap: 22px; margin-top: 30px; padding-bottom: 10px; border-bottom: 1px solid #afcbc0; font-size: 14px; }
 .story-link:hover { color: #b7e5d5; }
-.story-link:focus-visible, .story-motion-toggle:focus-visible { outline: 2px solid #b7e5d5; outline-offset: 7px; }
-.story-bottom { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 24px max(6vw, 24px) max(24px, env(safe-area-inset-bottom)); font-size: 11px; color: #d6e3e0; }
-.story-scroll-hint { display: none; align-items: center; gap: 10px; letter-spacing: .08em; }
-.story-motion-toggle { cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
+.story-link:focus-visible { outline: 2px solid #b7e5d5; outline-offset: 7px; }
 .story-video-error { position: absolute; right: 24px; top: 100px; max-width: 260px; padding: 12px; font-size: 12px; background: #061719; }
 .story-progress { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: rgb(255 255 255 / .15); }
 .story-progress > div { height: 100%; background: #b7e5d5; transform: scaleX(0); transform-origin: left; }
@@ -167,8 +164,6 @@ h1, h2, h3 { text-wrap: balance; }
 .ocean-story[data-motion='on'] .story-media { height: 100%; }
 .ocean-story[data-motion='on'] .story-frames { position: absolute; inset: 0; }
 .ocean-story[data-motion='on'] .story-frame { position: absolute; inset: 0; min-height: 0; }
-.ocean-story[data-motion='on'] .story-bottom { position: absolute; bottom: 0; left: 0; right: 0; }
-.ocean-story[data-motion='on'] .story-scroll-hint { display: inline-flex; }
 .home-map-section { padding: 100px 0 80px; background: radial-gradient(ellipse at 90% 45%, rgb(47 170 216 / .2), transparent 65%), linear-gradient(180deg, #071d35, #0b4264 60%, #0b2c4b); }
 .marine-map-shell { height: 82dvh; min-height: 540px; scroll-margin-top: calc(92px + env(safe-area-inset-top)); }
 .marine-map-shell.marine-map-expanded { height: calc(100dvh - 104px - env(safe-area-inset-top)); min-height: 0; }
@@ -222,7 +217,6 @@ h1, h2, h3 { text-wrap: balance; }
   .story-frame h1, .story-frame h2 { font-size: clamp(29px, 8.8vw, 54px); overflow-wrap: anywhere; }
   .story-description { max-width: 330px; font-size: 14px; }
   .story-eyebrow { font-size: 9px; max-width: 300px; }
-  .story-bottom { font-size: 10px; }
   .ocean-story[data-motion='on'] { height: 460svh; }
   .home-map-section { padding-top: 60px; }
 }
@@ -236,10 +230,9 @@ h1, h2, h3 { text-wrap: balance; }
   .story-description { font-size: 12px; line-height: 1.5; max-width: 460px; }
   .story-eyebrow { font-size: 8px; }
   .story-link { font-size: 12px; margin-top: 10px; padding-bottom: 4px; }
-  .story-bottom { font-size: 9px; padding-block: 10px max(10px, env(safe-area-inset-bottom)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .story-motion-toggle, .story-progress { display: none; }
+  .story-progress { display: none; }
 }
 
 .quiz-progress { display: block; width: 100%; height: 3px; appearance: none; border: none; background: rgb(255 255 255 / .12); color: #b7e5d5; }
@@ -264,6 +257,5 @@ h1, h2, h3 { text-wrap: balance; }
   .ocean-story[data-motion='on'] .story-scene { height: 100vh; height: 100lvh; }
   .ocean-story[data-motion='on'] .story-sequence { height: 100%; }
   .ocean-story[data-motion='on'] .story-frames { bottom: auto; height: 100dvh; }
-  .ocean-story[data-motion='on'] .story-bottom,
   .ocean-story[data-motion='on'] .story-progress { bottom: max(0px, calc(100lvh - 100dvh)); }
 }

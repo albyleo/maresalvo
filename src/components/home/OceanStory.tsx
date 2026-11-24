@@ -16,7 +16,6 @@ export function OceanStory() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  const [staticView, setStaticView] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ export function OceanStory() {
     if (!root || !video) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      if (staticView) return;
       root.dataset.motion = 'on';
       // Choose once per animation session: rotating a phone must not reload its video.
       const mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
@@ -93,7 +91,7 @@ export function OceanStory() {
       };
     }, root);
     return () => media.revert();
-  }, [staticView]);
+  }, []);
 
   return <section ref={rootRef} className="ocean-story" data-motion="off" aria-label="Il progetto MareSalvo">
     <div className="story-scene">
@@ -107,7 +105,7 @@ export function OceanStory() {
           <p className="story-eyebrow">MARESALVO / UN PROGETTO PER IL MEDITERRANEO</p>
           <h1>Il mare è vita.<br /><span>Prendiamocene cura.</span></h1>
           <p className="story-description">Conoscere il mare. Viverlo con rispetto.<br />Proteggere ciò che lo rende unico.</p>
-          <Link href="/questionari" className="story-link">Esplora i questionari <ArrowUpRight size={19} /></Link>
+          <Link href="/osservatorio" className="story-link">Esplora l’Osservatorio <ArrowUpRight size={19} /></Link>
         </div>
         <div className="story-frame">
           <p className="story-eyebrow">01 / CONOSCERE</p>
@@ -127,10 +125,6 @@ export function OceanStory() {
           <p className="story-description">Esplora fondali, aree marine protette e segnalazioni. Il viaggio continua sulla mappa.</p>
           <a href="#mappa" className="story-link">Esplora la mappa <ArrowDown size={19} /></a>
         </div>
-      </div>
-      <div className="story-bottom">
-        <span className="story-scroll-hint"><ArrowDown size={15} /> Scorri per immergerti</span>
-        <button type="button" onClick={() => setStaticView(value => !value)} aria-pressed={staticView} className="story-motion-toggle">{staticView ? 'Attiva animazioni' : 'Leggi senza animazioni'}</button>
       </div>
       {videoError && <p role="status" className="story-video-error">Video non disponibile. Puoi continuare a esplorare il progetto.</p>}
       <div className="story-progress" aria-hidden="true"><div ref={progressRef} /></div>
