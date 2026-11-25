@@ -1,4 +1,4 @@
-"""Import official latest releases; publish only the newest regional survey year.
+"""Import official releases, keeping the latest campaign per source/region.
 
 Run: python scripts/sync-observatory.py [--offline]
 Requires openpyxl. Raw archives stay in ignored output/observatory.
@@ -18,6 +18,8 @@ from urllib.request import urlopen
 from zipfile import ZipFile
 
 import openpyxl
+import ispra_observatory
+import arpav_observatory
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / "output/observatory"
@@ -251,22 +253,51 @@ def main():
                   "outSR": 4326, "returnGeometry": "true", "f": "geojson", "resultRecordCount": 10000}
         with urlopen(EEA + "?" + urlencode(params), timeout=60) as response:
             (CACHE / "discharges-data.json").write_bytes(response.read())
+        ispra_observatory.download()
+        arpav_observatory.download()
+    italian, ispra_report = ispra_observatory.build()
+    field, arpav_report = arpav_observatory.build()
     manifest = {}
     pending = {}
     for key, build in [("beach", beach), ("micro", micro), ("seafloor", seafloor), ("chemicals", chemicals), ("discharges", discharges)]:
         features = build()
+        provider = "EEA" if key == "discharges" else "EMODnet"
+        for f in features:
+            f["properties"]["provider"] = provider
+        sources = [{"provider": provider, "sourceUrl": SOURCES.get(key, EEA), "count": len(features)}]
+        if key in italian:
+            features.extend(italian[key])
+            sources.append({"provider": "ISPRA / ARPA", "sourceUrl": ispra_observatory.SOURCE, "count": len(italian[key])})
         raw = CACHE / ("discharges-data.json" if key == "discharges" else f"{key}.zip")
         verified = datetime.fromtimestamp(raw.stat().st_mtime, timezone.utc).isoformat()
         dates = sorted(f["properties"]["observedAt"] for f in features)
+        years = sorted(set(d[:4] for d in dates), reverse=True)
         meta = {"edition": "EEA 2026 · dati 2022–2023" if key == "discharges" else "EMODnet 2026",
                 "verifiedAt": verified, "observedFrom": dates[0], "observedTo": dates[-1], "count": len(features),
                 "sha256": hashlib.sha256(raw.read_bytes()).hexdigest(), "sourceUrl": SOURCES.get(key, EEA),
-                "year": "2022–2023" if key == "discharges" else dates[-1][:4]}
+                "year": "2022–2023" if key == "discharges" else years[0] if len(years) == 1 else f"{years[-1]}–{years[0]}",
+                "years": years, "sources": sources}
+        if key in italian:
+            meta["edition"] += " · ISPRA / ARPA · ultime campagne regionali"
+            meta["verifiedAt"] = max(verified, *(s["verifiedAt"] for s in ispra_report["archives"]))
+            # The original archive digest remains associated with EMODnet. The
+            # collection also carries a digest of every newly imported raw source.
+            meta["additionalSources"] = ispra_report["archives"]
+        pending[key] = {"type": "FeatureCollection", "metadata": meta, "features": features}
+        manifest[key] = meta
+        print(key, meta["year"], len(features), flush=True)
+    for key, features in field.items():
+        source = next(s for s in arpav_report["archives"] if s["id"] == key)
+        dates = sorted(f["properties"]["observedAt"] for f in features)
+        meta = {"edition": "ARPAV · " + source["edition"], "verifiedAt": source["verifiedAt"],
+                "observedFrom": dates[0], "observedTo": dates[-1], "count": len(features), "sha256": source["sha256"],
+                "sourceUrl": source["sourceUrl"], "year": dates[-1][:4], "years": [dates[-1][:4]],
+                "sources": [{"provider": "ARPAV", "sourceUrl": source["sourceUrl"], "count": len(features)}], "additionalSources": [source]}
         pending[key] = {"type": "FeatureCollection", "metadata": meta, "features": features}
         manifest[key] = meta
         print(key, meta["year"], len(features), flush=True)
     # Only publish after every importer has succeeded; fail instead of silently reverting.
-    for key, data in {**pending, "manifest": manifest}.items():
+    for key, data in {**pending, "manifest": manifest, "italian-sources": {"ispra": ispra_report, "arpav": arpav_report}}.items():
         target = DEST / f"{key}.json"
         tmp = target.with_suffix(".tmp")
         tmp.write_text(json.dumps(data, ensure_ascii=False, allow_nan=False, separators=(",", ":")), "utf-8")

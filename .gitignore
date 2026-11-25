@@ -13,6 +13,8 @@
 # testing
 /coverage
 /output/
+__pycache__/
+*.pyc
 
 # next.js
 /.next/

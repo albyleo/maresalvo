@@ -10,7 +10,7 @@ async function compiled(path, replacements = {}) {
   return `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`;
 }
 const dataUrl = await compiled('../src/features/observatory/data.ts');
-const { satelliteView, isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
+const { surveyForTheme, satelliteView, isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
 const { parseSatelliteCapabilities, parseSatelliteLegend } = await import(await compiled('../src/features/observatory/satellite.ts', {
   './data': dataUrl, 'fast-xml-parser': import.meta.resolve('fast-xml-parser'),
 }));
@@ -79,7 +79,7 @@ test('legend rejects silent provider style fallbacks and malformed colors', () =
     }
   }
 });
-test('published collections retain source/date/unit and only one campaign, with unique ids and no contact fields', async () => {
+test('published collections retain source/date/unit and declared campaigns, with unique ids and no contact fields', async () => {
   const manifest = JSON.parse(await readFile(new URL('../public/data/observatory/manifest.json', import.meta.url), 'utf8'));
   for (const [key, meta] of Object.entries(manifest)) {
     const raw = await readFile(new URL(`../public/data/observatory/${key}.json`, import.meta.url), 'utf8');
@@ -90,10 +90,52 @@ test('published collections retain source/date/unit and only one campaign, with 
     for (const f of data.features) {
       assert.equal(f.geometry.type, 'Point');
       assert.ok(f.geometry.coordinates.every(Number.isFinite));
-      assert.ok(f.properties.observedAt.startsWith(meta.year));
+      assert.ok((meta.years ?? [meta.year]).some(y => f.properties.observedAt.startsWith(y)));
       assert.match(f.properties.sourceUrl, /^https:\/\//);
       for (const m of f.properties.measurements) { assert.ok(Number.isFinite(m.value) && m.value >= 0); assert.ok(m.unit); }
-      if (key === 'chemicals') assert.ok(['1', '2', '6'].includes(f.properties.quality));
+      if (key === 'chemicals') assert.ok(['1', '2', '6', 'provider'].includes(f.properties.quality));
+      if (f.properties.provider === 'ISPRA / ARPA') {
+        assert.ok(f.properties.region);
+        assert.match(f.properties.sourceUrl, /^https:\/\/strategiamarina\.isprambiente\.it\//);
+        assert.ok(f.properties.sourceArchive.endsWith('.zip'));
+      }
+    }
+  }
+});
+
+test('regional campaigns can be filtered independently without dropping older sources globally', () => {
+  const features = [
+    { properties: { provider: 'EMODnet', observedAt: '2023-07-04' } },
+    { properties: { provider: 'ISPRA / ARPA', region: 'Puglia', observedAt: '2024-10-10' } },
+    { properties: { provider: 'ISPRA / ARPA', region: 'Veneto', observedAt: '2024-06-10' } },
+  ];
+  const filters = { bottles: false, substance: '', matrix: '' };
+  assert.equal(filterObservations(features, filters).length, 3);
+  assert.deepEqual(filterObservations(features, { ...filters, region: 'Puglia' }), [features[1]]);
+  assert.deepEqual(filterObservations(features, { ...filters, year: '2023' }), [features[0]]);
+  assert.deepEqual(filterObservations(features, { ...filters, provider: 'ISPRA / ARPA', region: 'Veneto' }), [features[2]]);
+});
+
+test('field measurements use independent collections and never replace a satellite variable silently', () => {
+  assert.equal(surveyForTheme('turbidity', false), null);
+  assert.equal(surveyForTheme('turbidity', true), 'turbidity-samples');
+  assert.equal(surveyForTheme('suspended-matter', true), 'suspended-matter-samples');
+  assert.equal(surveyForTheme('chlorophyll', true), null);
+  assert.equal(surveyForTheme('beach', false), 'beach');
+});
+
+test('Italian coverage includes all coastal regions overall and field units remain explicit', async () => {
+  const report = JSON.parse(await readFile(new URL('../public/data/observatory/italian-sources.json', import.meta.url), 'utf8'));
+  assert.equal(new Set(Object.values(report.ispra.coverage).flatMap(c => Object.keys(c))).size, 15);
+  for (const [id, unit] of [['turbidity-samples', 'FTU'], ['suspended-matter-samples', 'mg/L']]) {
+    const data = JSON.parse(await readFile(new URL(`../public/data/observatory/${id}.json`, import.meta.url), 'utf8'));
+    assert.ok(data.features.length > 0);
+    for (const f of data.features) {
+      assert.equal(f.properties.measurements[0].unit, unit);
+      assert.equal(f.properties.region, 'Veneto');
+      const [lon, lat] = f.geometry.coordinates;
+      assert.ok(lon > 11 && lon < 14 && lat > 44 && lat < 46);
+      if (id === 'turbidity-samples') assert.ok(f.properties.depth <= 1);
     }
   }
 });

@@ -1,11 +1,12 @@
 export type SatelliteId = 'chlorophyll' | 'coastal-chlorophyll' | 'turbidity' | 'suspended-matter';
-export type SurveyId = 'beach' | 'micro' | 'seafloor' | 'chemicals' | 'discharges';
+export type SurveyId = 'beach' | 'micro' | 'seafloor' | 'chemicals' | 'discharges' | 'turbidity-samples' | 'suspended-matter-samples';
 export type ThemeId = SatelliteId | SurveyId;
 export interface Measurement { name: string; value: number; unit: string; qualifier?: string; definition?: string }
 export interface Observation {
   id: string; title: string; observedAt: string; method: string; details: string;
   originator: string; sourceUrl: string; measurements: Measurement[];
   country?: string; bottles?: number | null; substance?: string; matrix?: string;
+  region?: string; provider?: string;
 }
 export interface ObservationFeature {
   type: 'Feature'; id: string; geometry: { type: 'Point'; coordinates: [number, number] }; properties: Observation;
@@ -13,6 +14,7 @@ export interface ObservationFeature {
 export interface SurveyMetadata {
   edition: string; verifiedAt: string; observedFrom: string; observedTo: string;
   year: string; count: number; sourceUrl: string; sha256: string;
+  years?: string[]; sources?: { provider: string; sourceUrl: string; count: number }[];
 }
 export interface SurveyData { type: 'FeatureCollection'; metadata: SurveyMetadata; features: ObservationFeature[] }
 export type SurveyManifest = Record<SurveyId, SurveyMetadata>;
@@ -46,22 +48,22 @@ export const THEMES: { id: ThemeId; label: string; subtitle: string; description
     description: 'Stima della concentrazione di materiale particolato sospeso nella fascia di circa 20 km dalla costa. I valori in g/m³ equivalgono numericamente a mg/L.',
     note: 'Le particelle possono comprendere sedimenti e materiale organico. La misura non quantifica plastica né identifica la sorgente. Le aree trasparenti non hanno una stima valida per la data selezionata.',
     source: 'Copernicus Marine · Sentinel-2', url: COASTAL_URL },
-  { id: 'beach', label: 'Spiagge e bottiglie', subtitle: 'Monitoraggio dei rifiuti',
-    description: 'L’ultimo rilievo disponibile per ogni spiaggia nell’ultima campagna di monitoraggio MSFD presente nella raccolta mediterranea.',
+  { id: 'beach', label: 'Rifiuti spiaggiati', subtitle: 'Monitoraggio dei rifiuti',
+    description: 'Ultimo rilievo per spiaggia nelle campagne integrate: raccolta mediterranea EMODnet e monitoraggi regionali ARPA pubblicati da ISPRA. Anni e coperture possono differire; i filtri permettono di selezionare fonte, regione e anno.',
     note: 'Il filtro bottiglie include solo categorie specifiche: esclude tappi e categorie miste. Zero significa conteggio nullo; un dato mancante resta non disponibile.',
-    source: 'EMODnet Chemistry · OGS', url: 'https://emodnet.ec.europa.eu/en/chemistry' },
+    source: 'EMODnet · ISPRA / ARPA', url: 'https://strategiamarina.isprambiente.it/sic-sistema-informativo-centralizzato/' },
   { id: 'micro', label: 'Microplastiche', subtitle: 'Campioni di microlitter',
-    description: 'Campionamenti superficiali dell’ultimo anno disponibile nell’area mediterranea. Ogni frazione conserva dimensione e materiale dichiarati dalla fonte.',
-    note: 'I valori sono particelle nella frazione campionata, non una concentrazione uniforme del mare. Microlitter e plastica non sono sinonimi; i materiali non identificati restano espliciti.',
-    source: 'EMODnet Chemistry · OGS', url: 'https://doi.org/10.13120/9abbd1ae-4c2a-4dd1-8bc1-5635996ebbfb' },
+    description: 'Campionamenti superficiali EMODnet e ARPA, distribuiti da ISPRA. È mantenuta l’ultima campagna disponibile per fonte e regione, con la data di ciascun prelievo.',
+    note: 'Le unità restano quelle originali: conteggi per frazione nei dati EMODnet, oggetti/m² nei dati ARPA. Non sono direttamente confrontabili. Microlitter e plastica non sono sinonimi; nessuna superficie è interpolata tra i campioni.',
+    source: 'EMODnet · ISPRA / ARPA', url: 'https://strategiamarina.isprambiente.it/sic-sistema-informativo-centralizzato/' },
   { id: 'seafloor', label: 'Rifiuti sul fondale', subtitle: 'Campagne scientifiche',
     description: 'Posizioni iniziali delle trainate scientifiche nell’ultima campagna disponibile. I codici delle categorie e le unità originali accompagnano ogni osservazione.',
     note: 'La copertura è discontinua. Questi rilievi non rappresentano tutte le reti abbandonate e non indicano la posizione attuale di un singolo oggetto.',
     source: 'EMODnet Chemistry · OGS', url: 'https://doi.org/10.13120/daf1f1d1-2346-485a-8ecd-5d923cb71400' },
   { id: 'chemicals', label: 'Metalli e pesticidi', subtitle: 'Analisi di laboratorio',
     description: 'Misure dell’ultima campagna disponibile, selezionabili per sostanza e matrice. Acqua, sedimento e organismi conservano unità e definizioni distinte.',
-    note: 'Il simbolo < indica un valore sotto il limite di rilevazione. Non sono applicate soglie di sicurezza o interpolazioni tra stazioni.',
-    source: 'EMODnet Chemistry · OGS', url: 'https://doi.org/10.13120/d3ae6fb3-03e6-4cbc-b281-34650971d417' },
+    note: 'Il simbolo < indica un valore sotto il limite dichiarato: la scheda distingue rilevazione e quantificazione. Acqua, sedimento e biota, così come peso secco e umido, richiedono confronti separati. Non sono applicate soglie di sicurezza o interpolazioni tra stazioni.',
+    source: 'EMODnet · ISPRA / ARPA', url: 'https://strategiamarina.isprambiente.it/sic-sistema-informativo-centralizzato/' },
   { id: 'discharges', label: 'Scarichi costieri', subtitle: 'Infrastrutture censite',
     description: 'Punti di scarico operativi censiti in acque costiere nell’ultima edizione pubblica EEA integrata. Sono escluse acque interne e punti fuori dall’area di studio.',
     note: 'Il censimento descrive infrastrutture: non misura la portata attuale, la dispersione o la qualità microbiologica e non identifica scarichi illeciti.',
@@ -74,10 +76,18 @@ export function displayDate(date: string) {
   return Number.isNaN(value.getTime()) ? 'Data non disponibile' : new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(value);
 }
 
-export function filterObservations(features: ObservationFeature[], filters: { bottles: boolean; substance: string; matrix: string }) {
+export function filterObservations(features: ObservationFeature[], filters: { bottles: boolean; substance: string; matrix: string; region?: string; provider?: string; year?: string }) {
   return features.filter(f => (!filters.bottles || typeof f.properties.bottles === 'number')
     && (!filters.substance || f.properties.substance === filters.substance)
-    && (!filters.matrix || f.properties.matrix === filters.matrix));
+    && (!filters.matrix || f.properties.matrix === filters.matrix)
+    && (!filters.region || f.properties.region === filters.region)
+    && (!filters.provider || f.properties.provider === filters.provider)
+    && (!filters.year || f.properties.observedAt.startsWith(filters.year)));
+}
+
+export function surveyForTheme(theme: ThemeId, fieldMeasurements: boolean): SurveyId | null {
+  if (fieldMeasurements && (theme === 'turbidity' || theme === 'suspended-matter')) return `${theme}-samples`;
+  return isSatelliteTheme(theme) ? null : theme;
 }
 
 export function isSatelliteRecent(date: string, now = Date.now()) {

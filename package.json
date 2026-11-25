@@ -16,6 +16,7 @@
     "observatory:sync": "python scripts/sync-observatory.py",
     "test:nautical": "node --test scripts/test-nautical-study.mjs",
     "test:observatory": "node --test scripts/test-observatory.mjs",
+    "test:observatory:imports": "python -m unittest discover -s scripts -p test_observatory_import.py",
     "test:marine": "node --test scripts/test-marine-areas.mjs scripts/test-weather.mjs",
     "check:release": "npm run lint && npm test && npm run test:marine && npm run test:observatory && npm run test:nautical && npm run test:ocean && npm run build",
     "test": "node --test scripts/test-certification.mjs scripts/test-certificate-pdf.mjs scripts/test-ghost-nets.mjs",
