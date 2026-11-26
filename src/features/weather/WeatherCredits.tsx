@@ -1,6 +1,7 @@
 import { InfoDisclosure } from '@/components/ui/InfoDisclosure';
 export function WeatherCredits() {
   return <InfoDisclosure label="Info e fonti meteo">
+    <p>Ricerca delle città: <a href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noreferrer" className="underline">Open-Meteo Geocoding</a>, dati geografici <a href="https://www.geonames.org/" target="_blank" rel="noreferrer" className="underline">GeoNames</a>. Il nome viene convertito in coordinate per ricentrare Windy e il bollettino.</p>
     <p>Mappa interattiva fornita da <a href="https://www.windy.com/" target="_blank" rel="noreferrer" className="underline">Windy.com</a>, con propri modelli, legenda e timeline. Il bollettino MareSalvo sottostante è indipendente.</p>
     <p>Previsioni da <a href="https://open-meteo.com/" className="underline" target="_blank" rel="noreferrer">Open-Meteo</a> · <a href="https://creativecommons.org/licenses/by/4.0/" className="underline" target="_blank" rel="noreferrer">CC BY 4.0</a>. Onde Météo-France MFWAM; correnti e temperatura marina Copernicus via Météo-France; atmosfera ECMWF IFS. Dati selezionati e riformattati da MareSalvo.</p>
     <p>Generated using E.U. Copernicus Marine Service Information · <a href="https://doi.org/10.48670/moi-00017" className="underline" target="_blank" rel="noreferrer">Onde</a> · <a href="https://doi.org/10.48670/moi-00016" className="underline" target="_blank" rel="noreferrer">Oceano</a>.</p>

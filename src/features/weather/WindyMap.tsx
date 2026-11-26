@@ -11,7 +11,7 @@ const VIEWS = {
   sst: { label:'Temperatura mare', product:'ecmwfAnalysis', icon:Thermometer },
 };
 type View = keyof typeof VIEWS;
-export function WindyMap({point}:{point:Position}) {
+export function WindyMap({point,focusKey=0}:{point:Position;focusKey?:number}) {
   const [view,setView]=useState<View>('wind'),[revision,setRevision]=useState(0);
   const params=new URLSearchParams({type:'map',location:'coordinates',lat:String(point.lat),lon:String(point.lng),detailLat:String(point.lat),detailLon:String(point.lng),zoom:'7',overlay:view,product:VIEWS[view].product,level:'surface',metricWind:'kt',metricTemp:'°C',metricRain:'mm',marker:'true'});
   const src=`https://embed.windy.com/embed.html?${params}`;
@@ -21,7 +21,7 @@ export function WindyMap({point}:{point:Position}) {
       <div className="flex flex-wrap gap-1" aria-label="Viste rapide Windy">{Object.entries(VIEWS).map(([key,value])=><button key={key} type="button" title={`Apri ${value.label} su Windy`} onClick={()=>{setView(key as View);setRevision(n=>n+1);}} className="flex items-center gap-2 border-l border-white/20 px-3 py-2 text-xs text-white/75 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-emerald-200"><value.icon size={14}/>{value.label}</button>)}</div>
     </div>
     <div className="h-[62svh] min-h-[420px] max-h-[780px] bg-[#102c33]">
-      <iframe key={`${src}:${revision}`} src={src} title={`Windy · ${VIEWS[view].label} · ${point.lat}, ${point.lng}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen className="h-full w-full border-0"/>
+      <iframe key={`${src}:${revision}:${focusKey}`} src={src} title={`Windy · ${VIEWS[view].label} · ${point.lat}, ${point.lng}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen className="h-full w-full border-0"/>
     </div>
     <div className="flex flex-wrap justify-between gap-3 py-4 text-xs text-white/55 border-t border-white/10">
       <p className="max-w-3xl leading-relaxed">Windy ha una timeline autonoma. I movimenti e i punti scelti nel widget non modificano il bollettino MareSalvo. Per ricentrare entrambi, usa la località o le coordinate qui sopra.</p>

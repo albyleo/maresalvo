@@ -1,6 +1,6 @@
 import type { ForecastHour } from './forecast';
-export function ForecastTrend({hours,selected}:{hours:ForecastHour[];selected:number}) {
-  return <div className="grid gap-4 lg:grid-cols-2">{([{key:'wind',label:'Vento a 10 m',unit:'kn',color:'#a7f3d0'},{key:'wave',label:'Altezza significativa onde',unit:'m',color:'#7dd3fc'}] as const).map(metric=>{
+export function ForecastTrend({hours,selected,marine=true}:{hours:ForecastHour[];selected:number;marine?:boolean}) {
+  return <div className={`grid gap-4 ${marine?'lg:grid-cols-2':''}`}>{([{key:'wind',label:'Vento a 10 m',unit:'kn',color:'#a7f3d0'},{key:'wave',label:'Altezza significativa onde',unit:'m',color:'#7dd3fc'}] as const).filter(metric=>marine||metric.key==='wind').map(metric=>{
     const values=hours.map(h=>h[metric.key]);
     const finite=values.filter((v):v is number=>v!==null);
     const max=Math.max(metric.key==='wave'?1:5,...finite)*1.15;
