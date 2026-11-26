@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
-export async function generateMarineQuestionnaires() {
+export async function generateMarineQuestionnaires(practiceAnswers = {}) {
   const source = JSON.parse(await readFile(new URL('../supabase/content/marine-activities-v2.json', import.meta.url), 'utf8'));
   const quote = value => "'" + String(value).replaceAll("'", "''") + "'";
   const catalog = [];
@@ -13,6 +13,8 @@ export async function generateMarineQuestionnaires() {
     references[course.id] = { reviewedAt: source.reviewedAt, sources: refs };
     catalog.push({ ...course, questions: questions.map(({ correct_option, source: sourceId, ...question }) => {
       if (!Number.isInteger(correct_option) || !question.options[correct_option] || !source.sources[sourceId]) throw new Error(`Invalid question: ${question.id}`);
+      if (!course.is_demo) throw new Error(`Practice answers require a demo course: ${course.id}`);
+      practiceAnswers[question.id] = correct_option;
       return question;
     }) });
     sql += `INSERT INTO public.questionnaires (id,title,version,description,pass_percent,is_demo,is_active) VALUES (${quote(course.id)},${quote(course.title)},${course.version},${quote(course.description)},${course.pass_percent},true,true);\n`;
@@ -28,10 +30,14 @@ export async function generateMarineQuestionnaires() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const additions = await generateMarineQuestionnaires();
+  const answersDestination = new URL('../src/features/certification/practice-answers.json', import.meta.url);
+  const practiceAnswers = JSON.parse(await readFile(answersDestination, 'utf8'));
+  const additions = await generateMarineQuestionnaires(practiceAnswers);
   const destination = new URL('../src/features/certification/catalog.json', import.meta.url);
   const existing = JSON.parse(await readFile(destination, 'utf8'));
   const ids = new Set(additions.map(item => item.id));
-  await writeFile(destination, JSON.stringify([...existing.filter(item => !ids.has(item.id) && !item.id.startsWith('41000000')), ...additions], null, 2) + '\n');
+  const catalog = [...existing.filter(item => !ids.has(item.id) && !item.id.startsWith('41000000')), ...additions];
+  await writeFile(destination, JSON.stringify(catalog, null, 2) + '\n');
+  await writeFile(answersDestination, JSON.stringify(Object.fromEntries(catalog.flatMap(course => course.questions.map(q => [q.id, practiceAnswers[q.id]]))), null, 2) + '\n');
   console.log('Added 3 marine activity courses, 30 questions and migration 008.');
 }

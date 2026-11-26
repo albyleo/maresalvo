@@ -5,14 +5,17 @@ import references from './course-sources.json';
 import { useState } from 'react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { QuestionnaireForm } from './QuestionnaireForm';
+import { QuestionnairePractice } from './QuestionnairePractice';
 import type { Question, Questionnaire } from './types';
 
-export function QuestionnairePicker({ items, preview = false }: { items: (Questionnaire & { questions: Question[] })[]; preview?: boolean }) {
+export function QuestionnairePicker({ items, preview = false, practiceAnswers }: { items: (Questionnaire & { questions: Question[] })[]; preview?: boolean; practiceAnswers?: Record<string, number> }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = items.find(q => q.id === selectedId);
   if (selected) return <div>
     <button type="button" onClick={() => setSelectedId(null)} className="flex gap-2 items-center text-sm text-white/60 mb-7 hover:text-white"><ArrowLeft size={16} />Tutti i percorsi</button>
-    <div className="editorial-section max-w-3xl"><QuestionnaireForm key={selected.id} questionnaire={selected} questions={selected.questions} preview={preview} /></div>
+    <div className="editorial-section max-w-3xl">{preview && practiceAnswers
+      ? <QuestionnairePractice key={selected.id} questionnaire={selected} questions={selected.questions} answerKeys={practiceAnswers} />
+      : <QuestionnaireForm key={selected.id} questionnaire={selected} questions={selected.questions} preview={preview} />}</div>
   </div>;
   return <div className="course-list">{items.map((item, index) => {
     const reference = (references as Record<string, { reviewedAt: string; sources: { label: string; url: string }[] }>)[item.id];

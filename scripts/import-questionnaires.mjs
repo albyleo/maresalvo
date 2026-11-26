@@ -59,6 +59,10 @@ for (const q of catalog) {
 for (const key of privateKeys) sql += `INSERT INTO public.questionnaire_answer_keys (question_id, correct_option) VALUES (${quote(key.question_id)}, ${key.correct_option});\n`;
 sql += "UPDATE public.questionnaires SET is_active = false WHERE id IN ('40000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000003');\nCOMMIT;\n";
 await writeFile(new URL('../supabase/migrations/005_training_questionnaires_v2.sql', import.meta.url), sql);
-// The browser catalog deliberately contains no correct answers or explanations.
-await writeFile(new URL('../src/features/certification/catalog.json', import.meta.url), JSON.stringify([...catalog, ...await generateMarineQuestionnaires()], null, 2) + '\n');
+// Publish educational answers separately for practice. Submitted assessments still
+// use database grading; no client-provided score is trusted.
+const practiceAnswers = Object.fromEntries(privateKeys.map(key => [key.question_id, key.correct_option]));
+const marineCatalog = await generateMarineQuestionnaires(practiceAnswers);
+await writeFile(new URL('../src/features/certification/catalog.json', import.meta.url), JSON.stringify([...catalog, ...marineCatalog], null, 2) + '\n');
+await writeFile(new URL('../src/features/certification/practice-answers.json', import.meta.url), JSON.stringify(practiceAnswers, null, 2) + '\n');
 console.log('Generated 3 version-2 training questionnaires, 45 questions, and migration 005.');

@@ -271,5 +271,28 @@ test('certification workflow and database permissions', async t => {
         await assert.rejects(db.query('SELECT * FROM public.questionnaire_answer_keys'), /permission denied/);
       }
     });
+    await t.test('public practice answers match every current demo question and server grading', async () => {
+      await root();
+      const catalog = JSON.parse(await readFile(new URL('../src/features/certification/catalog.json', import.meta.url), 'utf8'));
+      const practice = JSON.parse(await readFile(new URL('../src/features/certification/practice-answers.json', import.meta.url), 'utf8'));
+      const { rows } = await db.query(`SELECT k.question_id, k.correct_option
+        FROM public.questionnaire_answer_keys k
+        JOIN public.questionnaire_questions q ON q.id = k.question_id
+        JOIN public.questionnaires c ON c.id = q.questionnaire_id
+        WHERE c.is_active AND c.is_demo`);
+      assert.deepEqual(practice, Object.fromEntries(rows.map(k => [k.question_id, k.correct_option])));
+      assert.equal(Object.keys(practice).length, catalog.flatMap(c => c.questions).length);
+      for (const course of catalog) {
+        assert.equal(course.is_demo, true);
+        for (const q of course.questions) {
+          assert.ok(Number.isInteger(practice[q.id]));
+          assert.ok(q.options[practice[q.id]]);
+        }
+      }
+      // Practice publishes educational content, not new database permissions.
+      await as(null, 'anon');
+      await assert.rejects(db.query('SELECT * FROM public.questionnaire_answer_keys'), /permission denied/);
+      await assert.rejects(submit(), /permission denied/);
+    });
   } finally { await db.close(); }
 });
