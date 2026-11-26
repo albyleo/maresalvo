@@ -46,6 +46,9 @@ body {
 
 button, summary { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
+.map-credits { margin: 0; padding: 6px 0; color: #b1c8d7; font-size: 11px; line-height: 20px; overflow-wrap: anywhere; }
+.map-credits a:hover { text-decoration: underline; }
+.observatory-theme-select, .observatory-filter-toggle { display: none; }
 .observatory-themes { display: flex; flex-wrap: wrap; border-block: 1px solid rgb(255 255 255 / .22); margin-bottom: 24px; }
 .observatory-themes button { flex: 1 1 auto; padding: 17px 14px; font-size: 14px; color: #bed0df; border-bottom: 2px solid transparent; text-align: left; }
 .observatory-themes button[aria-pressed='true'] { color: white; border-color: #b7d6c9; background: rgb(255 255 255 / .06); }
@@ -56,13 +59,14 @@ button:disabled { cursor: not-allowed; }
 .observatory-map-stage { position: relative; background: #0b2e42; }
 .observatory-map { width: 100%; height: min(70dvh, 760px); min-height: 430px; }
 .observatory-map-reset { position: absolute; top: 12px; left: 12px; width: 42px; height: 42px; display: grid; place-items: center; color: #173c4c; background: white; box-shadow: 0 1px 5px #0003; }
-.observatory-map-message { position: absolute; bottom: 55px; left: 16px; max-width: min(400px, calc(100% - 32px)); padding: 16px 20px; background: #092b46; border-left: 2px solid #b7d6c9; font-size: 14px; color: #e7f2f8; }
+.observatory-map-message { margin: 8px 0; padding: 14px 16px; background: #092b46; border-left: 2px solid #b7d6c9; font-size: 14px; line-height: 1.6; color: #e7f2f8; }
 .observatory-map-caption { display: flex; flex-wrap: wrap; gap: 10px 25px; justify-content: space-between; font-size: 12px; color: #c6dce9; padding: 14px 20px 14px 0; }
 .observatory-map-caption a { text-decoration: underline; text-underline-offset: 3px; }
-.observatory-detail { border-left: 1px solid rgb(255 255 255 / .18); padding: 0 0 24px 26px; min-width: 0; max-height: calc(min(70dvh, 760px) + 140px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #608ba5 transparent; scroll-margin-top: 100px; }
+.observatory-sidebar { border-left: 1px solid rgb(255 255 255 / .18); padding: 0 0 24px 26px; min-width: 0; max-height: calc(min(70dvh, 760px) + 140px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #608ba5 transparent; }
+.observatory-detail { min-width: 0; overflow-wrap: anywhere; scroll-margin-top: 100px; }
 .observatory-filters { display: grid; gap: 14px; margin-bottom: 24px; }
-.observatory-detail label { font-size: 14px; color: #c6dce9; }
-.observatory-detail select { display: block; appearance: none; width: 100%; margin-top: 7px; border: 1px solid #60819a; padding: 12px 32px 12px 12px; background: #0b2b45 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c6dce9' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; color: #fff; font-size: 14px; border-radius: 0; }
+.observatory-sidebar label { font-size: 14px; color: #c6dce9; }
+.observatory-sidebar select, .observatory-theme-select select { display: block; appearance: none; width: 100%; margin-top: 7px; border: 1px solid #60819a; padding: 12px 32px 12px 12px; background: #0b2b45 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c6dce9' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; color: #fff; font-size: 14px; border-radius: 0; }
 .observatory-measurements > div { padding: 16px 0; border-bottom: 1px solid rgb(255 255 255 / .14); overflow-wrap: anywhere; }
 .observatory-selection { overflow-wrap: anywhere; }
 .observatory-note { display: flex; align-items: start; gap: 10px; margin-top: 24px; border-top: 1px solid rgb(255 255 255 / .14); padding-top: 20px; color: #b5cedf; font-size: 14px; line-height: 1.65; }
@@ -76,14 +80,43 @@ button:disabled { cursor: not-allowed; }
 .observatory-provenance { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 28px 0; }
 .observatory-sources { border-top: 1px solid rgb(255 255 255 / .18); padding-top: 20px; font-size: 13px; color: #aac5d8; }
 @media (max-width: 900px) {
+  .observatory-page { padding-top: 100px; }
+  .observatory-page > header { margin-bottom: 24px; }
+  .observatory-page h1 { font-size: clamp(1.8rem, 7vw, 2.6rem); line-height: 1.12; overflow-wrap: anywhere; }
   .observatory-workspace { grid-template-columns: minmax(0, 1fr); }
-  .observatory-detail { max-height: none; overflow: visible; border-left: 0; border-top: 1px solid rgb(255 255 255 / .18); padding: 22px 0; }
-  .observatory-map { height: 60svh; min-height: 360px; }
-  .observatory-map-heading { padding-right: 0; }
-  .observatory-themes { display: grid; grid-template-columns: 1fr 1fr; }
-  .observatory-themes button { font-size: 14px; padding: 14px 10px; }
+  .observatory-sidebar { display: contents; }
+  .observatory-filter-panel { order: -1; min-width: 0; margin-bottom: 20px; border-bottom: 1px solid rgb(255 255 255 / .18); }
+  .observatory-filter-toggle { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 0; color: #d9edf8; font-size: 15px; text-align: left; }
+  .observatory-filter-toggle svg:last-child { margin-left: auto; }
+  .observatory-filters { padding-top: 10px; gap: 18px; }
+  .observatory-filters[data-mobile-open='false'] { display: none; }
+  .observatory-sidebar select, .observatory-theme-select select { min-height: 48px; font-size: 16px; }
+  .observatory-detail { order: 1; border-top: 1px solid rgb(255 255 255 / .18); padding: 22px 0; }
+  .observatory-detail .text-xs { font-size: 13px; line-height: 1.6; }
+  .observatory-detail .text-sm { font-size: 15px; line-height: 1.65; }
+  .observatory-map { height: clamp(320px, 55svh, 540px); min-height: 0; }
+  .observatory-map-heading { flex-direction: column; align-items: stretch; gap: 12px; padding: 0 0 16px; min-height: 0; }
+  .observatory-map-heading h2 { font-size: 24px; line-height: 1.25; }
+  .observatory-map-heading > div:last-child { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; text-align: left; font-size: 14px; }
+  .observatory-themes { display: none; }
+  .observatory-theme-select { display: block; margin-bottom: 12px; color: #c6dce9; font-size: 14px; }
   .observatory-provenance { grid-template-columns: 1fr; gap: 16px; }
-  .observatory-map-caption { padding-right: 0; }
+  .observatory-map-caption { flex-direction: column; align-items: flex-start; gap: 8px; padding-right: 0; font-size: 13px; line-height: 1.6; }
+  .observatory-map-column > button { min-height: 44px; text-align: left; }
+  .observatory-amp-controls { gap: 12px 20px; padding-block: 16px; }
+  .observatory-amp-controls > button { width: 100%; min-height: 48px; text-align: left; }
+  .observatory-amp-controls label { font-size: 15px; }
+  .observatory-amp-controls label:last-child { flex: 1 1 100%; }
+  .observatory-amp-controls input[type='range'] { flex: 1; min-width: 70px; height: 44px; }
+  .observatory-map .maplibregl-ctrl-group button { width: 40px; height: 40px; }
+  .observatory-data-list summary, .observatory-sources summary { padding-block: 10px; line-height: 1.6; font-size: 15px; }
+  .observatory-data-list .observatory-table-scroll { max-height: none; overflow: visible; }
+  .observatory-data-list table, .observatory-data-list tbody { display: block; width: 100%; }
+  .observatory-data-list thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .observatory-data-list tr { display: block; padding: 16px 0; border-bottom: 1px solid rgb(255 255 255 / .2); }
+  .observatory-data-list td { display: grid; grid-template-columns: 90px minmax(0, 1fr); align-items: baseline; gap: 12px; padding: 7px 0; border: 0; overflow-wrap: anywhere; font-size: 15px; line-height: 1.5; }
+  .observatory-data-list td::before { content: attr(data-label); color: #b5cedf; font-size: 12px; }
+  .observatory-data-list td button { justify-self: start; min-height: 44px; padding: 4px 0; text-align: left; }
 }
 a, button, input, select, textarea, summary { -webkit-tap-highlight-color: transparent; }
 :where(a, button, summary):focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 5px; }

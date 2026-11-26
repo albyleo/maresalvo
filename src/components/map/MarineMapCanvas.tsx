@@ -224,7 +224,7 @@ export function MarineMapCanvas({
       zoom: MAP_INITIAL.zoom,
       pitch: MAP_INITIAL.pitch,
       bearing: MAP_INITIAL.bearing,
-      attributionControl: { compact: true },
+      attributionControl: false,
     });
     mapRef.current = map;
     map.on('error', (event) => { if ('sourceId' in event && typeof event.sourceId === 'string') errorRef.current(event.sourceId); });

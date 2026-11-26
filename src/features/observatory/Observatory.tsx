@@ -1,9 +1,10 @@
 'use client';
 
 import { InfoDisclosure } from '@/components/ui/InfoDisclosure';
+import { MapCredits } from '@/components/map/MapCredits';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LocateFixed, RefreshCw, X } from 'lucide-react';
+import { LocateFixed, RefreshCw, X, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { ProtectedAreaDetails } from './ProtectedAreaDetails';
 import type { ProtectedAreaSelection } from './protected-areas';
 import { displayDate, satelliteView, surveyForTheme, filterObservations, isSatelliteRecent, isSatelliteTheme, SATELLITES, THEMES, type ObservationFeature,
@@ -40,6 +41,7 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
   const [protectedSelection, setProtectedSelection] = useState<ProtectedAreaSelection | null>(null);
   const [protectedError, setProtectedError] = useState('');
   const [dismissProtectedKey, setDismissProtectedKey] = useState(0);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const protectedLayers = useMemo(() => ({ enabled: showProtected, zones: showZones, opacity: protectedOpacity }), [showProtected, showZones, protectedOpacity]);
   const definition = THEMES.find(t => t.id === theme)!;
   const surveyId = surveyForTheme(theme, fieldMeasurements);
@@ -107,6 +109,7 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
   const choose = (id: ThemeId) => { setTheme(id); setFieldMeasurements(false); setDate(''); resetFilters(); setSurveyError(null); setMapStatus('loading'); };
 
   return <>
+    <label className="observatory-theme-select">Esplora un tema<select value={theme} onChange={event => choose(event.target.value as ThemeId)}>{THEMES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
     <nav aria-label="Temi dell’osservatorio" className="observatory-themes">
       {THEMES.map(item => <button key={item.id} type="button" aria-pressed={theme === item.id} onClick={() => choose(item.id)}>{item.label}</button>)}
     </nav>
@@ -121,18 +124,20 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
         <div className="observatory-map-stage">
           <Map key={attempt} features={features} satellite={raster} onSelect={select} onStatus={setMapStatus} resetKey={resetKey} protectedLayers={protectedLayers} onProtectedSelect={selectProtected} onProtectedError={setProtectedError} dismissProtectedKey={dismissProtectedKey}/>
           <button type="button" className="observatory-map-reset" aria-label="Inquadra il Mediterraneo" title="Inquadra il Mediterraneo" onClick={() => setResetKey(k => k + 1)}><LocateFixed size={20}/></button>
+        </div>
+        <MapCredits/>
           {(loading || error || mapStatus === 'error') && <div className="observatory-map-message" role="status">
             {loading ? 'Caricamento delle osservazioni…' : error || 'Alcuni livelli cartografici non sono disponibili. Le schede dei dati restano consultabili.'}
             {!loading && <button type="button" onClick={() => { setSurveyError(null); setSatelliteError(null); setAttempt(n => n + 1); setResetKey(n => n + 1); }} className="mt-3 flex items-center gap-2 underline underline-offset-4"><RefreshCw size={16}/>Riprova</button>}
           </div>}
           {!loading && !error && !satelliteTheme && !features.length && <div className="observatory-map-message" role="status">Nessuna osservazione per questi filtri nell’ultima campagna disponibile.</div>}
-        </div>
         <div className="observatory-map-caption">
           <span>{satelliteTheme ? `${definition.label} · ${config?.unit} · ${theme === 'chlorophyll' ? '~1 km + 100 m costiero' : config?.resolution}` : `${features.length} osservazioni visualizzate · seleziona un punto`}</span>
           <a href={fieldMeasurements ? '#fonti-campionamenti' : definition.url} target={fieldMeasurements ? undefined : '_blank'} rel="noreferrer">{fieldMeasurements ? 'Fonti ARPA e copertura' : definition.source}</a>
         </div>
         {protectedSelection && <button type="button" className="mb-4 text-sm text-sky-200 underline" onClick={() => document.querySelector('.observatory-detail')?.scrollIntoView({ block: 'start', behavior: 'instant' })}>Vedi dettagli dell’area selezionata →</button>}
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/15 py-3">
+        {selected && <button type="button" className="mb-4 text-sm text-sky-200 underline" onClick={() => document.querySelector('.observatory-detail')?.scrollIntoView({ block: 'start', behavior: 'instant' })}>Vedi il campionamento selezionato →</button>}
+        <div className="observatory-amp-controls flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/15 py-3">
           <button type="button" aria-pressed={showProtected} onClick={() => { setShowProtected(value => !value); closeProtected(); }} className={`min-h-11 border px-4 py-2 text-sm ${showProtected ? 'border-sky-200 bg-sky-200/10 text-sky-100' : 'border-white/25 text-white/75'}`}>Aree marine protette</button>
           {showProtected && <>
             <label className="flex min-h-11 items-center gap-2 text-sm text-sky-100"><input type="checkbox" checked={showZones} onChange={e => { setShowZones(e.target.checked); closeProtected(); }} className="h-4 w-4 accent-sky-200"/>Zonazioni</label>
@@ -142,9 +147,11 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
         {showProtected && protectedError && <div role="status" className="mb-3 text-sm text-amber-200">{protectedError} <button type="button" className="underline" onClick={() => { setProtectedError(''); closeProtected(); setAttempt(k => k + 1); }}>Riprova AMP</button></div>}
       </div>
 
-      <aside className="observatory-detail" aria-label="Dati e dettagli">
-        {showProtected && protectedSelection && <ProtectedAreaDetails selection={protectedSelection} onClose={closeProtected}/>}
-        <div className="observatory-filters">
+      <aside className="observatory-sidebar" aria-label="Dati e dettagli">
+        <div className="observatory-filter-panel">
+        <button type="button" className="observatory-filter-toggle" aria-expanded={filtersOpen} aria-controls="observatory-filters" onClick={() => setFiltersOpen(open => !open)}><SlidersHorizontal size={18}/>Filtri e data<ChevronDown size={18} className={filtersOpen ? 'rotate-180' : ''}/></button>
+        <div id="observatory-filters" className="observatory-filters" data-mobile-open={filtersOpen}>
+          {loading && <p role="status" className="text-sm text-sky-100/70">Caricamento dei filtri disponibili…</p>}
           {(theme === 'turbidity' || theme === 'suspended-matter') && <label>Tipo di osservazione<select value={fieldMeasurements ? 'samples' : 'satellite'} onChange={e => { setFieldMeasurements(e.target.value === 'samples'); resetFilters(); setSurveyError(null); }}><option value="satellite">Satellite · Copernicus</option><option value="samples">Misure sul campo · ARPA regionali</option></select></label>}
           {satelliteTheme && satellite && <label>Data dell’osservazione<select value={satelliteDate} onChange={e => setDate(e.target.value)}>{availableDates.map(d => <option key={d} value={d}>{displayDate(d)}{d === availableDates[0] ? ' · ultima disponibile' : ''}</option>)}</select></label>}
           {!satelliteTheme && dataset && <>
@@ -156,6 +163,9 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
           {theme === 'chemicals' && <><label>Sostanza<select value={substance} onChange={e => { setSubstance(e.target.value); clearSelection(); }}><option value="">Tutte le sostanze</option>{substances.map(s => <option key={s}>{s}</option>)}</select></label>
             <label>Matrice<select value={matrix} onChange={e => { setMatrix(e.target.value); clearSelection(); }}><option value="">Tutte le matrici</option><option value="acqua">Acqua</option><option value="sedimento">Sedimento</option><option value="organismi">Organismi</option></select></label></>}
         </div>
+        </div>
+        <div className="observatory-detail" tabIndex={-1}>
+        {showProtected && protectedSelection && <ProtectedAreaDetails selection={protectedSelection} onClose={closeProtected}/>}
         {theme === 'chlorophyll' && satelliteDate && <div className="mb-5 space-y-2 text-xs text-sky-100/75" aria-live="polite">
           {(['chlorophyll', 'coastal-chlorophyll'] as const).map(id => <p key={id}>{id === 'chlorophyll' ? 'Bacino · ~1 km' : 'Costa · 100 m'}: {satelliteResult[id]?.dates.includes(satelliteDate) ? displayDate(satelliteDate) : 'non disponibile per questa data'}</p>)}
         </div>}
@@ -181,15 +191,16 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
           {!satelliteTheme && <p className="mt-5 flex items-center gap-2 text-sm text-sky-100/75"><span className="h-3 w-3 shrink-0 rounded-full border border-white bg-[#087d8b]"/>Punto di osservazione · colore senza soglie di rischio</p>}
         </div>}
         <InfoDisclosure key={`${theme}-${fieldMeasurements}`} label="Info sul livello">{fieldMeasurements ? <><p>Ultima campagna integrata per ciascuna fonte regionale. I punti indicano prelievi o misure con sonda, con date indipendenti dal satellite. La copertura italiana è ancora parziale.</p><p>{theme === 'turbidity' ? 'Veneto e Campania: misura più vicina alla superficie entro 1 m, in FTU. Lazio: punti di prelievo superficiali in NTU. Le unità originali non sono convertite né equiparate alle FNU satellitari.' : 'Solidi sospesi in mg/L misurati su campioni d’acqua. Le schede indicano le profondità dove disponibili. Toscana e Abruzzo: dati estratti dai rapporti 2024 e verificati sulle tabelle originali, con revisione richiesta per le nuove edizioni.'} Nessuna interpolazione o soglia di rischio.</p></> : <><p>{definition.description}</p><p>{definition.note}</p></>}{theme === 'chlorophyll' && <a className="underline" href="https://data.marine.copernicus.eu/product/OCEANCOLOUR_MED_BGC_HR_L3_NRT_009_205/description" target="_blank" rel="noreferrer">Fonte del dettaglio costiero · Copernicus Marine</a>}{satelliteTheme && <p>I valori oltre gli estremi usano il colore limite. La scala non indica soglie di rischio.</p>}</InfoDisclosure>
+        </div>
       </aside>
     </section>
 
     {dataset && <details className="observatory-data-list"><summary>Esplora le osservazioni anche senza mappa ({features.length})</summary>
       <div className="observatory-table-scroll"><table><thead><tr><th>Luogo / stazione</th><th>Data</th><th>Misura</th><th>Valore</th><th>Dettagli</th></tr></thead><tbody>{features.slice(0, visibleRows).map(f => {
         const measurement = theme === 'beach' && bottles ? f.properties.measurements.find(m => m.name.startsWith('Bottiglie')) : f.properties.measurements[0];
-        return <tr key={f.id}><td>{f.properties.title}</td><td>{displayDate(f.properties.observedAt)}</td><td>{measurement?.name ?? 'Infrastruttura censita'}</td>
-          <td>{measurement ? `${measurement.qualifier ?? ''}${numberFormat.format(measurement.value)} ${measurement.unit}` : '—'}</td>
-          <td><button type="button" onClick={() => { select([f]); document.querySelector('.observatory-detail')?.scrollIntoView({ block: 'start', behavior: 'instant' }); }}>Apri<span className="sr-only"> {f.properties.title} del {displayDate(f.properties.observedAt)}</span></button></td></tr>;
+        return <tr key={f.id}><td data-label="Luogo / stazione">{f.properties.title}</td><td data-label="Data">{displayDate(f.properties.observedAt)}</td><td data-label="Misura">{measurement?.name ?? 'Infrastruttura censita'}</td>
+          <td data-label="Valore">{measurement ? `${measurement.qualifier ?? ''}${numberFormat.format(measurement.value)} ${measurement.unit}` : '—'}</td>
+          <td data-label="Dettagli"><button type="button" onClick={() => { select([f]); document.querySelector('.observatory-detail')?.scrollIntoView({ block: 'start', behavior: 'instant' }); }}>Apri<span className="sr-only"> {f.properties.title} del {displayDate(f.properties.observedAt)}</span></button></td></tr>;
       })}</tbody></table></div>
       {features.length > visibleRows && <button type="button" onClick={() => setVisibleRows(n => n + 100)} className="mt-4 underline underline-offset-4">Mostra altre osservazioni ({visibleRows} di {features.length})</button>}
     </details>}
@@ -208,6 +219,7 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
       </InfoDisclosure>}
     </div>
     <details className="observatory-sources"><summary>Info · Fonti e attribuzioni</summary><div className="grid gap-5 pt-5 md:grid-cols-2">
+      <p>Cartografia: Esri, GEBCO, NOAA e altri fornitori della base oceanica. AMP: EMODnet / EEA CDDA / UNEP-WCMC / IUCN WDPA. Zonazioni locali: Regione Sardegna, Regione Siciliana e DM Porto Cesareo del 12/12/1997. <a href="/data/marine-sources.json" target="_blank" rel="noreferrer" className="underline">Provenienza della cartografia AMP</a>.</p>
       <p>Campionamenti: EMODnet Chemistry, OGS e istituti originatori indicati nelle schede. Raccolte unrestricted 2026, CC BY 4.0. Data and metadata are provided by EMODnet Chemistry under the support of DG MARE, CINEA/2024/OP/0006. Nessuna superficie stimata tra i campioni.</p>
       <p>Monitoraggi italiani: <a href="https://strategiamarina.isprambiente.it/sic-sistema-informativo-centralizzato/" target="_blank" rel="noreferrer" className="underline">SIC ISPRA · dati ARPA</a>, archivio 2024–2026; l’anno del contenitore non è la data della misura. Selezione delle ultime campagne per regione e matrice, con esclusione dei record incompleti o incoerenti. Elaborazione MareSalvo: normalizzazione, filtri e georeferenziazione. <a href="https://www.isprambiente.gov.it/it/note-legali" target="_blank" rel="noreferrer" className="underline">Condizioni ISPRA</a>.</p>
       <p>Misure in mare: <a href="https://opendata.arpa.veneto.it/" target="_blank" rel="noreferrer" className="underline">ARPAV</a> e <a href="https://dati.arpacampania.it/dataset/monitoraggio-acque-marino-costiere" target="_blank" rel="noreferrer" className="underline">ARPAC Campania</a> (CC BY); <a href="https://sira.arpalazio.it/web/guest/banche-dati/visualizzazione/acqua" target="_blank" rel="noreferrer" className="underline">ARPA Lazio · SIRA</a> (CC BY 3.0 IT). Elaborazione MareSalvo: selezione delle campagne e dei prelievi superficiali, conversione delle coordinate in WGS84; unità e valori originali conservati.</p>

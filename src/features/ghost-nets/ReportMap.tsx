@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { ESRI_SATELLITE_TILES } from '@/features/marine-map/config';
+import { MapCredits } from '@/components/map/MapCredits';
 import type { NearbyNet, Position } from './types';
 
 export default function ReportMap({ position, nearby, onPosition, enabled, purpose = 'net' }: {
@@ -20,7 +21,7 @@ export default function ReportMap({ position, nearby, onPosition, enabled, purpo
     if (!container.current) return;
     let instance: maplibregl.Map;
     try {
-      instance = new maplibregl.Map({ container: container.current, center: [16,39], zoom: 5,
+      instance = new maplibregl.Map({ container: container.current, center: [16,39], zoom: 5, attributionControl: false,
         style: { version: 8, sources: { satellite: { type: 'raster', tiles: ESRI_SATELLITE_TILES, tileSize: 256, attribution: 'Esri World Imagery' } },
           layers: [{ id: 'satellite', type: 'raster', source: 'satellite' }] } });
     } catch { requestAnimationFrame(() => setError(true)); return; }
@@ -64,6 +65,7 @@ export default function ReportMap({ position, nearby, onPosition, enabled, purpo
     <div className="relative h-[55svh] min-h-[360px] overflow-hidden border-y border-white/15">
       <div ref={container} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-label={purpose==='weather'?'Scegli il punto per il meteo marino':'Mappa per localizzare una rete'} />
     </div>
+    <MapCredits imagery/>
     {error && <p className="mt-2 text-xs text-amber-200" role="status">Cartografia temporaneamente non disponibile: puoi inserire le coordinate nei campi sottostanti.</p>}
     <p className="mt-3 text-xs text-white/50">{purpose==='weather'?'Tocca un punto in mare, oppure trascina il segnaposto. Le previsioni si riferiscono alla cella del modello più vicina.':<>{enabled ? 'Tocca il punto del ritrovamento. Puoi anche trascinare il segnaposto verde.' : 'Esplora la zona. Per inserire un punto e inviare osservazioni serve un account abilitato.'} I punti ambra indicano segnalazioni vicine.</>}</p>
   </div>;

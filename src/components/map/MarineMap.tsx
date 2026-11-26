@@ -7,6 +7,7 @@ import type { MarineProtectedArea, GhostNetReport, AisVesselPoint } from '@/type
 import { DEFAULT_LAYERS, type LayerToggles } from '@/features/marine-map/config';
 import { ZONE_STYLES } from '@/features/marine-map/zones';
 import { MapInteractionGate } from './MapInteractionGate';
+import { MapCredits } from './MapCredits';
 import Link from 'next/link';
 import { AreaGuidance } from '@/features/marine-map/AreaGuidance';
 import sourceManifest from '../../../public/data/marine-sources.json';
@@ -68,9 +69,10 @@ export function MarineMap({areas,ghostNets=[],aisVessels=[],fullScreen=false,act
     <div ref={layout} className="marine-map-layout" data-panel-open={sidebarOpen || layersOpen}
       onKeyDown={event => { if (event.key === 'Escape' && (sidebarOpen || layersOpen)) { event.stopPropagation(); closePanel(); } }}>
       <div className="marine-map-stage">
-        <div className="absolute inset-0"><MapContainer areas={filtered} ghostNets={ghostNets} aisVessels={aisVessels} layers={layers}
+        <div className="absolute inset-x-0 top-0 bottom-8"><MapContainer areas={filtered} ghostNets={ghostNets} aisVessels={aisVessels} layers={layers}
           selectedArea={selectedArea} selectedZoneId={selectedZoneId} onSelectArea={selectArea}
           onLayerError={source=>{if(SOURCE_LABELS[source]) setErrors(previous=>previous.includes(source)?previous:[...previous,source]);}} /></div>
+        <div className="absolute inset-x-0 bottom-0 h-8 bg-[#092637] px-3"><MapCredits imagery={layers.satellite}/></div>
         <div className="marine-map-tools absolute top-3 left-3 z-20 flex gap-2">
           <button ref={areasButton} type="button" aria-expanded={sidebarOpen} aria-controls="marine-area-panel" onClick={()=>{setSidebarOpen(!sidebarOpen);setLayersOpen(false);}}
             className="marine-tool-button"><Search size={16}/>Aree ({areas.length})</button>

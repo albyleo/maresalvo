@@ -55,7 +55,6 @@ export default function ObservatoryMap({ features, satellite, onSelect, onStatus
     let identifyRequest: AbortController | undefined;
     let lastWidth = container.current.clientWidth;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');
     map.on('error', event => {
       const sourceId = 'sourceId' in event ? event.sourceId : undefined;
