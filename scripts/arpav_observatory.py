@@ -83,4 +83,5 @@ def build():
         if not features: raise ValueError("No valid ARPAV measurements for " + kind)
         newest = max(f["properties"]["observedAt"][:4] for f in features.values())
         out[kind] = sorted([f for f in features.values() if f["properties"]["observedAt"].startswith(newest)], key=lambda f: f["id"])
+        print(f"ARPAV / Veneto: {kind}, {newest}, {len(out[kind])} osservazioni, {len(set(f['properties']['station'] for f in out[kind]))} stazioni", flush=True)
     return out, {"archives": sources, "excluded": dict(audit), "coverage": {k: {"Veneto": len(v)} for k, v in out.items()}}

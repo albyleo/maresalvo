@@ -23,6 +23,7 @@ from zipfile import ZipFile
 import openpyxl
 import ispra_observatory
 import arpav_observatory
+import regional_observatory
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / "output/observatory"
@@ -284,12 +285,85 @@ def download_discharges():
         return None
 
 
+def arpav_collection(offline=False):
+    try:
+        if not offline:
+            print('ARPAV / Veneto: aggiornamento misure in mare...', flush=True)
+            arpav_observatory.download()
+        return arpav_observatory.build()
+    except (OSError, ValueError, KeyError) as error:
+        if offline: raise
+        collections = {}; sources = []
+        for kind in arpav_observatory.PACKAGES:
+            data = json.loads((DEST / (kind + '.json')).read_text('utf-8'))
+            features = [f for f in data['features'] if f['properties'].get('provider') == 'ARPAV']
+            archive = [s for s in data['metadata']['additionalSources'] if s.get('provider', 'ARPAV') == 'ARPAV' and s['id'] == kind]
+            if not features or len(archive) != 1: raise RuntimeError('ARPAV: snapshot precedente incompleto') from error
+            collections[kind] = features
+            sources.append({**archive[0], 'retained': True, 'syncWarning': str(error),
+                            'lastAttemptAt': datetime.now(timezone.utc).isoformat()})
+        print(f'ATTENZIONE: ARPAV NON aggiornato ({error}); conservati dati e date precedenti.', flush=True)
+        return collections, {'archives': sources, 'excluded': {}, 'coverage': {k: {'Veneto': len(v)} for k, v in collections.items()}}
+
+
+def field_collections(field, archives):
+    """One latest campaign per provider; never discard older regions globally."""
+    review = json.loads((ROOT / 'scripts/data/regional-field-coverage.json').read_text('utf-8'))
+    pending = {}
+    for key, features in field.items():
+        sources = [s for s in archives if s['id'] == key]
+        dates = sorted(f['properties']['observedAt'] for f in features)
+        years = sorted(set(d[:4] for d in dates), reverse=True)
+        coverage = []
+        for entry in review['regions']:
+            subset = [f for f in features if f['properties']['region'] == entry['region']]
+            coverage.append({**entry, 'reviewedAt': review['reviewedAt'], 'count': len(subset),
+                             'stations': len(set(f['properties']['station'] for f in subset)),
+                             'years': sorted(set(f['properties']['observedAt'][:4] for f in subset))})
+        meta = {'edition': 'ARPA regionali · campagne e ultime letture integrate',
+                'verifiedAt': max(s['verifiedAt'] for s in sources),
+                'observedFrom': dates[0], 'observedTo': dates[-1], 'count': len(features),
+                'sha256': hashlib.sha256(json.dumps(features, sort_keys=True).encode()).hexdigest(),
+                'sourceUrl': sources[0]['sourceUrl'], 'year': years[0] if len(years) == 1 else f'{years[-1]}–{years[0]}',
+                'years': years, 'additionalSources': sources, 'regionalCoverage': coverage,
+                'sources': [{'provider': s.get('provider', 'ARPAV'), 'sourceUrl': s['sourceUrl'],
+                             'verifiedAt': s['verifiedAt'], 'license': s['license'],
+                             'syncStatus': 'retained' if s.get('retained') else 'verified',
+                             **({'lastAttemptAt': s['lastAttemptAt'], 'syncWarning': s['syncWarning']} if s.get('retained') else {}),
+                             'count': sum(f['properties']['provider'] == s.get('provider', 'ARPAV') for f in features)} for s in sources]}
+        pending[key] = {'type': 'FeatureCollection', 'metadata': meta, 'features': features}
+        print(key, meta['year'], len(features), flush=True)
+    return pending
+
+
+def write_outputs(data):
+    for key, value in data.items():
+        target = DEST / f'{key}.json'
+        tmp = target.with_suffix('.tmp')
+        tmp.write_text(json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(',', ':')), 'utf-8')
+        tmp.replace(target)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--offline", action="store_true", help="Rebuild from already downloaded archives; retains their verification time")
+    parser.add_argument('--field-only', action='store_true', help='Update only ARPA turbidity/suspended matter; preserve other published collections')
     args = parser.parse_args()
     CACHE.mkdir(parents=True, exist_ok=True)
     DEST.mkdir(parents=True, exist_ok=True)
+    if args.field_only:
+        manifest = json.loads((DEST / 'manifest.json').read_text('utf-8'))
+        report = json.loads((DEST / 'italian-sources.json').read_text('utf-8'))
+        if not args.offline:
+            regional_observatory.download()
+        field, report['arpav'] = arpav_collection(args.offline)
+        regional, report['regional'] = regional_observatory.build()
+        for key, features in regional.items(): field.setdefault(key, []).extend(features)
+        pending = field_collections(field, report['arpav']['archives'] + report['regional']['archives'])
+        manifest.update({key: data['metadata'] for key, data in pending.items()})
+        write_outputs({**pending, 'manifest': manifest, 'italian-sources': report})
+        print('Aggiornamento ARPA completato. Altre raccolte e relative date conservate.', flush=True)
+        return
     retained_discharges = None
     if not args.offline:
         for key, url in SOURCES.items():
@@ -299,11 +373,12 @@ def main():
         retained_discharges = download_discharges()
         print("ISPRA: aggiornamento archivi...", flush=True)
         ispra_observatory.download()
-        print("ARPAV: aggiornamento misure in mare...", flush=True)
-        arpav_observatory.download()
+        regional_observatory.download()
     print("Elaborazione e validazione dei campionamenti...", flush=True)
     italian, ispra_report = ispra_observatory.build()
-    field, arpav_report = arpav_observatory.build()
+    field, arpav_report = arpav_collection(args.offline)
+    regional, regional_report = regional_observatory.build()
+    for key, features in regional.items(): field.setdefault(key, []).extend(features)
     manifest = {}
     pending = {}
     for key, build in [("beach", beach), ("micro", micro), ("seafloor", seafloor), ("chemicals", chemicals), ("discharges", discharges)]:
@@ -337,22 +412,10 @@ def main():
         pending[key] = {"type": "FeatureCollection", "metadata": meta, "features": features}
         manifest[key] = meta
         print(key, meta["year"], len(features), flush=True)
-    for key, features in field.items():
-        source = next(s for s in arpav_report["archives"] if s["id"] == key)
-        dates = sorted(f["properties"]["observedAt"] for f in features)
-        meta = {"edition": "ARPAV · " + source["edition"], "verifiedAt": source["verifiedAt"],
-                "observedFrom": dates[0], "observedTo": dates[-1], "count": len(features), "sha256": source["sha256"],
-                "sourceUrl": source["sourceUrl"], "year": dates[-1][:4], "years": [dates[-1][:4]],
-                "sources": [{"provider": "ARPAV", "sourceUrl": source["sourceUrl"], "count": len(features)}], "additionalSources": [source]}
-        pending[key] = {"type": "FeatureCollection", "metadata": meta, "features": features}
-        manifest[key] = meta
-        print(key, meta["year"], len(features), flush=True)
+    pending.update(field_collections(field, arpav_report.get('archives', []) + regional_report.get('archives', [])))
+    manifest.update({key: data['metadata'] for key, data in pending.items()})
     # Only publish after every importer has succeeded; fail instead of silently reverting.
-    for key, data in {**pending, "manifest": manifest, "italian-sources": {"ispra": ispra_report, "arpav": arpav_report}}.items():
-        target = DEST / f"{key}.json"
-        tmp = target.with_suffix(".tmp")
-        tmp.write_text(json.dumps(data, ensure_ascii=False, allow_nan=False, separators=(",", ":")), "utf-8")
-        tmp.replace(target)
+    write_outputs({**pending, 'manifest': manifest, 'italian-sources': {'ispra': ispra_report, 'arpav': arpav_report, 'regional': regional_report}})
     print("Sincronizzazione completata CON AVVISO: EEA non aggiornato, mantenuta la versione precedente."
           if retained_discharges is not None else "Sincronizzazione completata.", flush=True)
 

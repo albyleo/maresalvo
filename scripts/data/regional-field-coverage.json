@@ -1,0 +1,81 @@
+{
+  "reviewedAt": "2026-11-26",
+  "scope": "Torbidità e solidi sospesi nelle acque marine delle 15 regioni costiere. Ricognizione dei servizi pubblici: la mancata integrazione non dimostra assenza di dati presso gli enti.",
+  "regions": [
+    {
+      "region": "Abruzzo",
+      "sourceUrl": "https://www.artaabruzzo.it/pubblicazioni.php?id_page=1",
+      "status": "Rapporto molluschi 2024: solidi sospesi e coordinate verificati. Nessuna torbidità nella tabella importata. Sei misure offshore escluse per coordinate non specificate."
+    },
+    {
+      "region": "Basilicata",
+      "sourceUrl": "https://www.arpab.it/temi-ambientali/acqua/acque-marine/acque-marino-costiere/",
+      "status": "Pagina ufficiale marino-costiera raggiungibile, senza allegati analitici scaricabili alla verifica. I file SIC ISPRA esaminati non contengono torbidità o solidi sospesi."
+    },
+    {
+      "region": "Calabria",
+      "sourceUrl": "https://www.arpacal.it/struttura/centro-regionale-strategia-marina",
+      "status": "Centro regionale Strategia Marina individuato. Non ancora verificato un export pubblico di questi parametri con data, unità e coordinate. Il portale SIC ARPACAL riguarda siti di interesse comunitario, non un archivio di analisi delle acque."
+    },
+    {
+      "region": "Campania",
+      "sourceUrl": "https://dati.arpacampania.it/dataset/monitoraggio-acque-marino-costiere",
+      "status": "Il CSV chimico-fisico verificato contiene torbidità, ma non solidi sospesi."
+    },
+    {
+      "region": "Emilia-Romagna",
+      "sourceUrl": "https://www.arpae.it/it/temi-ambientali/mare/dati-e-indicatori/rete-di-monitoraggio-meteo-marina",
+      "status": "Verificate API bollettini_daphne e meteo_marefe (12 stazioni, incluso Po di Goro): nelle risposte correnti non è esposto il parametro torbidità né solidi sospesi, pur essendo il sensore di torbidità descritto sul sito. Trasparenza Secchi non convertita in torbidità."
+    },
+    {
+      "region": "Friuli-Venezia Giulia",
+      "sourceUrl": "https://www.osmer.fvg.it/monitor-mare.php?ln=",
+      "status": "API Monitor-mare verificata: le letture di torbidità ARPA identificate appartengono alla laguna di Marano e Grado. Escluse dalla mappa: il progetto integra attualmente solo acque marine."
+    },
+    {
+      "region": "Lazio",
+      "sourceUrl": "https://sira.arpalazio.it/web/guest/banche-dati/visualizzazione/acqua",
+      "status": "API chimica delle acque costiere verificata dal 2024: torbidità presente, solidi sospesi non trovati nella risposta."
+    },
+    {
+      "region": "Liguria",
+      "sourceUrl": "https://servizi.regione.liguria.it/page/welcome/QUALITA_ACQUE_MARINE",
+      "status": "Servizio ufficiale SISEA individuato; host non risolvibile durante la verifica. Importazione ancora da realizzare."
+    },
+    {
+      "region": "Marche",
+      "sourceUrl": "https://www.arpa.marche.it/monitoraggio-marino",
+      "status": "Scaricato il bollettino di giugno 2023 esposto nella pagina: non contiene misure di torbidità o solidi sospesi. Rapporti di stato ambientale e classificazioni non sostituiscono le analisi puntuali."
+    },
+    {
+      "region": "Molise",
+      "sourceUrl": "https://www.arpamolise.it/WP/acque-marino-costiere/",
+      "status": "Pagina costiera consultata: rimanda al SIC ISPRA. Rapporto balneazione 2025 verificato: descrizioni di acqua torbida e fioriture, ma nessuna serie georeferenziata di questi due parametri."
+    },
+    {
+      "region": "Puglia",
+      "sourceUrl": "https://dati.arpa.puglia.it/openapi/index.html",
+      "status": "OpenAPI /swagger verificata: copre la qualità dell’aria, non le acque. Rapporto molluschi 2025: giudizi di conformità, senza valori dei due parametri. Nessuna misura marina importata da queste fonti."
+    },
+    {
+      "region": "Sardegna",
+      "sourceUrl": "https://portal.sardegnasira.it/acque-marino-costiere",
+      "status": "Verificato SIRA ArcGIS metadati/Metadati/MapServer/1: geometrie dei corpi idrici, senza analisi di torbidità o solidi sospesi. Il monitoraggio ARPAS include torbidità, ma non è stato verificato un export pubblico delle misure."
+    },
+    {
+      "region": "Sicilia",
+      "sourceUrl": "https://www.arpa.sicilia.it/download/monitoraggio-della-qualita-delle-acque-destinate-alla-vita-dei-molluschi-2025/",
+      "status": "Rapporto molluschi 2025 verificato: i valori di solidi sospesi riguardano Ganzirri, acqua di transizione. Esclusi: la mappa integra attualmente solo acque marine. Nessuna nuova misura marina importabile verificata."
+    },
+    {
+      "region": "Toscana",
+      "sourceUrl": "https://www.arpat.toscana.it/pubblicazione/qualita-delle-acque-destinate-alla-vita-dei-molluschi-2024/",
+      "status": "Rapporto molluschi 2024: solidi sospesi verificati, nessuna torbidità nella tabella importata. Export MAR restituito vuoto alla verifica."
+    },
+    {
+      "region": "Veneto",
+      "sourceUrl": "https://opendata.arpa.veneto.it/",
+      "status": "Importazioni CKAN attive per entrambi i parametri."
+    }
+  ]
+}

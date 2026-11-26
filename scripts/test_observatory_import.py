@@ -3,6 +3,8 @@ import io
 import importlib.util
 import json
 import tempfile
+import csv
+import hashlib
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -11,6 +13,7 @@ from urllib.error import URLError
 
 import openpyxl
 from ispra_observatory import Workbook, beaches, chemicals, micro, numeric, position, region
+import regional_observatory as regional
 
 spec = importlib.util.spec_from_file_location("sync_observatory", Path(__file__).with_name("sync-observatory.py"))
 sync = importlib.util.module_from_spec(spec)
@@ -131,17 +134,125 @@ class DischargeDownloadTests(unittest.TestCase):
         self.enterContext(patch.object(sync, "download_discharges", return_value=self.previous))
         ispra_download = self.enterContext(patch.object(sync.ispra_observatory, "download"))
         arpav_download = self.enterContext(patch.object(sync.arpav_observatory, "download"))
+        regional_download = self.enterContext(patch.object(sync.regional_observatory, 'download'))
         self.enterContext(patch.object(sync.ispra_observatory, "build", return_value=({}, {})))
         self.enterContext(patch.object(sync.arpav_observatory, "build", return_value=({}, {})))
+        self.enterContext(patch.object(sync.regional_observatory, 'build', return_value=({}, {})))
         for name in sync.SOURCES:
             self.enterContext(patch.object(sync, name, return_value=[sync.feature(name, 17, 40, "Test", "2024-01-01", [])]))
         sync.main()
         ispra_download.assert_called_once()
         arpav_download.assert_called_once()
+        regional_download.assert_called_once()
         self.assertEqual(json.loads((sync.DEST / "discharges.json").read_text("utf-8")), self.previous)
         manifest = json.loads((sync.DEST / "manifest.json").read_text("utf-8"))
         self.assertEqual(manifest["discharges"], self.previous["metadata"])
         self.assertEqual(manifest["beach"]["count"], 1)
+
+
+class RegionalTests(unittest.TestCase):
+    def source(self, region, key=regional.TUR):
+        return {'region': region, 'provider': 'Test ' + region, 'id': key, 'edition': 'Test',
+                'sourceUrl': 'https://example.org/data', 'license': 'Test', 'verifiedAt': '2026-11-26'}
+
+    def test_campania_surface_selection_zero_missing_and_latest_year(self):
+        rows = [{'Cod. Stazione': 'S1', 'Nome stazione': 'Test', 'Lat.N': '41,1', 'Long.E': '13,8',
+                 'Profondita': depth, 'Torbidita FTU': value, 'Data Campionamento': when}
+                for depth, value, when in [('-1', '5', '01-01-2025'), ('-0,5', '0', '01-01-2025'),
+                                          ('-2', '8', '01-01-2025'), ('-0,5', '2', '01-01-2024'),
+                                          ('-0,5', 'n.r.', '02-01-2025'), ('-0,5', '2', '01-01-2099')]]
+        raw = io.StringIO(); writer = csv.DictWriter(raw, fieldnames=list(rows[0])); writer.writeheader(); writer.writerows(rows)
+        result = regional.campania(raw.getvalue().encode(), self.source('Campania'), Counter())
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['properties']['measurements'][0]['value'], 0)
+        self.assertEqual(result[0]['properties']['depth'], .5)
+        self.assertEqual(result[0]['properties']['observedAt'], '2025-01-01')
+
+    def test_lazio_preserves_unit_qualifier_samples_and_requires_coordinates(self):
+        row = {'rif_campione': 'a', 'rt_data_ora_prelievo': '2025-02-03 10:00:00+01',
+               'parametro': 'Torbidità', 'unita_misura_descrizione': 'NTU', 'segno_valore': '<',
+               'valore_an': '0.1', 'revisione': 0, 'cod_ulia_figlia': 'M4/0', 'stazione': 'Test', 'tot_row': 3}
+        rows = [row, {**row, 'revisione': 1, 'valore_an': '0.2'}, {**row, 'rif_campione': 'b'}]
+        raw = json.dumps({'aRisultati': rows})
+        fs = regional.lazio(raw, {'M4/0': (12, 42)}, self.source('Lazio'), Counter())
+        self.assertEqual(len(fs), 2)
+        self.assertEqual(fs[0]['properties']['measurements'][0], {'name': 'Torbidità misurata', 'value': .2, 'unit': 'NTU', 'qualifier': '<'})
+        self.assertNotIn('depth', fs[0]['properties'])
+        with self.assertRaises(ValueError): regional.lazio(raw, {}, self.source('Lazio'), Counter())
+        with self.assertRaises(ValueError): regional.lazio(json.dumps({'aRisultati': [row]}), {'M4/0': (12, 42)}, self.source('Lazio'), Counter())
+
+    def test_report_transcription_preserves_limit_and_exact_coordinates(self):
+        fs = regional.toscana(self.source('Toscana', regional.SPM))
+        self.assertEqual(len(fs), 9)
+        self.assertEqual(fs[-1]['properties']['measurements'][0]['qualifier'], '<')
+        self.assertEqual(fs[-1]['properties']['measurements'][0]['value'], 2.5)
+        self.assertAlmostEqual(fs[0]['geometry']['coordinates'][1], 43 + 53.072/60, places=6)
+        self.assertNotIn('depth', fs[0]['properties'])
+
+    def test_abruzzo_does_not_map_unknown_offshore_coordinates_or_treat_distance_as_depth(self):
+        audit = Counter()
+        fs = regional.abruzzo(self.source('Abruzzo', regional.SPM), audit)
+        self.assertEqual(len(fs), 108)
+        self.assertEqual(len(set(f['properties']['station'] for f in fs)), 27)
+        self.assertEqual(audit['abruzzo_measurements_without_official_coordinates'], 6)
+        self.assertTrue(all('depth' not in f['properties'] for f in fs))
+        self.assertTrue(any(f['properties']['measurements'][0]['qualifier'] == '<' for f in fs))
+
+    def test_mixed_campaign_metadata_does_not_hide_older_region(self):
+        s1 = self.source('Toscana', regional.SPM); s2 = self.source('Veneto', regional.SPM)
+        fs = regional.toscana(s1)
+        veneto = json.loads(json.dumps(fs[0])); veneto['id'] = 'veneto'; veneto['properties'].update(
+            id='veneto', region='Veneto', provider=s2['provider'], observedAt='2025-01-01')
+        data = sync.field_collections({regional.SPM: fs + [veneto]}, [s1, s2])[regional.SPM]
+        self.assertEqual(data['metadata']['years'], ['2025', '2024'])
+        self.assertEqual(data['metadata']['count'], 10)
+        self.assertEqual(len(data['metadata']['regionalCoverage']), 15)
+        self.assertEqual(sum(c['count'] for c in data['metadata']['regionalCoverage']), 10)
+
+    def test_field_only_keeps_other_datasets_and_metadata_unchanged(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(sync, 'DEST', Path(folder)), patch.object(sync, 'CACHE', Path(folder)), patch('sys.argv', ['sync-observatory.py', '--field-only', '--offline']):
+            source = self.source('Toscana', regional.SPM)
+            (sync.DEST / 'manifest.json').write_text(json.dumps({'discharges': {'verifiedAt': 'old'}}))
+            (sync.DEST / 'italian-sources.json').write_text(json.dumps({'ispra': {'untouched': True}}))
+            target = sync.DEST / 'discharges.json'; target.write_bytes(b'unchanged')
+            with patch.object(sync.arpav_observatory, 'build', return_value=({}, {'archives': []})), patch.object(sync.regional_observatory, 'build', return_value=({regional.SPM: regional.toscana(source)}, {'archives': [source]})), patch.object(sync.regional_observatory, 'download') as network:
+                sync.main()
+            network.assert_not_called()
+            self.assertEqual(target.read_bytes(), b'unchanged')
+            self.assertEqual(json.loads((sync.DEST / 'manifest.json').read_text())['discharges'], {'verifiedAt': 'old'})
+            self.assertEqual(json.loads((sync.DEST / 'italian-sources.json').read_text())['ispra'], {'untouched': True})
+
+    def test_changed_report_bytes_cannot_use_old_transcription(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(regional, 'CACHE', Path(folder)):
+            source = {**self.source('Toscana', regional.SPM), 'file': 'report.pdf', 'sha256': hashlib.sha256(b'changed').hexdigest()}
+            (regional.CACHE / 'sources.json').write_text(json.dumps([source, {'region': 'Campania'}, {'region': 'Lazio'}, {'region': 'Abruzzo'}]))
+            (regional.CACHE / 'report.pdf').write_bytes(b'changed')
+            with self.assertRaisesRegex(ValueError, 'Rapporto ARPAT non revisionato'): regional.build()
+
+    def test_failed_regional_refresh_preserves_values_and_verification_date(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(regional, 'PUBLISHED', Path(folder)):
+            source = self.source('Toscana', regional.SPM)
+            source['verifiedAt'] = '2026-11-20T12:00:00+00:00'
+            fs = regional.toscana(source)
+            path = Path(folder) / (regional.SPM + '.json')
+            path.write_text(json.dumps({'metadata': {'additionalSources': [source]}, 'features': fs}), 'utf-8')
+            retained = regional.retained_source('Toscana', TimeoutError('offline'))
+            self.assertEqual(retained['verifiedAt'], source['verifiedAt'])
+            self.assertEqual(regional.retained_features(retained), fs)
+            meta = sync.field_collections({regional.SPM: fs}, [retained])[regional.SPM]['metadata']
+            self.assertEqual(meta['sources'][0]['syncStatus'], 'retained')
+            self.assertEqual(meta['sources'][0]['verifiedAt'], source['verifiedAt'])
+
+    def test_arpav_outage_retains_both_previous_collections(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(sync, 'DEST', Path(folder)), patch.object(sync.arpav_observatory, 'download', side_effect=TimeoutError('offline')):
+            for kind in sync.arpav_observatory.PACKAGES:
+                source = {**self.source('Veneto', kind), 'provider': 'ARPAV', 'verifiedAt': '2026-11-20'}
+                feature = {'id': kind, 'properties': {'provider': 'ARPAV', 'observedAt': '2025-01-01'}}
+                (Path(folder) / (kind + '.json')).write_text(json.dumps({'metadata': {'additionalSources': [source]}, 'features': [feature]}))
+            data, report = sync.arpav_collection()
+            self.assertEqual(set(data), set(sync.arpav_observatory.PACKAGES))
+            self.assertTrue(all(s['retained'] and s['verifiedAt'] == '2026-11-20' for s in report['archives']))
+            self.assertTrue(all(fs[0]['properties']['observedAt'] == '2025-01-01' for fs in data.values()))
 
 
 if __name__ == '__main__': unittest.main()

@@ -1,0 +1,807 @@
+{
+  "sourceUrl": "https://www.artaabruzzo.it/download/pubblicazioni/Relazione_Vita_Molluschi_2024_r1.pdf",
+  "sha256": "8a338b1b0afe34eed14fa13f7e7e82718f6a29d519bcbbce1a1d2b4b2470de53",
+  "reviewedAt": "2026-11-26",
+  "coordinatesPage": 7,
+  "measurementsPages": [
+    14,
+    15,
+    16
+  ],
+  "coordinates": {
+    "Foce Vibrata_VM_500": [
+      13.939167,
+      42.839444
+    ],
+    "Foce Tordino_VM_500": [
+      13.981944,
+      42.747778
+    ],
+    "Foce Vomano_VM_500": [
+      14.045278,
+      42.653889
+    ],
+    "Foce Saline_VM_500": [
+      14.156953,
+      42.529379
+    ],
+    "Foce Pescara_VM_500": [
+      14.201667,
+      42.488333
+    ],
+    "Foce Foro_VM_500": [
+      14.331244,
+      42.404882
+    ],
+    "Foce Sangro_VM_500": [
+      14.546234,
+      42.2401
+    ],
+    "Foce Sinello_VM_500": [
+      14.650936,
+      42.195943
+    ],
+    "Foce Trigno - Buonanotte_VM_500": [
+      14.756944,
+      42.083611
+    ],
+    "Foce Vibrata_VM_1000": [
+      13.945055,
+      42.840671
+    ],
+    "Foce Tordino_VM_1000": [
+      13.987834,
+      42.748996
+    ],
+    "Foce Vomano_VM_1000": [
+      14.050903,
+      42.655617
+    ],
+    "Foce Saline_VM_1000": [
+      14.161771,
+      42.532139
+    ],
+    "Foce Pescara_VM_1000": [
+      14.206698,
+      42.490871
+    ],
+    "Foce Foro_VM_1000": [
+      14.334821,
+      42.408524
+    ],
+    "Foce Sangro_VM_1000": [
+      14.549395,
+      42.243942
+    ],
+    "Foce Sinello_VM_1000": [
+      14.653509,
+      42.20002
+    ],
+    "Foce Trigno - Buonanotte_VM_1000": [
+      14.760042,
+      42.087482
+    ],
+    "Foce Vibrata_VM_3000": [
+      13.968611,
+      42.845556
+    ],
+    "Foce Tordino_VM_3000": [
+      14.011389,
+      42.753889
+    ],
+    "Foce Vomano_VM_3000": [
+      14.073333,
+      42.6625
+    ],
+    "Foce Saline_VM_3000": [
+      14.181025,
+      42.543163
+    ],
+    "Foce Pescara_VM_3000": [
+      14.226944,
+      42.501111
+    ],
+    "Foce Foro_VM_3000": [
+      14.349239,
+      42.423032
+    ],
+    "Foce Sangro_VM_3000": [
+      14.562046,
+      42.259308
+    ],
+    "Foce Sinello_VM_3000": [
+      14.663801,
+      42.21633
+    ],
+    "Foce Trigno - Buonanotte_VM_3000": [
+      14.772222,
+      42.102778
+    ]
+  },
+  "measurements": [
+    {
+      "station": "Foce Vibrata_VM_500",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_1000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_3000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_500",
+      "date": "27/05/2024",
+      "value": "2",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_1000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_3000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_500",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_1000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_3000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_500",
+      "date": "23/10/2024",
+      "value": "1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_1000",
+      "date": "23/10/2024",
+      "value": "2",
+      "page": 14
+    },
+    {
+      "station": "Foce Vibrata_VM_3000",
+      "date": "23/10/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_500",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_1000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_3000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_500",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_1000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_3000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_500",
+      "date": "29/08/2024",
+      "value": "1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_1000",
+      "date": "29/08/2024",
+      "value": "1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_3000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_500",
+      "date": "23/10/2024",
+      "value": "4",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_1000",
+      "date": "23/10/2024",
+      "value": "2",
+      "page": 14
+    },
+    {
+      "station": "Foce Tordino_VM_3000",
+      "date": "23/10/2024",
+      "value": "4",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_500",
+      "date": "15/02/2024",
+      "value": "5",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_1000",
+      "date": "15/02/2024",
+      "value": "1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_3000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_500",
+      "date": "27/05/2024",
+      "value": "1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_1000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_3000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_500",
+      "date": "29/08/2024",
+      "value": "7",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_1000",
+      "date": "29/08/2024",
+      "value": "2",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_3000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_500",
+      "date": "23/10/2024",
+      "value": "7",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_1000",
+      "date": "23/10/2024",
+      "value": "6",
+      "page": 14
+    },
+    {
+      "station": "Foce Vomano_VM_3000",
+      "date": "23/10/2024",
+      "value": "3",
+      "page": 14
+    },
+    {
+      "station": "Foce Saline_VM_500",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_1000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_3000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_500",
+      "date": "27/05/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_1000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_3000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_500",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_1000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_3000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_500",
+      "date": "23/10/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_1000",
+      "date": "23/10/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Saline_VM_3000",
+      "date": "23/10/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_500",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_1000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_3000",
+      "date": "15/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_500",
+      "date": "27/05/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_1000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_3000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_500",
+      "date": "29/08/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_1000",
+      "date": "29/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_3000",
+      "date": "29/08/2024",
+      "value": "1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_500",
+      "date": "24/10/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_1000",
+      "date": "24/10/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Pescara_VM_3000",
+      "date": "24/10/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_500",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_1000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_3000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_500",
+      "date": "28/05/2024",
+      "value": "1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_1000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_3000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_500",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_1000",
+      "date": "26/08/2024",
+      "value": "1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_3000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_500",
+      "date": "24/10/2024",
+      "value": "3",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_1000",
+      "date": "24/10/2024",
+      "value": "4",
+      "page": 15
+    },
+    {
+      "station": "Foce Foro_VM_3000",
+      "date": "24/10/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_500",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_1000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_3000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_500",
+      "date": "28/05/2024",
+      "value": "2",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_1000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_3000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_500",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_1000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_3000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 15
+    },
+    {
+      "station": "Foce Sangro_VM_500",
+      "date": "22/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sangro_VM_1000",
+      "date": "22/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sangro_VM_3000",
+      "date": "22/10/2024",
+      "value": "2",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_500",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_1000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_3000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_500",
+      "date": "28/05/2024",
+      "value": "2",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_3000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_1000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_500",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_3000",
+      "date": "26/08/2024",
+      "value": "1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_1000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_500",
+      "date": "22/10/2024",
+      "value": "1",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_1000",
+      "date": "22/10/2024",
+      "value": "3",
+      "page": 16
+    },
+    {
+      "station": "Foce Sinello_VM_3000",
+      "date": "22/10/2024",
+      "value": "1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_500",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_1000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_3000",
+      "date": "16/02/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_500",
+      "date": "28/05/2024",
+      "value": "2",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_1000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_3000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_500",
+      "date": "26/08/2024",
+      "value": "2",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_1000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_3000",
+      "date": "26/08/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_500",
+      "date": "22/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_1000",
+      "date": "22/10/2024",
+      "value": "2",
+      "page": 16
+    },
+    {
+      "station": "Foce Trigno - Buonanotte_VM_3000",
+      "date": "22/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Adriatica Off-Shore SrL_VM_4000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Adriatica Off-Shore SrL_VM_4000",
+      "date": "23/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Posidonia_VM_4000",
+      "date": "27/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Posidonia_VM_4000",
+      "date": "24/10/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Silmar SrL_VM_4000",
+      "date": "28/05/2024",
+      "value": "<1",
+      "page": 16
+    },
+    {
+      "station": "Silmar SrL_VM_4000",
+      "date": "18/11/2024",
+      "value": "<1",
+      "page": 16
+    }
+  ]
+}

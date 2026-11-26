@@ -127,16 +127,21 @@ test('field measurements use independent collections and never replace a satelli
 test('Italian coverage includes all coastal regions overall and field units remain explicit', async () => {
   const report = JSON.parse(await readFile(new URL('../public/data/observatory/italian-sources.json', import.meta.url), 'utf8'));
   assert.equal(new Set(Object.values(report.ispra.coverage).flatMap(c => Object.keys(c))).size, 15);
-  for (const [id, unit] of [['turbidity-samples', 'FTU'], ['suspended-matter-samples', 'mg/L']]) {
+  for (const id of ['turbidity-samples', 'suspended-matter-samples']) {
     const data = JSON.parse(await readFile(new URL(`../public/data/observatory/${id}.json`, import.meta.url), 'utf8'));
     assert.ok(data.features.length > 0);
     for (const f of data.features) {
-      assert.equal(f.properties.measurements[0].unit, unit);
-      assert.equal(f.properties.region, 'Veneto');
+      assert.equal(f.properties.measurements[0].unit, id === 'suspended-matter-samples' ? 'mg/L' : f.properties.region === 'Lazio' ? 'NTU' : 'FTU');
       const [lon, lat] = f.geometry.coordinates;
-      assert.ok(lon > 11 && lon < 14 && lat > 44 && lat < 46);
-      if (id === 'turbidity-samples') assert.ok(f.properties.depth <= 1);
+      assert.ok(lon > 9 && lon < 16 && lat > 39 && lat < 46);
+      if (id === 'turbidity-samples' && f.properties.depth !== undefined) assert.ok(f.properties.depth <= 1);
     }
+    const regions = [...new Set(data.features.map(f => f.properties.region))].sort();
+    assert.deepEqual(regions, id === 'turbidity-samples' ? ['Campania', 'Lazio', 'Veneto'] : ['Abruzzo', 'Toscana', 'Veneto']);
+    assert.equal(data.metadata.regionalCoverage.length, 15);
+    assert.equal(data.metadata.regionalCoverage.reduce((n, r) => n + r.count, 0), data.features.length);
+    assert.equal(new Set(data.features.map(f => f.id)).size, data.features.length);
+    assert.deepEqual(data.metadata.years, [...new Set(data.features.map(f => f.properties.observedAt.slice(0, 4)))].sort().reverse());
   }
 });
 

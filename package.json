@@ -14,6 +14,7 @@
     "questionnaires:generate": "node scripts/import-questionnaires.mjs",
     "marine:sync": "node scripts/sync-marine-areas.mjs",
     "observatory:sync": "python scripts/sync-observatory.py",
+    "observatory:sync:regional": "python -u -B scripts/sync-observatory.py --field-only",
     "test:nautical": "node --test scripts/test-nautical-study.mjs",
     "test:observatory": "node --test scripts/test-observatory.mjs",
     "test:observatory:imports": "python -m unittest discover -s scripts -p test_observatory_import.py",

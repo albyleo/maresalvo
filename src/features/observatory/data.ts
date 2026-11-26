@@ -14,7 +14,8 @@ export interface ObservationFeature {
 export interface SurveyMetadata {
   edition: string; verifiedAt: string; observedFrom: string; observedTo: string;
   year: string; count: number; sourceUrl: string; sha256: string;
-  years?: string[]; sources?: { provider: string; sourceUrl: string; count: number }[];
+  years?: string[]; sources?: { provider: string; sourceUrl: string; count: number; verifiedAt?: string; license?: string; syncStatus?: string; lastAttemptAt?: string; syncWarning?: string }[];
+  regionalCoverage?: { region: string; sourceUrl: string; status: string; reviewedAt: string; count: number; stations: number; years: string[] }[];
 }
 export interface SurveyData { type: 'FeatureCollection'; metadata: SurveyMetadata; features: ObservationFeature[] }
 export type SurveyManifest = Record<SurveyId, SurveyMetadata>;
