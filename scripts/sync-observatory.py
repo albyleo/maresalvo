@@ -10,10 +10,13 @@ import hashlib
 import io
 import json
 import math
+import time
+from http.client import IncompleteRead
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlencode
+from urllib.error import URLError
 from urllib.request import urlopen
 from zipfile import ZipFile
 
@@ -218,8 +221,9 @@ def chemicals():
     return latest(features)
 
 
-def discharges():
-    data = json.loads((CACHE / "discharges-data.json").read_text("utf-8"))
+def discharge_features(data):
+    if data.get("error") or data.get("type") != "FeatureCollection":
+        raise ValueError("EEA returned an invalid GeoJSON response")
     if data.get("exceededTransferLimit") or data.get("properties", {}).get("exceededTransferLimit"):
         raise ValueError("EEA response truncated")
     features = []
@@ -238,28 +242,75 @@ def discharges():
     return features
 
 
+def discharges():
+    return discharge_features(json.loads((CACHE / "discharges-data.json").read_text("utf-8")))
+
+
+def download_discharges():
+    """Retry EEA; on transport failure retain the published snapshot unchanged.
+
+    Never replace the cache with an incomplete/error response, or assign a new
+    verification date to a dataset we could not retrieve. Invalid data still fail.
+    """
+    params = {"where": "dcpWaterBodyType='CW'", "geometry": "-5.7,30,36.6,46", "geometryType": "esriGeometryEnvelope",
+              "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "dcpCode,dcpName,dcpState,dcpWaterBodyType,repCode,uwwCode",
+              "outSR": 4326, "returnGeometry": "true", "f": "geojson", "resultRecordCount": 10000}
+    for attempt in range(1, 4):
+        print(f"EEA: download scarichi costieri, tentativo {attempt}/3...", flush=True)
+        try:
+            with urlopen(EEA + "?" + urlencode(params), timeout=20) as response:
+                raw = response.read()
+        except (URLError, TimeoutError, ConnectionError, IncompleteRead) as exc:
+            print(f"EEA: richiesta non riuscita ({exc}).", flush=True)
+            if attempt < 3:
+                time.sleep(attempt)
+                continue
+            target = DEST / "discharges.json"
+            if not target.exists():
+                raise RuntimeError("EEA non raggiungibile e nessun dataset pubblicato da conservare.") from exc
+            previous = json.loads(target.read_text("utf-8"))
+            meta = previous.get("metadata", {})
+            if (previous.get("type") != "FeatureCollection" or not previous.get("features")
+                    or meta.get("count") != len(previous["features"]) or not meta.get("verifiedAt")):
+                raise ValueError("Il dataset EEA precedente non e valido: aggiornamento interrotto.") from exc
+            print(f"ATTENZIONE: scarichi EEA NON aggiornati; conservati {meta['count']} punti "
+                  f"e la verifica precedente del {meta['verifiedAt']}. Le altre fonti proseguono.", flush=True)
+            return previous
+        discharge_features(json.loads(raw))
+        target = CACHE / "discharges-data.json"
+        tmp = target.with_suffix(".tmp")
+        tmp.write_bytes(raw)
+        tmp.replace(target)
+        return None
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--offline", action="store_true", help="Rebuild from already downloaded archives; retains their verification time")
     args = parser.parse_args()
     CACHE.mkdir(parents=True, exist_ok=True)
     DEST.mkdir(parents=True, exist_ok=True)
+    retained_discharges = None
     if not args.offline:
         for key, url in SOURCES.items():
+            print(f"EMODnet: download {key}...", flush=True)
             with urlopen(url, timeout=90) as response:
                 (CACHE / f"{key}.zip").write_bytes(response.read())
-        params = {"where": "dcpWaterBodyType='CW'", "geometry": "-5.7,30,36.6,46", "geometryType": "esriGeometryEnvelope",
-                  "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "dcpCode,dcpName,dcpState,dcpWaterBodyType,repCode,uwwCode",
-                  "outSR": 4326, "returnGeometry": "true", "f": "geojson", "resultRecordCount": 10000}
-        with urlopen(EEA + "?" + urlencode(params), timeout=60) as response:
-            (CACHE / "discharges-data.json").write_bytes(response.read())
+        retained_discharges = download_discharges()
+        print("ISPRA: aggiornamento archivi...", flush=True)
         ispra_observatory.download()
+        print("ARPAV: aggiornamento misure in mare...", flush=True)
         arpav_observatory.download()
+    print("Elaborazione e validazione dei campionamenti...", flush=True)
     italian, ispra_report = ispra_observatory.build()
     field, arpav_report = arpav_observatory.build()
     manifest = {}
     pending = {}
     for key, build in [("beach", beach), ("micro", micro), ("seafloor", seafloor), ("chemicals", chemicals), ("discharges", discharges)]:
+        if key == "discharges" and retained_discharges is not None:
+            pending[key] = retained_discharges
+            manifest[key] = retained_discharges["metadata"]
+            continue
         features = build()
         provider = "EEA" if key == "discharges" else "EMODnet"
         for f in features:
@@ -302,6 +353,8 @@ def main():
         tmp = target.with_suffix(".tmp")
         tmp.write_text(json.dumps(data, ensure_ascii=False, allow_nan=False, separators=(",", ":")), "utf-8")
         tmp.replace(target)
+    print("Sincronizzazione completata CON AVVISO: EEA non aggiornato, mantenuta la versione precedente."
+          if retained_discharges is not None else "Sincronizzazione completata.", flush=True)
 
 
 if __name__ == "__main__":
