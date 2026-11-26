@@ -4,6 +4,10 @@ import { InfoDisclosure } from '@/components/ui/InfoDisclosure';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LocateFixed, RefreshCw, X } from 'lucide-react';
+import { ProtectedAreaDetails } from './ProtectedAreaDetails';
+import { ZONE_STYLES } from '../marine-map/zones';
+import marineSources from '../../../public/data/marine-sources.json';
+import type { ProtectedAreaSelection } from './protected-areas';
 import { displayDate, satelliteView, surveyForTheme, filterObservations, isSatelliteRecent, isSatelliteTheme, SATELLITES, THEMES, type ObservationFeature,
   type SatelliteId, type SatelliteData, type SurveyData, type SurveyManifest, type ThemeId } from './data';
 
@@ -32,6 +36,13 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
   const [attempt, setAttempt] = useState(0);
   const [resetKey, setResetKey] = useState(0);
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [showProtected, setShowProtected] = useState(false);
+  const [showZones, setShowZones] = useState(true);
+  const [protectedOpacity, setProtectedOpacity] = useState(0.2);
+  const [protectedSelection, setProtectedSelection] = useState<ProtectedAreaSelection | null>(null);
+  const [protectedError, setProtectedError] = useState('');
+  const [dismissProtectedKey, setDismissProtectedKey] = useState(0);
+  const protectedLayers = useMemo(() => ({ enabled: showProtected, zones: showZones, opacity: protectedOpacity }), [showProtected, showZones, protectedOpacity]);
   const definition = THEMES.find(t => t.id === theme)!;
   const surveyId = surveyForTheme(theme, fieldMeasurements);
   const satelliteTheme = surveyId === null;
@@ -90,7 +101,9 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
   const selected = selection.find(f => f.id === selectedId) ?? selection[0];
   const error = satelliteTheme ? satelliteError : surveyError?.id === surveyId ? surveyError.message : '';
   const loading = !error && (satelliteTheme ? !satellite : !dataset);
-  const select = useCallback((items: ObservationFeature[]) => { setSelection(items); setSelectedId(items[0].id); }, []);
+  const select = useCallback((items: ObservationFeature[]) => { setSelection(items); setSelectedId(items[0].id); setProtectedSelection(null); setDismissProtectedKey(k => k + 1); }, []);
+  const selectProtected = useCallback((item: ProtectedAreaSelection | null) => { setProtectedSelection(item); setSelection([]); setSelectedId(''); }, []);
+  const closeProtected = () => { setProtectedSelection(null); setDismissProtectedKey(k => k + 1); };
   const clearSelection = () => { setSelection([]); setSelectedId(''); };
   const resetFilters = () => { setRegion(''); setProvider(''); setYear(''); setSubstance(''); setMatrix(''); setVisibleRows(100); clearSelection(); };
   const choose = (id: ThemeId) => { setTheme(id); setFieldMeasurements(false); setDate(''); resetFilters(); setSurveyError(null); setMapStatus('loading'); };
@@ -107,8 +120,22 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
           <div className="text-right text-sm"><span className="block text-sky-100/60">{satelliteTheme ? 'Osservazione satellitare' : 'Campagna disponibile'}</span>
             <strong className="font-medium text-white">{satelliteTheme ? satelliteDate ? displayDate(satelliteDate) : 'Data in verifica' : meta?.year}</strong></div>
         </div>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/15 py-3">
+          <button type="button" aria-pressed={showProtected} onClick={() => { setShowProtected(value => !value); closeProtected(); }} className={`min-h-11 border px-4 py-2 text-sm ${showProtected ? 'border-sky-200 bg-sky-200/10 text-sky-100' : 'border-white/25 text-white/75'}`}>Aree marine protette</button>
+          {showProtected && <>
+            <label className="flex min-h-11 items-center gap-2 text-sm text-sky-100"><input type="checkbox" checked={showZones} onChange={e => { setShowZones(e.target.checked); closeProtected(); }} className="h-4 w-4 accent-sky-200"/>Zonazioni</label>
+            <label className="flex min-h-11 flex-wrap items-center gap-3 text-sm text-sky-100">Opacità AMP <input type="range" aria-label="Opacità delle aree marine protette" min="0" max="60" step="5" value={Math.round(protectedOpacity * 100)} onChange={e => setProtectedOpacity(Number(e.target.value) / 100)} className="w-28 accent-sky-200"/><span className="w-9 tabular-nums">{Math.round(protectedOpacity * 100)}%</span></label>
+          </>}
+        </div>
+        {showProtected && <InfoDisclosure label="Info e legenda AMP">
+          <p>Perimetri internazionali: EMODnet / CDDA / WDPA. Cartografia locale di {marineSources.area_count} AMP italiane, acquisita il {displayDate(marineSources.retrieved_at)}. Zonazioni interne disponibili solo per alcune aree.</p>
+          <div className="flex flex-wrap gap-3"><span className="text-sky-200">━ Perimetro</span>{Object.entries(ZONE_STYLES).map(([zone, style]) => <span key={zone} style={{ color: style.color }}>● {zone} · {style.title}</span>)}</div>
+          <p>Il confronto è visivo: non calcola medie o qualità dell’acqua all’interno delle AMP. I colori delle zone indicano regimi di tutela, non livelli di inquinamento. Riduci l’opacità per leggere i colori del satellite; i bordi locali restano visibili.</p>
+          <a className="underline" href="/mappa">Apri la Mappa AMP</a>
+        </InfoDisclosure>}
+        {showProtected && protectedError && <div role="status" className="mb-3 text-sm text-amber-200">{protectedError} <button type="button" className="underline" onClick={() => { setProtectedError(''); closeProtected(); setAttempt(k => k + 1); }}>Riprova AMP</button></div>}
         <div className="observatory-map-stage">
-          <Map key={attempt} features={features} satellite={raster} onSelect={select} onStatus={setMapStatus} resetKey={resetKey}/>
+          <Map key={attempt} features={features} satellite={raster} onSelect={select} onStatus={setMapStatus} resetKey={resetKey} protectedLayers={protectedLayers} onProtectedSelect={selectProtected} onProtectedError={setProtectedError} dismissProtectedKey={dismissProtectedKey}/>
           <button type="button" className="observatory-map-reset" aria-label="Inquadra il Mediterraneo" title="Inquadra il Mediterraneo" onClick={() => setResetKey(k => k + 1)}><LocateFixed size={20}/></button>
           {(loading || error || mapStatus === 'error') && <div className="observatory-map-message" role="status">
             {loading ? 'Caricamento delle osservazioni…' : error || 'Alcuni livelli cartografici non sono disponibili. Le schede dei dati restano consultabili.'}
@@ -120,9 +147,11 @@ export function Observatory({ manifest }: { manifest: SurveyManifest }) {
           <span>{satelliteTheme ? `${definition.label} · ${config?.unit} · ${theme === 'chlorophyll' ? '~1 km + 100 m costiero' : config?.resolution}` : `${features.length} osservazioni visualizzate · seleziona un punto`}</span>
           <a href={fieldMeasurements ? '#fonti-campionamenti' : definition.url} target={fieldMeasurements ? undefined : '_blank'} rel="noreferrer">{fieldMeasurements ? 'Fonti ARPA e copertura' : definition.source}</a>
         </div>
+        {protectedSelection && <button type="button" className="mb-4 text-sm text-sky-200 underline" onClick={() => document.querySelector('.observatory-detail')?.scrollIntoView({ block: 'start', behavior: 'instant' })}>Vedi dettagli dell’area selezionata →</button>}
       </div>
 
       <aside className="observatory-detail" aria-label="Dati e dettagli">
+        {showProtected && protectedSelection && <ProtectedAreaDetails selection={protectedSelection} onClose={closeProtected}/>}
         <div className="observatory-filters">
           {(theme === 'turbidity' || theme === 'suspended-matter') && <label>Tipo di osservazione<select value={fieldMeasurements ? 'samples' : 'satellite'} onChange={e => { setFieldMeasurements(e.target.value === 'samples'); resetFilters(); setSurveyError(null); }}><option value="satellite">Satellite · Copernicus</option><option value="samples">Misure sul campo · ARPA regionali</option></select></label>}
           {satelliteTheme && satellite && <label>Data dell’osservazione<select value={satelliteDate} onChange={e => setDate(e.target.value)}>{availableDates.map(d => <option key={d} value={d}>{displayDate(d)}{d === availableDates[0] ? ' · ultima disponibile' : ''}</option>)}</select></label>}

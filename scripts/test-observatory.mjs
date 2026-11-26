@@ -10,6 +10,52 @@ async function compiled(path, replacements = {}) {
   return `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`;
 }
 const dataUrl = await compiled('../src/features/observatory/data.ts');
+const protectedUrl = await compiled('../src/features/observatory/protected-areas.ts', {
+  '../marine-map/config': await compiled('../src/features/marine-map/config.ts'),
+  '../marine-map/zones': await compiled('../src/features/marine-map/zones.ts'),
+});
+const { syncProtectedLayers, protectedHit } = await import(protectedUrl);
+
+test('AMP overlays load on demand, stay below observations and preserve environmental layers', () => {
+  const sources = new Map([['observations', {}], ['satellite-0', { date: '2026-11-19' }]]);
+  const layers = new Map([['satellite-0', { id: 'satellite-0' }], ['labels', { id: 'labels' }], ['observations', { id: 'observations' }]]);
+  const order = [...layers.keys()];
+  let sourceLoads = 0;
+  const map = {
+    getSource: id => sources.get(id),
+    addSource: (id, source) => { assert.ok(!sources.has(id)); sources.set(id, source); sourceLoads++; },
+    addLayer: (layer, before) => { assert.ok(order.includes(before)); layers.set(layer.id, structuredClone(layer)); order.splice(order.indexOf(before), 0, layer.id); },
+    setLayoutProperty: (id, key, value) => { const layer = layers.get(id); (layer.layout ??= {})[key] = value; },
+    setPaintProperty: (id, key, value) => { const layer = layers.get(id); (layer.paint ??= {})[key] = value; },
+  };
+  const satellite = sources.get('satellite-0');
+  syncProtectedLayers(map, { enabled: false, zones: true, opacity: 0.2 });
+  assert.equal(sourceLoads, 0);
+  syncProtectedLayers(map, { enabled: true, zones: true, opacity: 0.2 });
+  assert.equal(sourceLoads, 2);
+  assert.equal(order.at(-1), 'observations');
+  assert.ok(order.indexOf('observatory-amp-wms') > order.indexOf('satellite-0'));
+  assert.equal(layers.get('observatory-amp-zones').paint['fill-opacity'], 0.2);
+  syncProtectedLayers(map, { enabled: true, zones: false, opacity: 0 });
+  assert.equal(layers.get('observatory-amp-zones').layout.visibility, 'none');
+  assert.equal(layers.get('observatory-amp-zone-lines').layout.visibility, 'none');
+  assert.equal(layers.get('observatory-amp-outlines').layout.visibility, 'visible');
+  assert.equal(layers.get('observatory-amp-wms').paint['raster-opacity'], 0);
+  syncProtectedLayers(map, { enabled: false, zones: true, opacity: 0.6 });
+  for (const [id, layer] of layers) if (id.startsWith('observatory-amp-')) assert.equal(layer.layout.visibility, 'none');
+  syncProtectedLayers(map, { enabled: true, zones: true, opacity: 0.3 });
+  assert.equal(sourceLoads, 2);
+  assert.equal(sources.get('satellite-0'), satellite);
+  assert.equal(layers.get('observatory-amp-zones').layout.visibility, 'visible');
+});
+
+test('AMP selection prefers a specific zone over an overlapping perimeter', () => {
+  const perimeter = { properties: { kind: 'boundary', area_id: 'EUAP0950' } };
+  const zone = { properties: { kind: 'zone', area_id: 'EUAP0950', zone: 'A' } };
+  assert.equal(protectedHit([perimeter, zone]), zone);
+  assert.equal(protectedHit([perimeter]), perimeter);
+  assert.equal(protectedHit([]), undefined);
+});
 const { surveyForTheme, satelliteView, isSatelliteRecent, isSatelliteTheme, SATELLITES, satelliteTileUrl, filterObservations } = await import(dataUrl);
 const { parseSatelliteCapabilities, parseSatelliteLegend } = await import(await compiled('../src/features/observatory/satellite.ts', {
   './data': dataUrl, 'fast-xml-parser': import.meta.resolve('fast-xml-parser'),
