@@ -27,6 +27,17 @@ export function OceanStory() {
       root.dataset.motion = 'on';
       // Choose once per animation session: rotating a phone must not reload its video.
       const mobile = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
+      // Keep mobile progress outside the sticky scene: browser chrome and the
+      // scene's stable large viewport must never change the bar's bottom offset.
+      const mobileProgress = mobile ? document.createElement('div') : null;
+      if (mobileProgress) {
+        mobileProgress.className = 'story-progress story-progress--viewport';
+        mobileProgress.setAttribute('aria-hidden', 'true');
+        mobileProgress.dataset.active = 'false';
+        mobileProgress.appendChild(document.createElement('div'));
+        document.body.appendChild(mobileProgress);
+      }
+      const progressTarget = mobileProgress?.firstElementChild ?? progressRef.current;
       const sequence = mobile && canvasRef.current ? createOceanSequence(canvasRef.current) : null;
       if (!sequence) { video.src = mobile ? '/videos/tartaruga-scroll-mobile.mp4' : '/videos/tartaruga-scroll.mp4'; video.muted = true; video.load(); }
       const frames = root.querySelectorAll<HTMLElement>('.story-frame');
@@ -62,14 +73,19 @@ export function OceanStory() {
       document.addEventListener('visibilitychange', scheduleSeek);
       gsap.set(frames, { autoAlpha: 0, y: 36 });
       gsap.set(frames[0], { autoAlpha: 1, y: 0 });
+      const syncProgressVisibility = (self: ScrollTrigger) => {
+        if (mobileProgress) mobileProgress.dataset.active = String(self.isActive || (self.progress === 0 && root.getBoundingClientRect().top <= 0));
+      };
       const timeline = gsap.timeline({
         scrollTrigger: { trigger: root, start: 'top top',
           // Match the sticky container's actual travel, including stable mobile viewport height.
           end: () => `+=${Math.max(1, root.offsetHeight - (scene?.offsetHeight ?? window.innerHeight))}`,
-          scrub: mobile ? 0.2 : 0.65, invalidateOnRefresh: true, onToggle: self => sequence?.setActive(self.isActive) },
+          scrub: mobile ? 0.2 : 0.65, invalidateOnRefresh: true,
+          onRefresh: syncProgressVisibility,
+          onToggle: self => { sequence?.setActive(self.isActive); syncProgressVisibility(self); } },
       });
       timeline.to(playhead, { progress: 1, duration: 1, ease: 'none', onUpdate: scheduleSeek }, 0)
-        .to(progressRef.current, { scaleX: 1, duration: 1, ease: 'none' }, 0)
+        .to(progressTarget, { scaleX: 1, duration: 1, ease: 'none' }, 0)
         .to(frames[0], { autoAlpha: 0, y: -30, duration: 0.08 }, 0.10)
         .fromTo(frames[1], { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.09 }, 0.23)
         .to(frames[1], { autoAlpha: 0, y: -30, duration: 0.08 }, 0.42)
@@ -80,6 +96,7 @@ export function OceanStory() {
       return () => {
         disposed = true;
         sequence?.destroy();
+        mobileProgress?.remove();
         cancelAnimationFrame(raf);
         readyEvents.forEach(event => video.removeEventListener(event, scheduleSeek));
         root.removeEventListener('pointerdown', primeVideo);

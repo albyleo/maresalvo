@@ -192,6 +192,8 @@ h1, h2, h3 { text-wrap: balance; }
 .story-video-error { position: absolute; right: 24px; top: 100px; max-width: 260px; padding: 12px; font-size: 12px; background: #061719; }
 .story-progress { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: rgb(255 255 255 / .15); }
 .story-progress > div { height: 100%; background: #b7e5d5; transform: scaleX(0); transform-origin: left; }
+.story-progress--viewport { position: fixed; inset: auto 0 0; height: 2px; z-index: 45; pointer-events: none; visibility: hidden; transform: translateZ(0); }
+.story-progress--viewport[data-active='true'] { visibility: visible; }
 .ocean-story[data-motion='on'] { height: 560svh; }
 .ocean-story[data-motion='on'] .story-scene { position: sticky; top: 0; height: 100vh; height: 100dvh; }
 .ocean-story[data-motion='on'] .story-media { height: 100%; }
@@ -293,5 +295,5 @@ h1, h2, h3 { text-wrap: balance; }
   .ocean-story[data-motion='on'] .story-scene { height: 100vh; height: 100lvh; }
   .ocean-story[data-motion='on'] .story-sequence { height: 100%; }
   .ocean-story[data-motion='on'] .story-frames { bottom: auto; height: 100dvh; }
-  .ocean-story[data-motion='on'] .story-progress { bottom: max(0px, calc(100lvh - 100dvh)); }
+  .ocean-story[data-motion='on'] .story-progress { display: none; }
 }
