@@ -16,7 +16,7 @@ const NO_FEATURES: ObservationFeature[] = [];
 const numberFormat = new Intl.NumberFormat('it-IT', { maximumSignificantDigits: 6 });
 
 export function Observatory({ manifest }: { manifest: SurveyManifest }) {
-  const [theme, setTheme] = useState<ThemeId>('chlorophyll');
+  const [theme, setTheme] = useState<ThemeId>(THEMES[0].id);
   const [survey, setSurvey] = useState<{ id: ThemeId; data: SurveyData } | null>(null);
   const [surveyError, setSurveyError] = useState<{ id: ThemeId; message: string } | null>(null);
   const [satelliteResult, setSatellite] = useState<Partial<Record<SatelliteId, SatelliteData>>>({});
